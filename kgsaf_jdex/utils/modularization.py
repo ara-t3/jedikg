@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Set, Tuple
 
 from rdflib import OWL, RDF, RDFS, BNode, Graph, URIRef
-from utils.conventions.builtins import BUILTIN_URIS
+from kgsaf_jdex.utils.conventions.builtins import BUILTIN_URIS
 
 import kgsaf_jdex.utils.conventions.paths as pc
 from kgsaf_jdex.utils.utility import verbose_print
