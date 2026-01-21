@@ -291,3 +291,57 @@ class OWLConverter:
                 out_json[r] = val
 
         return out_json
+
+
+class TSVConverter:
+    def __init__(
+        self,
+        path: str,
+    ):
+
+        self.p_data = dict()
+        self.base_path = Path(path).resolve().absolute()
+
+    def convert(
+        self,
+        triples: bool = True,
+        splits: bool = True,
+    ):
+
+        if triples:
+            self.p_data["triples"] = (
+                self.preprocess_triples(self.base_path / "abox/obj_prop_assertions.nt"),
+                self.base_path / "abox/obj_prop_assertions.tsv",
+            )
+
+        if splits:
+            self.p_data["train"] = (
+                self.preprocess_triples(self.base_path / pc.RDF_TRAIN),
+                self.base_path / pc.TRAIN,
+            )
+            self.p_data["test"] = (
+                self.preprocess_triples(self.base_path / pc.RDF_TEST),
+                self.base_path / pc.TEST,
+            )
+            self.p_data["valid"] = (
+                self.preprocess_triples(self.base_path / pc.RDF_VALID),
+                self.base_path / pc.VALID,
+            )
+
+
+    def serialize(self):
+        for key, values in self.p_data.items():
+            obj = values[0]
+            path = values[1]
+
+            with open(path, "w") as f:
+                if key in ["triples", "train", "valid", "test"]:
+                    f.write(obj)
+
+    def preprocess_triples(self, path):
+        triples = Graph()
+        triples.parse(path)
+        out_str = ""
+        for s, p, o in triples:
+            out_str += f"{str(s)}\t{str(p)}\t{str(o)}\n"
+        return out_str
