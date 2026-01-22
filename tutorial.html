@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KG-SaF-Data: Complete KGR Datasets &mdash; KG-SaF: Building Complete and Curated Datasets for Machine Learning 1.6.0 documentation</title>
+  <title>Tutorials and Guides &mdash; KG-SaF: Building Complete and Curated Datasets for Machine Learning 1.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
@@ -19,8 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="KG-SaF-JDeX: Modular Dataset Generation Workflow" href="jdex.html" />
-    <link rel="prev" title="Tutorials and Guides" href="tutorial.html" /> 
+    <link rel="next" title="KG-SaF-Data: Consistent and Complete KGR Datasets" href="data.html" />
+    <link rel="prev" title="Quick Start Guide" href="quick.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,14 +45,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quick.html">Quick Start Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials and Guides</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>KG-SaF-Data</strong>: Complete KGR Datasets</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#dataset-structure">Dataset Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#available-ontologies">Available Ontologies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#available-datasets">Available Datasets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials and Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#loading-the-kg-saf-datasets-in-pytorch">Loading the  KG-SaF Datasets in Pytorch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-transe-on-kg-saf-datasets">Running TransE on KG-SaF Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-kg-saf-jdex-on-custom-knowledge-graphs">Using KG-SaF-JDeX on Custom Knowledge Graphs</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="jdex.html"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">KG-SaF-Data: Consistent and Complete KGR Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jdex.html">KG-SaF-JDeX: Modular dataset creation workflow</a></li>
 </ul>
 
         </div>
@@ -69,9 +69,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><strong>KG-SaF-Data</strong>: Complete KGR Datasets</li>
+      <li class="breadcrumb-item active">Tutorials and Guides</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/data.md.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/tutorial.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -79,16 +79,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="kg-saf-data-complete-kgr-datasets">
-<h1><strong>KG-SaF-Data</strong>: Complete KGR Datasets<a class="headerlink" href="#kg-saf-data-complete-kgr-datasets" title="Link to this heading"></a></h1>
-<section id="dataset-structure">
-<h2>Dataset Structure<a class="headerlink" href="#dataset-structure" title="Link to this heading"></a></h2>
+  <section id="tutorials-and-guides">
+<h1>Tutorials and Guides<a class="headerlink" href="#tutorials-and-guides" title="Link to this heading"></a></h1>
+<section id="loading-the-kg-saf-datasets-in-pytorch">
+<h2>Loading the  KG-SaF Datasets in Pytorch<a class="headerlink" href="#loading-the-kg-saf-datasets-in-pytorch" title="Link to this heading"></a></h2>
 </section>
-<section id="available-ontologies">
-<h2>Available Ontologies<a class="headerlink" href="#available-ontologies" title="Link to this heading"></a></h2>
+<section id="running-transe-on-kg-saf-datasets">
+<h2>Running TransE on KG-SaF Datasets<a class="headerlink" href="#running-transe-on-kg-saf-datasets" title="Link to this heading"></a></h2>
 </section>
-<section id="available-datasets">
-<h2>Available Datasets<a class="headerlink" href="#available-datasets" title="Link to this heading"></a></h2>
+<section id="using-kg-saf-jdex-on-custom-knowledge-graphs">
+<h2>Using KG-SaF-JDeX on Custom Knowledge Graphs<a class="headerlink" href="#using-kg-saf-jdex-on-custom-knowledge-graphs" title="Link to this heading"></a></h2>
 </section>
 </section>
 
@@ -96,8 +96,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="tutorial.html" class="btn btn-neutral float-left" title="Tutorials and Guides" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="jdex.html" class="btn btn-neutral float-right" title="KG-SaF-JDeX: Modular Dataset Generation Workflow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="quick.html" class="btn btn-neutral float-left" title="Quick Start Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data.html" class="btn btn-neutral float-right" title="KG-SaF-Data: Consistent and Complete KGR Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

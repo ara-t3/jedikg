@@ -1,4 +1,4 @@
-KG-SaF-Data: Consistent and Complete KGR Datasets
+**KG-SaF-Data**: Complete KGR Datasets
 =================
 
 ## Dataset Structure 
