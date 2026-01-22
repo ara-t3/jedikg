@@ -6,6 +6,8 @@ KG-SaF-Data and KG-SaF-JDeX from "Diliso, I., Barile, R., d'Amato, C., & Fanizzi
 
 **KG-SaF** provides a workflow (*KG-SaF-JDeX*) and curated datasets  (*KG-SaF-Data*) for knowledge graph refinement (KGR) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** and **reasoning services**.
 
+
+
 Key Features
 ------------
 
@@ -16,13 +18,13 @@ Key Features
 - 🧩 Offers **schema decomposition** into themed partitions (modularization of ontology components)
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Contents:
 
    quick
+   tutorial
    data
    jdex
-
 
 
 

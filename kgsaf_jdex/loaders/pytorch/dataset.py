@@ -186,10 +186,11 @@ class KnowledgeGraph(Dataset):
             data = json.load(casrt_json)
 
         for ind_uri in data:
-            ind_id = self.individual_to_id(ind_uri)
-            for class_uri in data[ind_uri]:
-                class_id = self.class_to_id(class_uri)
-                casrt.append([ind_id, class_id])
+            if ind_uri in self._individual_to_id.keys():
+                ind_id = self.individual_to_id(ind_uri)
+                for class_uri in data[ind_uri]:
+                    class_id = self.class_to_id(class_uri)
+                    casrt.append([ind_id, class_id])
 
         return torch.tensor(casrt, dtype=torch.int64)
 

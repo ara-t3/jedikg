@@ -9,6 +9,7 @@ import os
 import sys
 from pathlib import Path
 sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, os.path.abspath("../../"))
 
 project = 'KG-SaF: Building Complete and Curated Datasets for Machine Learning'
 copyright = '2026, Ivan Diliso and Roberto Barile'
