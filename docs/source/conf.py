@@ -20,6 +20,7 @@ release = '1.6.0'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    'sphinx.ext.mathjax',
     'myst_parser',  # Markdown support
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',  # For Google/NumPy docstrings

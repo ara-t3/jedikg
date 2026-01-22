@@ -103,3 +103,7 @@ In the `tutorial` folder, we provide example notebooks demonstrating how to use 
 2. **Proof of concept: Using PyKEEN for machine learning on KG-SaF datasets**  
    - File: `tutorial/kge_pykeen.ipynb`  
    - Description: Demonstrates a basic pipeline for training a Knowledge Graph Embedding (KGE) model using PyKEEN on one of the KG-SaF datasets, including evaluation.  
+
+2. **Generating a KG-SaF Dataset form a Custom KG**  
+   - File: `tutorial/general.ipynb`  
+   - Description: Full pipeline for transforming a user defined KG into a machine learning ready dataset. Performs all the requires preprocessing, filtering and post processing of the KG-SaF-JDeX workflow. 

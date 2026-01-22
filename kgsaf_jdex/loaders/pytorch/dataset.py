@@ -12,19 +12,38 @@ import kgsaf_jdex.utils.conventions.paths as pc
 
 
 class KnowledgeGraph(Dataset):
+    """
+    Knowledge Graph Dataset Loader.
+
+    This module defines a PyTorch `Dataset` abstraction for ontology-enhanced
+    knowledge graphs, supporting ABox, TBox, and RBox components.
+
+    The dataset structure assumes:
+        - Precomputed URI-to-ID mappings for individuals, classes, and object properties
+        - ABox triples split into train/validation/test sets
+        - Optional class assertions (rdf:type)
+        - TBox taxonomy (class subsumption)
+        - RBox axioms including object property hierarchies and domain/range constraints
+
+    All symbolic components are loaded from disk and exposed as `torch.Tensor`
+    objects suitable for downstream learning and reasoning tasks.
+
+    The implementation supports limited OWL constructs such as `owl:unionOf`
+    in domain and range definitions while skipping unsupported complex expressions.
+    """
     def __init__(
         self,
         path: str,
     ):
-        """_summary_
+        """
+        Initialize the knowledge graph dataset.
 
         Args:
-            path (str): _description_
+            path (str): Base path of the dataset directory.
         """
 
         super().__init__()
 
-        
 
         # Dataset BASE Folder
 
@@ -62,57 +81,111 @@ class KnowledgeGraph(Dataset):
 
     # General Functions
 
-    def _warning(self, count):
+    def _warning(self, count:int):
+        """
+        Print a warning for skipped complex URIs.
+
+        Args:
+            count (int): Number of skipped URIs.
+        """
         print(f"WARNING: {count} complex URIs detected. These classes are skipped during loading.")
 
     def _load_mappings(self, file_location: str):
+        """
+        Load a URI-to-ID mapping from disk.
+
+        Args:
+            file_location (str): Relative path to mapping file.
+        """        
         with open(self.base_path / file_location, "r") as map_json:
             return json.load(map_json)
 
     def individual_to_id(self, individual_uri: str) -> int:
+        """
+        Convert individual URI to ID.
+        """
         return self._individual_to_id[individual_uri]
 
     def class_to_id(self, class_uri: str) -> int:
+        """
+        Convert class URI to ID.
+        """
         return self._class_to_id[class_uri]
 
     def obj_prop_to_id(self, obj_prop_uri: str) -> int:
+        """
+        Convert object property URI to ID.
+        """
         return self._obj_prop_to_id[obj_prop_uri]
 
     def id_to_individual(self, individual_id: int) -> str:
+        """
+        Convert individual ID to URI.
+        """
         return self._id_to_individual[individual_id]
 
     def id_to_class(self, class_id: int) -> str:
+        """
+        Convert class ID to URI.
+        """
         return self._id_to_class[class_id]
 
     def id_to_obj_prop(self, obj_prop_id: int) -> str:
+        """
+        Convert object property ID to URI.
+        """
         return self._id_to_obj_prop[obj_prop_id]
 
     def individual_classes(self, individual_id: int) -> torch.tensor:
+        """
+        Get classes asserted for an individual.
+        """
         return self.class_assertions[self.class_assertions[:, 0] == individual_id, 1]
 
     def sup_classes(self, class_id: int) -> torch.tensor:
+        """
+        Get superclasses of a class.
+        """
         return self.taxonomy[self.taxonomy[:, 0] == class_id, 1]
 
     def sub_classes(self, class_id: int) -> torch.tensor:
+        """
+        Get subclasses of a class.
+        """
         return self.taxonomy[self.taxonomy[:, 1] == class_id, 0]
     
     def is_leaf(self, class_id: int) -> bool:
+        """
+        Check if class has no subclasses.
+        """
         return len(self.sub_classes(class_id)) == 0
 
     def sup_obj_prop(self, obj_prop_id: int) -> torch.tensor:
+        """
+        Get super-properties of an object property.
+        """
         return self.obj_props_hierarchy[
             self.obj_props_hierarchy[:, 0] == obj_prop_id, 1
         ]
 
     def sub_obj_prop(self, obj_prop_id: int) -> torch.tensor:
+        """
+        Get sub-properties of an object property.
+        """
         return self.obj_props_hierarchy[
             self.obj_props_hierarchy[:, 1] == obj_prop_id, 0
         ]
 
     def obj_prop_domain(self, obj_prop_id: int) -> torch.tensor:
+        """
+        Get domain classes of an object property.
+        """
         return self.obj_props_domain[self.obj_props_domain[:, 0] == obj_prop_id, 1]
 
     def obj_prop_range(self, obj_prop_id: int) -> torch.tensor:
+        """
+        Get range classes of an object property.
+        """
         return self.obj_props_range[self.obj_props_range[:, 0] == obj_prop_id, 1]
 
     # Getters
@@ -123,6 +196,7 @@ class KnowledgeGraph(Dataset):
 
     @property
     def train(self) -> torch.tensor:
+
         return self._train_triples
 
     @property

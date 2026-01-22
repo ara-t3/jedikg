@@ -6,15 +6,30 @@ import subprocess
 sys.path.append(str(Path.cwd().parent))
 
 
-
 class ReasonerUtility:
-    def __init__(self, robot_jar):
+    """
+    Utility wrapper for invoking the ROBOT OWL tool and OWL reasoners.
+    """
+    def __init__(self, robot_jar: str):
+        """
+        Initialize the reasoner utility. Sets up the base Java command used for all ROBOT invocations.
+
+        Args:
+            robot_jar (Path or str): Path to the ROBOT JAR executable.
+
+        """
         self.robot_jar = robot_jar
         self.base_command =  ["java", "-Xmx20G", "-jar", str(self.robot_jar)]
         
 
 
     def check_result(self, result):
+        """
+        Check the result of a subprocess execution. Prints whether the command completed successfully based on the return code.
+
+        Args:
+            result (subprocess.CompletedProcess): Result returned by subprocess.run.
+        """
         if result.returncode == 0:
             print("Reasoning completed successfully!")
         else:
@@ -22,6 +37,13 @@ class ReasonerUtility:
 
 
     def convert_owl(self, input, output):
+        """
+        Convert and normalize an OWL file using ROBOT merge. Writes a merged OWL ontology to the output path.
+
+        Args:
+            input (Path or str): Input OWL file.
+            output (Path or str): Output OWL file.
+        """
         command = self.base_command + [
             "merge",
             "-vvv",
@@ -34,6 +56,13 @@ class ReasonerUtility:
 
     
     def filter_unsatisfiable(self, input, output):
+        """
+        Detect and remove unsatisfiable classes from an ontology. Writes a filtered OWL file if unsatisfiable classes are found. Prints detected unsatisfiable class IRIs.
+
+        Args:
+            input (Path or str): Input OWL ontology.
+            output (Path or str): Output OWL ontology with unsatisfiable classes removed.
+        """
         command = self.base_command + [
             "reason",
             "-vvv",
@@ -78,6 +107,15 @@ class ReasonerUtility:
         self.check_result(result)
 
     def reason(self, axiom_generators, input, output, debug):
+        """
+        Run OWL reasoning and materialize inferred axioms. Writes a reasoned OWL ontology to the output path.
+
+        Args:
+            axiom_generators (list[str]): ROBOT axiom generators to enable (e.g., 'SubClassOf', 'EquivalentClasses').
+            input (Path or str): Input OWL ontology.
+            output (Path or str): Output OWL ontology with inferred axioms.
+            debug (bool): Enable ROBOT debug mode.
+        """
 
         prop_string = ""
         for p in axiom_generators:
@@ -103,6 +141,16 @@ class ReasonerUtility:
 
         
     def serialize(self, graph, output):
+        """
+        Serialize an RDFLib graph to OWL format using ROBOT. Writes an OWL file to disk and removes the temporary XML file.
+
+        Args:
+            graph (rdflib.Graph): RDFLib graph to serialize.
+            output (Path): Output file path (without extension).
+
+        Raises:
+            RuntimeError: If ROBOT merge fails.
+        """
         xml_path = output.with_suffix(".xml")
         owl_path = output.with_suffix(".owl")
         graph.serialize(xml_path, format="xml")

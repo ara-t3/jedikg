@@ -294,10 +294,17 @@ class OWLConverter:
 
 
 class TSVConverter:
+    """Converts RDF triple files into TSV format."""
     def __init__(
         self,
         path: str,
     ):
+        """
+        Initialize the TSV converter.
+
+        Args:
+            path (str): Dataset base directory.
+        """
 
         self.p_data = dict()
         self.base_path = Path(path).resolve().absolute()
@@ -307,6 +314,13 @@ class TSVConverter:
         triples: bool = True,
         splits: bool = True,
     ):
+        """
+        Convert RDF triple files into TSV files. Prepares TSV representations for serialization.
+
+        Args:
+            triples (bool, optional): Convert full ABox triples. Defaults to True.
+            splits (bool, optional): Convert train/valid/test splits. Defaults to True.      
+        """
 
         if triples:
             self.p_data["triples"] = (
@@ -330,6 +344,9 @@ class TSVConverter:
 
 
     def serialize(self):
+        """
+        Write converted TSV data to disk.
+        """
         for key, values in self.p_data.items():
             obj = values[0]
             path = values[1]
@@ -339,6 +356,15 @@ class TSVConverter:
                     f.write(obj)
 
     def preprocess_triples(self, path):
+        """
+        Convert an RDF triple file into a TSV string.
+
+        Args:
+            path (Path): Path to an RDF triple file.
+
+        Returns:
+            str: TSV-formatted string of triples (s, p, o).
+        """
         triples = Graph()
         triples.parse(path)
         out_str = ""
@@ -348,7 +374,7 @@ class TSVConverter:
     
 
 class IDMapper:
-    """Maps entity URIs to unique IDs"""
+    """Maps ontology URIs to integer identifiers."""
 
     def __init__(
         self,
@@ -371,6 +397,13 @@ class IDMapper:
         self.out_data = dict()
 
     def map_to_id(self):
+        """
+        Assign unique integer IDs to ontology elements. IDs are assigned deterministically after sorting URIs.
+        Generates mappings for:
+            - Classes
+            - Object properties
+            - Individuals
+        """
 
         classes =  set(self.onto.subjects(RDF.type, OWL.Class)) - BUILTIN_URIS
         classes = {c for c in classes if not isinstance(c, BNode)}
@@ -396,6 +429,9 @@ class IDMapper:
 
 
     def serialize(self):
+        """
+        Write generated ID mappings to JSON files. Writes class, individual, and property mappings to disk.
+        """
 
         (self.base_path / pc.MAPPINGS).mkdir(exist_ok=True, parents=True)
 
