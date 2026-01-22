@@ -27,4 +27,10 @@ Key Features
    jdex
 
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Appendix:
+
+   reference
+
 
