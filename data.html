@@ -50,6 +50,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#dataset-structure">Dataset Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#available-ontologies">Available Ontologies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#available-datasets">Available Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dataset-statistics">Dataset Statistics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#table-available-datasets-schema-axiom-coverage-comparison">Table: Available datasets schema axiom coverage comparison</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#table-available-datasets-statistics">Table: Available datasets statistics</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="jdex.html"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a></li>
@@ -81,14 +86,546 @@
              
   <section id="kg-saf-data-complete-kgr-datasets">
 <h1><strong>KG-SaF-Data</strong>: Complete KGR Datasets<a class="headerlink" href="#kg-saf-data-complete-kgr-datasets" title="Link to this heading"></a></h1>
+<p>KG-SaF-Data provides <strong>complete and curated knowledge graph datasets</strong> designed for <strong>machine learning</strong> and <strong>reasoning tasks</strong>. Each dataset comes with both a <strong>schema (TBox)</strong> and <strong>instance data (ABox)</strong>, along with <strong>role definitions (RBox)</strong>, making them ready for Knowledge Graph Refinement (KGR) research and embedding-based pipelines.</p>
+<p>These datasets are compatible with <strong>Python</strong>, <strong>PyTorch</strong>, <strong>PyKEEN</strong>, and ontology editors like <strong>Protege</strong>.</p>
 <section id="dataset-structure">
 <h2>Dataset Structure<a class="headerlink" href="#dataset-structure" title="Link to this heading"></a></h2>
+<p>KG-SaF datasets follow a <strong>Description Logic (DL) formalization</strong>, organizing the knowledge graph into three main components:</p>
+<ul class="simple">
+<li><p><strong>ABox (Assertional Box):</strong> Instance-level data (entities, class assertions, object property assertions)</p></li>
+<li><p><strong>TBox (Terminological Box):</strong> Schema-level knowledge, including class hierarchies and axioms</p></li>
+<li><p><strong>RBox (Role Box):</strong> Relationships and properties, including domain, range, and hierarchy</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>📄 Files marked with this icon are <strong>new serializations or variations</strong> of the same data already available in OWL format (e.g., TSV or JSON representations), intended for easier use in ML pipelines.</p>
+</div>
+<p>Each dataset folder contains the following structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>📁 abox ......................................... # Assertional Box (instance-level data)
+│ ├── 📁 splits ................................. # Train/test/validation splits
+│ │ ├── 🦉 train.nt ............................. # Training triples (N-Triples)
+│ │ ├── 🦉 valid.nt ............................. # Validation triples (N-Triples)
+│ │ ├── 🦉 test.nt .............................. # Test triples (N-Triples)
+│ │ ├── 📄 train.tsv ............................ # Training triples (TSV)
+│ │ ├── 📄 valid.tsv ............................ # Validation triples (TSV)
+│ │ └── 📄 test.tsv ............................. # Test triples (TSV)
+│ │
+│ ├── 🦉 individuals.owl ........................ # Individuals definitions
+│ ├── 🦉 class_assertions.owl ................... # Individuals class assertions (OWL)
+│ ├── 📄 class_assertions.json .................. # Individuals class assertions (JSON)
+│ │
+│ ├── 🦉 obj_prop_assertions.nt ................. # Combined triples (N-Triples)
+│ └── 📄 obj_prop_assertions.tsv ................ # Combined triples (TSV)
+
+📁 rbox ......................................... # Role Box (relations and properties)
+│ ├── 🦉 roles.owl .............................. # Role definitions
+│ ├── 📄 roles_domain_range.json ................ # Domain and range of roles (JSON)
+│ └── 📄 roles_hierarchy.json ................... # Role hierarchy (JSON)
+
+📁 tbox ......................................... # Terminological Box (schema-level info)
+│ ├── 🦉 classes.owl ............................ # Class non-taxonomical axioms
+│ ├── 🦉 taxonomy.owl ........................... # Hierarchical taxonomy
+│ └── 📄 taxonomy.json .......................... # Hierarchical taxonomy (JSON)
+
+🦉 knowledge_graph.owl .......................... # Full merged TBox + RBox + ABox
+🦉 ontology.owl ................................. # Core modularized schema
+
+📁 mappings ..................................... # Mappings to IDs
+│ ├── 🧾 class_to_id.json ....................... # Map ontology classes to IDs
+│ ├── 🧾 individual_to_id.json .................. # Map entities/instances to IDs
+│ └── 🧾 object_property_to_id.json ............. # Map object properties to IDs
+</pre></div>
+</div>
 </section>
 <section id="available-ontologies">
 <h2>Available Ontologies<a class="headerlink" href="#available-ontologies" title="Link to this heading"></a></h2>
+<p>KG-SaF includes datasets derived from <strong>well-known knowledge graphs</strong> and domain-specific ontologies. Each ontology is provided as part of the dataset with <strong>modularized TBox, RBox, and ABox components</strong>.</p>
+<ul class="simple">
+<li><p><strong>DBpedia</strong> – <a class="reference external" href="https://www.dbpedia.org/resources/ontology/">Link</a><br />
+Large-scale multilingual knowledge graph extracted from Wikipedia. Contains general-purpose concepts like <code class="docutils literal notranslate"><span class="pre">Person</span></code>, <code class="docutils literal notranslate"><span class="pre">Place</span></code>, <code class="docutils literal notranslate"><span class="pre">Organisation</span></code>, and relationships between them.</p></li>
+<li><p><strong>YAGO3</strong> – <a class="reference external" href="https://yago-knowledge.org/downloads/yago-3">Link</a><br />
+Knowledge graph integrating Wikipedia, WordNet, and GeoNames. Known for high coverage and rich semantic types (<code class="docutils literal notranslate"><span class="pre">ALHIF+</span></code> DL fragment).</p></li>
+<li><p><strong>YAGO4</strong> – <a class="reference external" href="https://yago-knowledge.org/downloads/yago-4">Link</a><br />
+Updated version of YAGO with enhanced temporal and factual coverage, suitable for reasoning over large-scale datasets.</p></li>
+<li><p><strong>ArCo</strong> – <a class="reference external" href="http://wit.istc.cnr.it/arco">Link</a><br />
+Cultural heritage ontology and KG covering Italian assets. Supports advanced reasoning with <code class="docutils literal notranslate"><span class="pre">SROIQ</span></code> DL fragment.</p></li>
+<li><p><strong>WHOW</strong> – <a class="reference external" href="https://whowproject.eu/">Link</a><br />
+Ontology for the World Heritage and cultural objects, designed for semantic reasoning and ML experiments.</p></li>
+<li><p><strong>ApuliaTravel</strong> – <a class="reference external" href="https://github.com/rbarile17/ApuliaTravelKG">Link</a><br />
+Domain-specific KG for tourism in Apulia, Italy. Models attractions, accommodations, and travel routes.</p></li>
+</ul>
 </section>
 <section id="available-datasets">
 <h2>Available Datasets<a class="headerlink" href="#available-datasets" title="Link to this heading"></a></h2>
+<p>The table below lists the currently available <strong>ontologies</strong> and their corresponding <strong>datasets</strong> included in this resource.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This table will be <strong>updated</strong> as new datasets and ontologies become available.</p>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Ontology</p></th>
+<th class="head"><p>Dataset</p></th>
+<th class="head"><p>DL Fragment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DBpedia</p></td>
+<td><p>DBPEDIA25-50K-C</p></td>
+<td><p>ALCHF</p></td>
+</tr>
+<tr class="row-odd"><td><p>DBpedia</p></td>
+<td><p>DBPEDIA25-100K-C</p></td>
+<td><p>ALCHF</p></td>
+</tr>
+<tr class="row-even"><td><p>YAGO3</p></td>
+<td><p>YAGO3-39K-C</p></td>
+<td><p>ALHIF+</p></td>
+</tr>
+<tr class="row-odd"><td><p>YAGO3</p></td>
+<td><p>YAGO3-10-C</p></td>
+<td><p>ALHIF+</p></td>
+</tr>
+<tr class="row-even"><td><p>YAGO4</p></td>
+<td><p>YAGO4-20-C</p></td>
+<td><p>ALCHIF</p></td>
+</tr>
+<tr class="row-odd"><td><p>ArCo</p></td>
+<td><p>ARCO25-20</p></td>
+<td><p>SROIQ</p></td>
+</tr>
+<tr class="row-even"><td><p>ArCo</p></td>
+<td><p>ARCO25-10</p></td>
+<td><p>SROIQ</p></td>
+</tr>
+<tr class="row-odd"><td><p>ArCo</p></td>
+<td><p>ARCO25-5</p></td>
+<td><p>SROIQ</p></td>
+</tr>
+<tr class="row-even"><td><p>WHOW</p></td>
+<td><p>WHOW25-5</p></td>
+<td><p>SROIQ</p></td>
+</tr>
+<tr class="row-odd"><td><p>ApuliaTravel</p></td>
+<td><p>ATRAVEL</p></td>
+<td><p>SRIQ</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dataset-statistics">
+<h2>Dataset Statistics<a class="headerlink" href="#dataset-statistics" title="Link to this heading"></a></h2>
+<section id="table-available-datasets-schema-axiom-coverage-comparison">
+<h3>Table: Available datasets schema axiom coverage comparison<a class="headerlink" href="#table-available-datasets-schema-axiom-coverage-comparison" title="Link to this heading"></a></h3>
+<p><strong>Legend:</strong></p>
+<ul class="simple">
+<li><p>✅ = axiom available in the dataset</p></li>
+<li><p>❌ = axiom not available</p></li>
+<li><p>⚠️ = axiom available in the KG but not in the dataset</p></li>
+</ul>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Axiom Type</p></th>
+<th class="head"><p>DB100K-C</p></th>
+<th class="head"><p>YAGO3-10-C</p></th>
+<th class="head"><p>YAGO4-20-C</p></th>
+<th class="head"><p>APULIA</p></th>
+<th class="head"><p>WHOW-5</p></th>
+<th class="head"><p>ARCO-5</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ClassAssertion</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubClassOf</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>EquivalentClasses</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>DisjointClasses</p></td>
+<td><p>✅</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>UnionOf</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>IntersectionOf</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+</tr>
+<tr class="row-even"><td><p>ComplementOf</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>Existential Restrictions</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>Universal Restrictions</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cardinality Restrictions</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>ObjPropDomain</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>ObjPropRange</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>SubObjProp</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>InverseObjProp</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>EquivalentObjProp</p></td>
+<td><p>⚠️</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>ObjPropCharacteristic</p></td>
+<td><p>⚠️</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>ObjPropChain</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="table-available-datasets-statistics">
+<h3>Table: Available datasets statistics<a class="headerlink" href="#table-available-datasets-statistics" title="Link to this heading"></a></h3>
+<p>Dataset statistics including <strong>ABox</strong> (instance-level) and <strong>Schema/TBox</strong> (class &amp; property-level) information. For object property structural columns, the <strong>highest values</strong> in each column are highlighted in bold (manually indicated with <strong>…</strong>).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head text-right"><p>Triples</p></th>
+<th class="head text-right"><p>Inds</p></th>
+<th class="head text-right"><p>Props</p></th>
+<th class="head text-right"><p>Classes</p></th>
+<th class="head text-center"><p>1to1</p></th>
+<th class="head text-center"><p>1toN</p></th>
+<th class="head text-center"><p>Nto1</p></th>
+<th class="head text-center"><p>NtoN</p></th>
+<th class="head text-right"><p>Avg Triples</p></th>
+<th class="head text-right"><p>Class Assert.</p></th>
+<th class="head text-right"><p>TBox Classes</p></th>
+<th class="head text-right"><p>Disjoints</p></th>
+<th class="head text-right"><p>Subclass</p></th>
+<th class="head text-center"><p>∃R.C</p></th>
+<th class="head text-center"><p>∀R.C</p></th>
+<th class="head text-right"><p>Props</p></th>
+<th class="head text-center"><p>Domain</p></th>
+<th class="head text-center"><p>Range</p></th>
+<th class="head text-center"><p>Both</p></th>
+<th class="head text-center"><p>Functional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DB-50K-C</p></td>
+<td class="text-right"><p>28,525</p></td>
+<td class="text-right"><p>22,268</p></td>
+<td class="text-right"><p>275</p></td>
+<td class="text-right"><p>169</p></td>
+<td class="text-center"><p>0.21</p></td>
+<td class="text-center"><p>0.08</p></td>
+<td class="text-center"><p>0.33</p></td>
+<td class="text-center"><p><strong>0.38</strong></p></td>
+<td class="text-right"><p>103.73</p></td>
+<td class="text-right"><p>12,419</p></td>
+<td class="text-right"><p>232</p></td>
+<td class="text-right"><p>14</p></td>
+<td class="text-right"><p>226</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-right"><p>280</p></td>
+<td class="text-center"><p>194</p></td>
+<td class="text-center"><p>217</p></td>
+<td class="text-center"><p>152</p></td>
+<td class="text-center"><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>DB-100K-C</p></td>
+<td class="text-right"><p>577,249</p></td>
+<td class="text-right"><p>96,375</p></td>
+<td class="text-right"><p>406</p></td>
+<td class="text-right"><p>229</p></td>
+<td class="text-center"><p>0.09</p></td>
+<td class="text-center"><p>0.06</p></td>
+<td class="text-center"><p>0.15</p></td>
+<td class="text-center"><p><strong>0.71</strong></p></td>
+<td class="text-right"><p>1,421.80</p></td>
+<td class="text-right"><p>82,750</p></td>
+<td class="text-right"><p>297</p></td>
+<td class="text-right"><p>14</p></td>
+<td class="text-right"><p>290</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-right"><p>411</p></td>
+<td class="text-center"><p>295</p></td>
+<td class="text-center"><p>317</p></td>
+<td class="text-center"><p>233</p></td>
+<td class="text-center"><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p>Y3-10-C</p></td>
+<td class="text-right"><p>1,080,398</p></td>
+<td class="text-right"><p>123,038</p></td>
+<td class="text-right"><p>34</p></td>
+<td class="text-right"><p>92,539</p></td>
+<td class="text-center"><p>0.00</p></td>
+<td class="text-center"><p>0.00</p></td>
+<td class="text-center"><p>0.12</p></td>
+<td class="text-center"><p><strong>0.88</strong></p></td>
+<td class="text-right"><p>31,776.41</p></td>
+<td class="text-right"><p>1,309,964</p></td>
+<td class="text-right"><p>94,726</p></td>
+<td class="text-right"><p>-</p></td>
+<td class="text-right"><p>94,809</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-right"><p>35</p></td>
+<td class="text-center"><p>34</p></td>
+<td class="text-center"><p>29</p></td>
+<td class="text-center"><p>28</p></td>
+<td class="text-center"><p>12</p></td>
+</tr>
+<tr class="row-odd"><td><p>Y3-39K-C</p></td>
+<td class="text-right"><p>370,169</p></td>
+<td class="text-right"><p>37,711</p></td>
+<td class="text-right"><p>34</p></td>
+<td class="text-right"><p>45,456</p></td>
+<td class="text-center"><p>0.03</p></td>
+<td class="text-center"><p>0.03</p></td>
+<td class="text-center"><p>0.15</p></td>
+<td class="text-center"><p><strong>0.79</strong></p></td>
+<td class="text-right"><p>10,887.32</p></td>
+<td class="text-right"><p>-</p></td>
+<td class="text-right"><p>46,892</p></td>
+<td class="text-right"><p>-</p></td>
+<td class="text-right"><p>46,960</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-right"><p>35</p></td>
+<td class="text-center"><p>34</p></td>
+<td class="text-center"><p>29</p></td>
+<td class="text-center"><p>28</p></td>
+<td class="text-center"><p>10</p></td>
+</tr>
+<tr class="row-even"><td><p>Y4-20-C</p></td>
+<td class="text-right"><p>653,988</p></td>
+<td class="text-right"><p>91,904</p></td>
+<td class="text-right"><p>68</p></td>
+<td class="text-right"><p>1,433</p></td>
+<td class="text-center"><p>0.07</p></td>
+<td class="text-center"><p>0.07</p></td>
+<td class="text-center"><p>0.13</p></td>
+<td class="text-center"><p><strong>0.72</strong></p></td>
+<td class="text-right"><p>9,617.47</p></td>
+<td class="text-right"><p>116,141</p></td>
+<td class="text-right"><p>1,462</p></td>
+<td class="text-right"><p>9</p></td>
+<td class="text-right"><p>1,665</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-right"><p>69</p></td>
+<td class="text-center"><p>68</p></td>
+<td class="text-center"><p>56</p></td>
+<td class="text-center"><p>56</p></td>
+<td class="text-center"><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p>ATRAVEL</p></td>
+<td class="text-right"><p>76,943</p></td>
+<td class="text-right"><p>29,767</p></td>
+<td class="text-right"><p>25</p></td>
+<td class="text-right"><p>53</p></td>
+<td class="text-center"><p><strong>0.36</strong></p></td>
+<td class="text-center"><p>0.16</p></td>
+<td class="text-center"><p><strong>0.36</strong></p></td>
+<td class="text-center"><p>0.12</p></td>
+<td class="text-right"><p>3,077.72</p></td>
+<td class="text-right"><p>35,910</p></td>
+<td class="text-right"><p>100</p></td>
+<td class="text-right"><p>12</p></td>
+<td class="text-right"><p>184</p></td>
+<td class="text-center"><p>17</p></td>
+<td class="text-center"><p>52</p></td>
+<td class="text-right"><p>71</p></td>
+<td class="text-center"><p>57</p></td>
+<td class="text-center"><p>61</p></td>
+<td class="text-center"><p>47</p></td>
+<td class="text-center"><p>16</p></td>
+</tr>
+<tr class="row-even"><td><p>WHOW-5</p></td>
+<td class="text-right"><p>584,791</p></td>
+<td class="text-right"><p>137,740</p></td>
+<td class="text-right"><p>25</p></td>
+<td class="text-right"><p>31</p></td>
+<td class="text-center"><p>0.00</p></td>
+<td class="text-center"><p>0.00</p></td>
+<td class="text-center"><p><strong>0.76</strong></p></td>
+<td class="text-center"><p>0.24</p></td>
+<td class="text-right"><p>23,391.64</p></td>
+<td class="text-right"><p>144,892</p></td>
+<td class="text-right"><p>91</p></td>
+<td class="text-right"><p>16</p></td>
+<td class="text-right"><p>202</p></td>
+<td class="text-center"><p>43</p></td>
+<td class="text-center"><p>34</p></td>
+<td class="text-right"><p>102</p></td>
+<td class="text-center"><p>99</p></td>
+<td class="text-center"><p>99</p></td>
+<td class="text-center"><p>99</p></td>
+<td class="text-center"><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>ARCO-20</p></td>
+<td class="text-right"><p>95,840</p></td>
+<td class="text-right"><p>15,690</p></td>
+<td class="text-right"><p>53</p></td>
+<td class="text-right"><p>78</p></td>
+<td class="text-center"><p>0.04</p></td>
+<td class="text-center"><p>0.09</p></td>
+<td class="text-center"><p>0.40</p></td>
+<td class="text-center"><p><strong>0.47</strong></p></td>
+<td class="text-right"><p>1,808.30</p></td>
+<td class="text-right"><p>41,626</p></td>
+<td class="text-right"><p>315</p></td>
+<td class="text-right"><p>14</p></td>
+<td class="text-right"><p>873</p></td>
+<td class="text-center"><p>181</p></td>
+<td class="text-center"><p>366</p></td>
+<td class="text-right"><p>454</p></td>
+<td class="text-center"><p>348</p></td>
+<td class="text-center"><p>352</p></td>
+<td class="text-center"><p>271</p></td>
+<td class="text-center"><p>62</p></td>
+</tr>
+<tr class="row-even"><td><p>ARCO-10</p></td>
+<td class="text-right"><p>202,492</p></td>
+<td class="text-right"><p>45,400</p></td>
+<td class="text-right"><p>111</p></td>
+<td class="text-right"><p>117</p></td>
+<td class="text-center"><p>0.06</p></td>
+<td class="text-center"><p>0.06</p></td>
+<td class="text-center"><p><strong>0.44</strong></p></td>
+<td class="text-center"><p><strong>0.44</strong></p></td>
+<td class="text-right"><p>1,824.25</p></td>
+<td class="text-right"><p>119,304</p></td>
+<td class="text-right"><p>378</p></td>
+<td class="text-right"><p>24</p></td>
+<td class="text-right"><p>1,033</p></td>
+<td class="text-center"><p>211</p></td>
+<td class="text-center"><p>431</p></td>
+<td class="text-right"><p>593</p></td>
+<td class="text-center"><p>462</p></td>
+<td class="text-center"><p>465</p></td>
+<td class="text-center"><p>369</p></td>
+<td class="text-center"><p>71</p></td>
+</tr>
+<tr class="row-odd"><td><p>ARCO-5</p></td>
+<td class="text-right"><p>655,089</p></td>
+<td class="text-right"><p>198,674</p></td>
+<td class="text-right"><p>196</p></td>
+<td class="text-right"><p>192</p></td>
+<td class="text-center"><p>0.10</p></td>
+<td class="text-center"><p>0.10</p></td>
+<td class="text-center"><p><strong>0.40</strong></p></td>
+<td class="text-center"><p><strong>0.40</strong></p></td>
+<td class="text-right"><p>3,342.29</p></td>
+<td class="text-right"><p>471,031</p></td>
+<td class="text-right"><p>438</p></td>
+<td class="text-right"><p>26</p></td>
+<td class="text-right"><p>1,153</p></td>
+<td class="text-center"><p>228</p></td>
+<td class="text-center"><p>474</p></td>
+<td class="text-right"><p>683</p></td>
+<td class="text-center"><p>546</p></td>
+<td class="text-center"><p>551</p></td>
+<td class="text-center"><p>450</p></td>
+<td class="text-center"><p>84</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 </section>
 

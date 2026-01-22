@@ -302,7 +302,7 @@ Please follow the **Quick Start Guide** before going forward.
 ```
 
 ```{note}
-This guide is also available as a Notebook in `tutorial/general.ipynb`, a Python shell executable script in `tutorial/general.py` and shell script `tutorial/general.sh`
+This guide is also available as a Notebook in `tutorial/general.ipynb`, a Python shell executable script in `tutorial/general.py` and shell script `tutorial/general.sh`.  For easier customization, we suggest following the Notebook.
 ```
 
 This guide show how to use the provided **KG-SaF-JDeX Workflow** Functionalities to generate a new Schema and Data Dataset from your custom Knowledge Graph.  This guide provides an example dataset in the INPUT folder to test the functionalities. All the produces files will be created in the OUTPUT folder.  
@@ -330,7 +330,7 @@ And applies the following procedures following the KG-SaF-JDeX workflow:
 - Conversion and serialization of schema axioms to JSON format
 
 
-#### Full pipeline script 
+#### Executable Script
 
 **Usage example:**
 

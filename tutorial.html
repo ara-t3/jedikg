@@ -62,7 +62,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#using-kg-saf-jdex-on-custom-knowledge-graphs">Using KG-SaF-JDeX on Custom Knowledge Graphs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#full-pipeline-script">Full pipeline script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#executable-script">Executable Script</a></li>
 </ul>
 </li>
 </ul>
@@ -377,7 +377,7 @@ INFO:pykeen.evaluation.evaluator:Evaluation took 79.32s seconds
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This guide is also available as a Notebook in <code class="docutils literal notranslate"><span class="pre">tutorial/general.ipynb</span></code>, a Python shell executable script in <code class="docutils literal notranslate"><span class="pre">tutorial/general.py</span></code> and shell script <code class="docutils literal notranslate"><span class="pre">tutorial/general.sh</span></code></p>
+<p>This guide is also available as a Notebook in <code class="docutils literal notranslate"><span class="pre">tutorial/general.ipynb</span></code>, a Python shell executable script in <code class="docutils literal notranslate"><span class="pre">tutorial/general.py</span></code> and shell script <code class="docutils literal notranslate"><span class="pre">tutorial/general.sh</span></code>.  For easier customization, we suggest following the Notebook.</p>
 </div>
 <p>This guide show how to use the provided <strong>KG-SaF-JDeX Workflow</strong> Functionalities to generate a new Schema and Data Dataset from your custom Knowledge Graph.  This guide provides an example dataset in the INPUT folder to test the functionalities. All the produces files will be created in the OUTPUT folder.</p>
 <p>This notebook expectes the following inputs:</p>
@@ -402,8 +402,8 @@ INFO:pykeen.evaluation.evaluator:Evaluation took 79.32s seconds
 <li><p>Conversion and serialization of object property assertion to TSV format</p></li>
 <li><p>Conversion and serialization of schema axioms to JSON format</p></li>
 </ul>
-<section id="full-pipeline-script">
-<h3>Full pipeline script<a class="headerlink" href="#full-pipeline-script" title="Link to this heading"></a></h3>
+<section id="executable-script">
+<h3>Executable Script<a class="headerlink" href="#executable-script" title="Link to this heading"></a></h3>
 <p><strong>Usage example:</strong></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>general.py<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--kg_file<span class="w"> </span>/path/to/input_kg.owl<span class="w"> </span><span class="se">\</span>

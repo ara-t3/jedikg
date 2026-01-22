@@ -88,19 +88,38 @@
 <div class="viewcode-block" id="KnowledgeGraph">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeGraph</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Knowledge Graph Dataset Loader.</span>
+
+<span class="sd">    This module defines a PyTorch `Dataset` abstraction for ontology-enhanced</span>
+<span class="sd">    knowledge graphs, supporting ABox, TBox, and RBox components.</span>
+
+<span class="sd">    The dataset structure assumes:</span>
+<span class="sd">        - Precomputed URI-to-ID mappings for individuals, classes, and object properties</span>
+<span class="sd">        - ABox triples split into train/validation/test sets</span>
+<span class="sd">        - Optional class assertions (rdf:type)</span>
+<span class="sd">        - TBox taxonomy (class subsumption)</span>
+<span class="sd">        - RBox axioms including object property hierarchies and domain/range constraints</span>
+
+<span class="sd">    All symbolic components are loaded from disk and exposed as `torch.Tensor`</span>
+<span class="sd">    objects suitable for downstream learning and reasoning tasks.</span>
+
+<span class="sd">    The implementation supports limited OWL constructs such as `owl:unionOf`</span>
+<span class="sd">    in domain and range definitions while skipping unsupported complex expressions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;_summary_</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the knowledge graph dataset.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            path (str): _description_</span>
+<span class="sd">            path (str): Base path of the dataset directory.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        
 
         <span class="c1"># Dataset BASE Folder</span>
 
@@ -138,76 +157,121 @@
 
     <span class="c1"># General Functions</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print a warning for skipped complex URIs.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            count (int): Number of skipped URIs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARNING: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> complex URIs detected. These classes are skipped during loading.&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_load_mappings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_location</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load a URI-to-ID mapping from disk.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_location (str): Relative path to mapping file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_path</span> <span class="o">/</span> <span class="n">file_location</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">map_json</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">map_json</span><span class="p">)</span>
 
 <div class="viewcode-block" id="KnowledgeGraph.individual_to_id">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.individual_to_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">individual_to_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert individual URI to ID.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_individual_to_id</span><span class="p">[</span><span class="n">individual_uri</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="KnowledgeGraph.class_to_id">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.class_to_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">class_to_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert class URI to ID.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_class_to_id</span><span class="p">[</span><span class="n">class_uri</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="KnowledgeGraph.obj_prop_to_id">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.obj_prop_to_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">obj_prop_to_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_prop_uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert object property URI to ID.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj_prop_to_id</span><span class="p">[</span><span class="n">obj_prop_uri</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="KnowledgeGraph.id_to_individual">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.id_to_individual">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">id_to_individual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert individual ID to URI.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id_to_individual</span><span class="p">[</span><span class="n">individual_id</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="KnowledgeGraph.id_to_class">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.id_to_class">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">id_to_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert class ID to URI.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id_to_class</span><span class="p">[</span><span class="n">class_id</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="KnowledgeGraph.id_to_obj_prop">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.id_to_obj_prop">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">id_to_obj_prop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_prop_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert object property ID to URI.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id_to_obj_prop</span><span class="p">[</span><span class="n">obj_prop_id</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="KnowledgeGraph.individual_classes">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.individual_classes">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">individual_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get classes asserted for an individual.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_assertions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">class_assertions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">individual_id</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="KnowledgeGraph.sup_classes">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.sup_classes">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">sup_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get superclasses of a class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxonomy</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">taxonomy</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">class_id</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="KnowledgeGraph.sub_classes">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.sub_classes">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">sub_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get subclasses of a class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">taxonomy</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">taxonomy</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">class_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span></div>
 
     
 <div class="viewcode-block" id="KnowledgeGraph.is_leaf">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.is_leaf">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_leaf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if class has no subclasses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sub_classes</span><span class="p">(</span><span class="n">class_id</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span></div>
 
 
 <div class="viewcode-block" id="KnowledgeGraph.sup_obj_prop">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.sup_obj_prop">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">sup_obj_prop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_prop_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get super-properties of an object property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_props_hierarchy</span><span class="p">[</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">obj_props_hierarchy</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">obj_prop_id</span><span class="p">,</span> <span class="mi">1</span>
         <span class="p">]</span></div>
@@ -216,6 +280,9 @@
 <div class="viewcode-block" id="KnowledgeGraph.sub_obj_prop">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.sub_obj_prop">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">sub_obj_prop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_prop_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get sub-properties of an object property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_props_hierarchy</span><span class="p">[</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">obj_props_hierarchy</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">obj_prop_id</span><span class="p">,</span> <span class="mi">0</span>
         <span class="p">]</span></div>
@@ -224,12 +291,18 @@
 <div class="viewcode-block" id="KnowledgeGraph.obj_prop_domain">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.obj_prop_domain">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">obj_prop_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_prop_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get domain classes of an object property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_props_domain</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_props_domain</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">obj_prop_id</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="KnowledgeGraph.obj_prop_range">
 <a class="viewcode-back" href="../../../../jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.obj_prop_range">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">obj_prop_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_prop_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get range classes of an object property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_props_range</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_props_range</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">obj_prop_id</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></div>
 
 
@@ -241,6 +314,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">:</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_triples</span>
 
     <span class="nd">@property</span>
