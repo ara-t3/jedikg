@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KG-SaF-JDeX: Modular Dataset Generation Workflow &mdash; KG-SaF: Building Complete and Curated Datasets for Machine Learning 1.6.0 documentation</title>
+  <title>Code Documentation &mdash; KG-SaF: Building Complete and Curated Datasets for Machine Learning 1.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="KG-SaF-Data: Complete KGR Datasets" href="data.html" /> 
+    <link rel="prev" title="KG-SaF-JDeX: Modular Dataset Generation Workflow" href="jdex.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,7 +46,8 @@
 <li class="toctree-l1"><a class="reference internal" href="quick.html">Quick Start Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials and Guides</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data.html"><strong>KG-SaF-Data</strong>: Complete KGR Datasets</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="jdex.html"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph"><code class="docutils literal notranslate"><span class="pre">KnowledgeGraph</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.class_assertions"><code class="docutils literal notranslate"><span class="pre">KnowledgeGraph.class_assertions</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.class_to_id"><code class="docutils literal notranslate"><span class="pre">KnowledgeGraph.class_to_id()</span></code></a></li>
@@ -74,29 +75,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.valid"><code class="docutils literal notranslate"><span class="pre">KnowledgeGraph.valid</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#kgsaf_jdex.utils.modularization.SignatureModularizer"><code class="docutils literal notranslate"><span class="pre">SignatureModularizer</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.utils.modularization.SignatureModularizer.modularize"><code class="docutils literal notranslate"><span class="pre">SignatureModularizer.modularize()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#kgsaf_jdex.utils.modularization.SchemaDecomposer"><code class="docutils literal notranslate"><span class="pre">SchemaDecomposer</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.utils.modularization.SchemaDecomposer.decompose"><code class="docutils literal notranslate"><span class="pre">SchemaDecomposer.decompose()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#kgsaf_jdex.utils.conversion.OWLConverter"><code class="docutils literal notranslate"><span class="pre">OWLConverter</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.utils.conversion.OWLConverter.preprocess"><code class="docutils literal notranslate"><span class="pre">OWLConverter.preprocess()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_class_assertions"><code class="docutils literal notranslate"><span class="pre">OWLConverter.preprocess_class_assertions()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_obj_prop_domain_range"><code class="docutils literal notranslate"><span class="pre">OWLConverter.preprocess_obj_prop_domain_range()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_obj_prop_hierarchy"><code class="docutils literal notranslate"><span class="pre">OWLConverter.preprocess_obj_prop_hierarchy()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_taxonomy"><code class="docutils literal notranslate"><span class="pre">OWLConverter.preprocess_taxonomy()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.utils.conversion.OWLConverter.serialize"><code class="docutils literal notranslate"><span class="pre">OWLConverter.serialize()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#kgsaf_jdex.utils.conversion.TSVConverter"><code class="docutils literal notranslate"><span class="pre">TSVConverter</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.utils.conversion.TSVConverter.convert"><code class="docutils literal notranslate"><span class="pre">TSVConverter.convert()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.utils.conversion.TSVConverter.preprocess_triples"><code class="docutils literal notranslate"><span class="pre">TSVConverter.preprocess_triples()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kgsaf_jdex.utils.conversion.TSVConverter.serialize"><code class="docutils literal notranslate"><span class="pre">TSVConverter.serialize()</span></code></a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -115,9 +93,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</li>
+      <li class="breadcrumb-item active">Code Documentation</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/jdex.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/code.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -125,9 +103,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="kg-saf-jdex-modular-dataset-generation-workflow">
-<h1><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow<a class="headerlink" href="#kg-saf-jdex-modular-dataset-generation-workflow" title="Link to this heading"></a></h1>
-<dl class="py class">
+  <section id="code-documentation">
+<h1>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h1>
+<dl class="py class" id="module-kgsaf_jdex.loaders.pytorch.dataset">
 <dt class="sig sig-object py" id="kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kgsaf_jdex.loaders.pytorch.dataset.</span></span><span class="sig-name descname"><span class="pre">KnowledgeGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kgsaf_jdex/loaders/pytorch/dataset.html#KnowledgeGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
@@ -253,204 +231,13 @@
 
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.modularization.SignatureModularizer">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kgsaf_jdex.utils.modularization.</span></span><span class="sig-name descname"><span class="pre">SignatureModularizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">URIRef</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kgsaf_jdex/utils/modularization.html#SignatureModularizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.modularization.SignatureModularizer" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Exctract a Module from an OWL Ontology given a signature (Set of target URIs)</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.modularization.SignatureModularizer.modularize">
-<span class="sig-name descname"><span class="pre">modularize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/kgsaf_jdex/utils/modularization.html#SignatureModularizer.modularize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.modularization.SignatureModularizer.modularize" title="Link to this definition"></a></dt>
-<dd><p>Modularize the graph and output a new RDFLib graph</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Log printing.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Modularized sub graph</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Graph</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.modularization.SchemaDecomposer">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kgsaf_jdex.utils.modularization.</span></span><span class="sig-name descname"><span class="pre">SchemaDecomposer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kgsaf_jdex/utils/modularization.html#SchemaDecomposer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.modularization.SchemaDecomposer" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Decompose a given Ontology into TBox and RBox components.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.modularization.SchemaDecomposer.decompose">
-<span class="sig-name descname"><span class="pre">decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Graph</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Graph</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Graph</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/kgsaf_jdex/utils/modularization.html#SchemaDecomposer.decompose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.modularization.SchemaDecomposer.decompose" title="Link to this definition"></a></dt>
-<dd><p>Decompose a Graph into RBox, Taxonomy and Classes</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Log printing.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>RBox graph, Taxonomy Graph and Class definitions Graph</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuple[Graph, Graph, Graph]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.conversion.OWLConverter">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kgsaf_jdex.utils.conversion.</span></span><span class="sig-name descname"><span class="pre">OWLConverter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kgsaf_jdex/utils/conversion.html#OWLConverter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.conversion.OWLConverter" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Converts a subset of OWL Ontology axioms to JSON Serialization</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.conversion.OWLConverter.preprocess">
-<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">taxonomy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_assertions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_prop_domain_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_prop_hierarchy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kgsaf_jdex/utils/conversion.html#OWLConverter.preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.conversion.OWLConverter.preprocess" title="Link to this definition"></a></dt>
-<dd><p>Preprocess a subset of the dataset schema into Python data structure</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>taxonomy</strong> (<em>bool</em><em>, </em><em>optional</em>) – Load and convert taxonomy axioms. Defaults to True.</p></li>
-<li><p><strong>class_assertions</strong> (<em>bool</em><em>, </em><em>optional</em>) – Load and convert class assertions axioms. Defaults to True.</p></li>
-<li><p><strong>obj_prop_domain_range</strong> (<em>bool</em><em>, </em><em>optional</em>) – Load and convert object propoerty domain and range. Defaults to True.</p></li>
-<li><p><strong>obj_prop_hierarchy</strong> (<em>bool</em><em>, </em><em>optional</em>) – Load and convert object property hierarchy. Defaults to True.</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – Log printing. Defaults to True.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.conversion.OWLConverter.preprocess_class_assertions">
-<span class="sig-name descname"><span class="pre">preprocess_class_assertions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/kgsaf_jdex/utils/conversion.html#OWLConverter.preprocess_class_assertions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_class_assertions" title="Link to this definition"></a></dt>
-<dd><p>Process class assertions data, the out dictionary will be formatted as:</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">uri_individuals</span> <span class="pre">:</span> <span class="pre">['uri_class_1',...,'uri_class_n']</span>
-<span class="pre">`</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Log printing.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary with list of individuals and their types</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.conversion.OWLConverter.preprocess_obj_prop_domain_range">
-<span class="sig-name descname"><span class="pre">preprocess_obj_prop_domain_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/kgsaf_jdex/utils/conversion.html#OWLConverter.preprocess_obj_prop_domain_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_obj_prop_domain_range" title="Link to this definition"></a></dt>
-<dd><p>Process object properties domain and range, the out dictionary will be formatted as:</p>
-<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
-uri_obj_prop : {</p>
-<blockquote>
-<div><p>domain : [‘uri_c_1’, …, ‘uri_c_n’]
-range :  [‘uri_c_1’, …, ‘uri_c_m’]</p>
-</div></blockquote>
-<section id="id3">
-<h2>}<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
-<p>If complex classes are found (restrictions or lists). These will be kept and recusively added as a Python dictionary</p>
-<dl class="field-list simple">
-<dt class="field-odd">param verbose<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Log printing.</p>
-</dd>
-<dt class="field-even">type verbose<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-<dt class="field-odd">returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dictionary with list of object properties and domain and range classes</p>
-</dd>
-<dt class="field-even">rtype<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.conversion.OWLConverter.preprocess_obj_prop_hierarchy">
-<span class="sig-name descname"><span class="pre">preprocess_obj_prop_hierarchy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/kgsaf_jdex/utils/conversion.html#OWLConverter.preprocess_obj_prop_hierarchy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_obj_prop_hierarchy" title="Link to this definition"></a></dt>
-<dd><p>Process object properties hierarchy, the out dictionary will be formatted as:</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">uri_obj_prop</span> <span class="pre">:</span> <span class="pre">['sup_uri_obj_prop_1',...,'sup_uri_obj_prop_1']</span>
-<span class="pre">`</span></code></p>
-<p>If complex classes are found (restrictions or lists). These will be kept and recusively added as a Python dictionary</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Log printing.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary with list of object properties and their hierarchy</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.conversion.OWLConverter.preprocess_taxonomy">
-<span class="sig-name descname"><span class="pre">preprocess_taxonomy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/kgsaf_jdex/utils/conversion.html#OWLConverter.preprocess_taxonomy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_taxonomy" title="Link to this definition"></a></dt>
-<dd><p>Process taxonomy data, the out dictionary will be formatted as:</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">uri_class</span> <span class="pre">:</span> <span class="pre">['uri_sup_class_1',...,</span> <span class="pre">'uri_sup_class_n']</span>
-<span class="pre">`</span></code></p>
-<p>If complex classes are found (restrictions or lists). These will be kept and recusively added as a Python dictionary</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Log printing.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary with list of classes and theri super classes</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.conversion.OWLConverter.serialize">
-<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/kgsaf_jdex/utils/conversion.html#OWLConverter.serialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.conversion.OWLConverter.serialize" title="Link to this definition"></a></dt>
-<dd><p>Serialize loaded and converted data into JSON format</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.conversion.TSVConverter">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kgsaf_jdex.utils.conversion.</span></span><span class="sig-name descname"><span class="pre">TSVConverter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kgsaf_jdex/utils/conversion.html#TSVConverter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.conversion.TSVConverter" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.conversion.TSVConverter.convert">
-<span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">triples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kgsaf_jdex/utils/conversion.html#TSVConverter.convert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.conversion.TSVConverter.convert" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.conversion.TSVConverter.preprocess_triples">
-<span class="sig-name descname"><span class="pre">preprocess_triples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kgsaf_jdex/utils/conversion.html#TSVConverter.preprocess_triples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.conversion.TSVConverter.preprocess_triples" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="kgsaf_jdex.utils.conversion.TSVConverter.serialize">
-<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/kgsaf_jdex/utils/conversion.html#TSVConverter.serialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kgsaf_jdex.utils.conversion.TSVConverter.serialize" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="data.html" class="btn btn-neutral float-left" title="KG-SaF-Data: Complete KGR Datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="jdex.html" class="btn btn-neutral float-left" title="KG-SaF-JDeX: Modular Dataset Generation Workflow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

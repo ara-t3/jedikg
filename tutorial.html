@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="KG-SaF-Data: Consistent and Complete KGR Datasets" href="data.html" />
+    <link rel="next" title="KG-SaF-Data: Complete KGR Datasets" href="data.html" />
     <link rel="prev" title="Quick Start Guide" href="quick.html" /> 
 </head>
 
@@ -46,13 +46,29 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quick.html">Quick Start Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials and Guides</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#loading-the-kg-saf-datasets-in-pytorch">Loading the  KG-SaF Datasets in Pytorch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-transe-on-kg-saf-datasets">Running TransE on KG-SaF Datasets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#using-kg-saf-jdex-on-custom-knowledge-graphs">Using KG-SaF-JDeX on Custom Knowledge Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-and-analyzing-a-kg-saf-datasets-in-pytorch">Loading and Analyzing a KG-SaF Datasets in PyTorch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#loading-the-dataset">Loading the Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inspect-dataset-components">Inspect Dataset Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exploring-individuals-classes-and-object-properties">Exploring Individuals Classes and Object Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inspecting-class-assertions">Inspecting Class Assertions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exploring-class-hierarchies">Exploring Class Hierarchies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inspecting-object-properties-hierarchies">Inspecting Object Properties Hierarchies</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="data.html">KG-SaF-Data: Consistent and Complete KGR Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jdex.html">KG-SaF-JDeX: Modular dataset creation workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-transe-on-kg-saf-datasets">Running TransE on KG-SaF Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#loading-and-mapping-triples">Loading and Mapping Triples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#train-transe-model">Train TransE Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-kg-saf-jdex-on-custom-knowledge-graphs">Using KG-SaF-JDeX on Custom Knowledge Graphs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#full-pipeline-script">Full pipeline script</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data.html"><strong>KG-SaF-Data</strong>: Complete KGR Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jdex.html"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a></li>
 </ul>
 
         </div>
@@ -81,14 +97,347 @@
              
   <section id="tutorials-and-guides">
 <h1>Tutorials and Guides<a class="headerlink" href="#tutorials-and-guides" title="Link to this heading"></a></h1>
-<section id="loading-the-kg-saf-datasets-in-pytorch">
-<h2>Loading the  KG-SaF Datasets in Pytorch<a class="headerlink" href="#loading-the-kg-saf-datasets-in-pytorch" title="Link to this heading"></a></h2>
+<section id="loading-and-analyzing-a-kg-saf-datasets-in-pytorch">
+<h2>Loading and Analyzing a KG-SaF Datasets in PyTorch<a class="headerlink" href="#loading-and-analyzing-a-kg-saf-datasets-in-pytorch" title="Link to this heading"></a></h2>
+<p>This tutorial demonstrates how to load a Knowledge Graph dataset using kgsaf_jdex and inspect its components, classes, and object property hierarchies. You can find a full executable Notebook in <code class="docutils literal notranslate"><span class="pre">tutorial/dataset_loader.ipynb</span></code>. For this example the <code class="docutils literal notranslate"><span class="pre">APULIATRAVEL</span></code> dataset will be used.</p>
+<p><strong>Setup and Imports</strong></p>
+<p>Before loading the dataset, make sure your Python environment can access the library and required modules:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>  <span class="c1"># Adds the parent folder to the path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">kgsaf_jdex.utils.conventions.paths</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">kgsaf_jdex.loaders.pytorch.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">KnowledgeGraph</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Adding the parent directory to <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> allows Python to locate your <code class="docutils literal notranslate"><span class="pre">kgsaf_jdex</span></code> package if it is not installed system-wide.</p>
+</div>
+<section id="loading-the-dataset">
+<h3>Loading the Dataset<a class="headerlink" href="#loading-the-dataset" title="Link to this heading"></a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">KnowledgeGraph</span></code> class to load a dataset from the folder created by the unpacking utility:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kg</span> <span class="o">=</span> <span class="n">KnowledgeGraph</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&lt;DATASET_PATH&gt;&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="inspect-dataset-components">
+<h3>Inspect Dataset Components<a class="headerlink" href="#inspect-dataset-components" title="Link to this heading"></a></h3>
+<p>You can quickly inspect the shapes of the main dataset components:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Dataset Component&#39;</span><span class="si">:</span><span class="s2">&lt;35</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Shape&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Training triples&#39;</span><span class="si">:</span><span class="s2">&lt;35</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Test triples&#39;</span><span class="si">:</span><span class="s2">&lt;35</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Validation triples&#39;</span><span class="si">:</span><span class="s2">&lt;35</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">valid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Class assertions&#39;</span><span class="si">:</span><span class="s2">&lt;35</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">class_assertions</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Taxonomy (TBox)&#39;</span><span class="si">:</span><span class="s2">&lt;35</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">taxonomy</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Object property hierarchy&#39;</span><span class="si">:</span><span class="s2">&lt;35</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">obj_props_hierarchy</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Object property domains&#39;</span><span class="si">:</span><span class="s2">&lt;35</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">obj_props_domain</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Object property ranges&#39;</span><span class="si">:</span><span class="s2">&lt;35</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">obj_props_range</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Dataset Component                   | Shape
+--------------------------------------------------
+Training triples                    | torch.Size([65401, 3])
+Test triples                        | torch.Size([7695, 3])
+Validation triples                  | torch.Size([3847, 3])
+Class assertions                    | torch.Size([35915, 2])
+Taxonomy (TBox)                     | torch.Size([54, 2])
+Object property hierarchy           | torch.Size([11, 2])
+Object property domains             | torch.Size([71, 2])
+Object property ranges              | torch.Size([69, 2])
+</pre></div>
+</div>
+</section>
+<section id="exploring-individuals-classes-and-object-properties">
+<h3>Exploring Individuals Classes and Object Properties<a class="headerlink" href="#exploring-individuals-classes-and-object-properties" title="Link to this heading"></a></h3>
+<p>You can select random elements for testing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">individual_uri_test</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">kg</span><span class="o">.</span><span class="n">_individual_to_id</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">class_uri_test</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">kg</span><span class="o">.</span><span class="n">_class_to_id</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">op_uri_test</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">kg</span><span class="o">.</span><span class="n">_obj_prop_to_id</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Testing on individual: </span><span class="si">{</span><span class="n">individual_uri_test</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Testing on class: </span><span class="si">{</span><span class="n">class_uri_test</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Testing on object property: </span><span class="si">{</span><span class="n">op_uri_test</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing on individual: https://w3id.org/italia/onto/CLV/StreetToponym/31148_Castello_street_toponym
+Testing on class: https://apuliatravel.org/td/HistoricPalace
+Testing on object property: https://w3id.org/italia/onto/CLV/hasDirectHigherRank
+</pre></div>
+</div>
+</section>
+<section id="inspecting-class-assertions">
+<h3>Inspecting Class Assertions<a class="headerlink" href="#inspecting-class-assertions" title="Link to this heading"></a></h3>
+<p>Retrieve all classes associated with an individual:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="bp">cls</span> <span class="o">=</span> <span class="n">kg</span><span class="o">.</span><span class="n">individual_classes</span><span class="p">(</span><span class="n">kg</span><span class="o">.</span><span class="n">individual_to_id</span><span class="p">(</span><span class="n">individual_uri_test</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Class assertions for [</span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">individual_to_id</span><span class="p">(</span><span class="n">individual_uri_test</span><span class="p">)</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">individual_uri_test</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">cls</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">id_to_class</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing the Class Assertions of [7157] https://w3id.org/italia/onto/CLV/StreetToponym/31148_Castello_street_toponym
+	 Tensor [58]
+	 [58] https://w3id.org/italia/onto/CLV/StreetToponym
+</pre></div>
+</div>
+</section>
+<section id="exploring-class-hierarchies">
+<h3>Exploring Class Hierarchies<a class="headerlink" href="#exploring-class-hierarchies" title="Link to this heading"></a></h3>
+<p>Check superclasses and subclasses of a given class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sup_cls</span> <span class="o">=</span> <span class="n">kg</span><span class="o">.</span><span class="n">sup_classes</span><span class="p">(</span><span class="n">kg</span><span class="o">.</span><span class="n">class_to_id</span><span class="p">(</span><span class="n">class_uri_test</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">sub_cls</span> <span class="o">=</span> <span class="n">kg</span><span class="o">.</span><span class="n">sub_classes</span><span class="p">(</span><span class="n">kg</span><span class="o">.</span><span class="n">class_to_id</span><span class="p">(</span><span class="n">class_uri_test</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Superclasses:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">sup_cls</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">id_to_class</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Subclasses:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">sub_cls</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">id_to_class</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing the Hierarchy of [84] https://w3id.org/italia/onto/TI/Year. Leaf class? True
+	 Superclasses
+		 Tensor: [81]
+		 [81] https://w3id.org/italia/onto/TI/TemporalEntity
+	 Subclasses
+		 Tensor: []
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">is_leaf(class_id)</span></code> can be used to check if the class is a leaf in the hierarchy.</p>
+</div>
+</section>
+<section id="inspecting-object-properties-hierarchies">
+<h3>Inspecting Object Properties Hierarchies<a class="headerlink" href="#inspecting-object-properties-hierarchies" title="Link to this heading"></a></h3>
+<p>Check super and sub properties, as well as domains and ranges:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sup_op</span> <span class="o">=</span> <span class="n">kg</span><span class="o">.</span><span class="n">sup_obj_prop</span><span class="p">(</span><span class="n">kg</span><span class="o">.</span><span class="n">obj_prop_to_id</span><span class="p">(</span><span class="n">op_uri_test</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">sub_op</span> <span class="o">=</span> <span class="n">kg</span><span class="o">.</span><span class="n">sub_obj_prop</span><span class="p">(</span><span class="n">kg</span><span class="o">.</span><span class="n">obj_prop_to_id</span><span class="p">(</span><span class="n">op_uri_test</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Super Object Properties:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">sup_op</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">id_to_obj_prop</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sub Object Properties:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">sub_op</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">id_to_obj_prop</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">domain</span> <span class="o">=</span> <span class="n">kg</span><span class="o">.</span><span class="n">obj_prop_domain</span><span class="p">(</span><span class="n">kg</span><span class="o">.</span><span class="n">obj_prop_to_id</span><span class="p">(</span><span class="n">op_uri_test</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="nb">range</span> <span class="o">=</span> <span class="n">kg</span><span class="o">.</span><span class="n">obj_prop_range</span><span class="p">(</span><span class="n">kg</span><span class="o">.</span><span class="n">obj_prop_to_id</span><span class="p">(</span><span class="n">op_uri_test</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Domain:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">domain</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">id_to_class</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Range:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">id_to_class</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing the Role Hierarhcy of [41] https://w3id.org/italia/onto/SM/hasEmailType
+	 Super Obj Prop
+		 Tensor: []
+	 Sub Obj Prop
+		 Tensor: []
+
+Testing the Role Hierarhcy of [41] https://w3id.org/italia/onto/SM/hasEmailType
+	 Domain
+		 Tensor: [66]
+		 [66] https://w3id.org/italia/onto/SM/Email
+	 Range
+		 Tensor: [67]
+		 [67] https://w3id.org/italia/onto/SM/EmailType
+</pre></div>
+</div>
+</section>
 </section>
 <section id="running-transe-on-kg-saf-datasets">
 <h2>Running TransE on KG-SaF Datasets<a class="headerlink" href="#running-transe-on-kg-saf-datasets" title="Link to this heading"></a></h2>
+<p>This tutorial demonstrates how to train and evaluate <strong>TransE</strong> KGR model
+on a dataset prepared with the <code class="docutils literal notranslate"><span class="pre">kgsaf_jdex</span></code> loaders.  You can find a full executable Notebook in <code class="docutils literal notranslate"><span class="pre">tutorial/kge_pykeen.ipynb</span></code>. The example will use the <code class="docutils literal notranslate"><span class="pre">APULIATRAVEL</span></code> dataset.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure the dataset is unpacked and the paths in <code class="docutils literal notranslate"><span class="pre">pc</span></code> (paths conventions) point to the correct files.</p>
+</div>
+<p><strong>Imports</strong></p>
+<p>This code imports all necessary packages, including PyKEEN for knowledge graph embeddings and
+your kgsaf_jdex dataset utilities.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pykeen.triples</span><span class="w"> </span><span class="kn">import</span> <span class="n">TriplesFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pykeen.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">RankBasedEvaluator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pykeen.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">pipeline</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">kgsaf_jdex.utils.conventions.paths</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+
+<span class="c1"># Add parent folder to Python path if needed</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
+</pre></div>
+</div>
+<section id="loading-and-mapping-triples">
+<h3>Loading and Mapping Triples<a class="headerlink" href="#loading-and-mapping-triples" title="Link to this heading"></a></h3>
+<p>Here we load entity and relation mappings from JSON files, and then build TriplesFactory objects
+for training, validation, and testing. PyKEEN uses these to manage KG data efficiently.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dataset_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/home/navis/dev/kg-saf/kgsaf_data/datasets/base/unpack/APULIATRAVEL-BASE&quot;</span><span class="p">)</span>
+
+<span class="c1"># Load entity and relation mappings</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dataset_path</span> <span class="o">/</span> <span class="n">pc</span><span class="o">.</span><span class="n">INDIVIDUAL_MAPPINGS</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">entity_mapping</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dataset_path</span> <span class="o">/</span> <span class="n">pc</span><span class="o">.</span><span class="n">OBJ_PROP_MAPPINGS</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">relation_mapping</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="c1"># Create PyKEEN TriplesFactory objects</span>
+<span class="n">train_tf</span> <span class="o">=</span> <span class="n">TriplesFactory</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span>
+    <span class="n">dataset_path</span> <span class="o">/</span> <span class="n">pc</span><span class="o">.</span><span class="n">TRAIN</span><span class="p">,</span>
+    <span class="n">entity_to_id</span><span class="o">=</span><span class="n">entity_mapping</span><span class="p">,</span>
+    <span class="n">relation_to_id</span><span class="o">=</span><span class="n">relation_mapping</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">valid_tf</span> <span class="o">=</span> <span class="n">TriplesFactory</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span>
+    <span class="n">dataset_path</span> <span class="o">/</span> <span class="n">pc</span><span class="o">.</span><span class="n">VALID</span><span class="p">,</span>
+    <span class="n">entity_to_id</span><span class="o">=</span><span class="n">entity_mapping</span><span class="p">,</span>
+    <span class="n">relation_to_id</span><span class="o">=</span><span class="n">relation_mapping</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">test_tf</span> <span class="o">=</span> <span class="n">TriplesFactory</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span>
+    <span class="n">dataset_path</span> <span class="o">/</span> <span class="n">pc</span><span class="o">.</span><span class="n">TEST</span><span class="p">,</span>
+    <span class="n">entity_to_id</span><span class="o">=</span><span class="n">entity_mapping</span><span class="p">,</span>
+    <span class="n">relation_to_id</span><span class="o">=</span><span class="n">relation_mapping</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="train-transe-model">
+<h3>Train TransE Model<a class="headerlink" href="#train-transe-model" title="Link to this heading"></a></h3>
+<p>This code trains a TransE model using the dataset we just loaded. The pipeline function handles
+everything: model initialization, training, validation, and testing.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;TransE&quot;</span><span class="p">,</span>
+    <span class="n">training</span><span class="o">=</span><span class="n">train_tf</span><span class="p">,</span>
+    <span class="n">validation</span><span class="o">=</span><span class="n">valid_tf</span><span class="p">,</span>
+    <span class="n">testing</span><span class="o">=</span><span class="n">test_tf</span><span class="p">,</span>
+    <span class="n">model_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">embedding_dim</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
+    <span class="n">training_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">num_epochs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">),</span>
+    <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INFO</span><span class="p">:</span><span class="n">pykeen</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">api</span><span class="p">:</span><span class="n">Using</span> <span class="n">device</span><span class="p">:</span> <span class="n">cpu</span>
+<span class="n">INFO</span><span class="p">:</span><span class="n">pykeen</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">representation</span><span class="p">:</span><span class="n">Inferred</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span> <span class="k">for</span> <span class="n">Embedding</span><span class="p">()</span>
+<span class="n">INFO</span><span class="p">:</span><span class="n">pykeen</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">representation</span><span class="p">:</span><span class="n">Inferred</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span> <span class="k">for</span> <span class="n">Embedding</span><span class="p">()</span>
+<span class="n">Training</span> <span class="n">epochs</span> <span class="n">on</span> <span class="n">cpu</span><span class="p">:</span> <span class="mi">100</span><span class="o">%</span> <span class="mi">5</span><span class="o">/</span><span class="mi">5</span> <span class="p">[</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="o">&lt;</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">,</span>  <span class="mf">6.71</span><span class="n">s</span><span class="o">/</span><span class="n">epoch</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="mf">0.141</span><span class="p">,</span> <span class="n">prev_loss</span><span class="o">=</span><span class="mf">0.182</span><span class="p">]</span>
+<span class="n">Evaluating</span> <span class="n">on</span> <span class="n">cpu</span><span class="p">:</span> <span class="mi">100</span><span class="o">%</span> <span class="mf">7.70</span><span class="n">k</span><span class="o">/</span><span class="mf">7.70</span><span class="n">k</span> <span class="p">[</span><span class="mi">01</span><span class="p">:</span><span class="mi">09</span><span class="o">&lt;</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">,</span> <span class="mi">109</span><span class="n">triple</span><span class="o">/</span><span class="n">s</span><span class="p">]</span>
+<span class="n">INFO</span><span class="p">:</span><span class="n">pykeen</span><span class="o">.</span><span class="n">evaluation</span><span class="o">.</span><span class="n">evaluator</span><span class="p">:</span><span class="n">Evaluation</span> <span class="n">took</span> <span class="mf">69.78</span><span class="n">s</span> <span class="n">seconds</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can replace <code class="docutils literal notranslate"><span class="pre">&quot;TransE&quot;</span></code> with any other PyKEEN model, e.g., <code class="docutils literal notranslate"><span class="pre">&quot;DistMult&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ComplEx&quot;</span></code>, etc.
+<code class="docutils literal notranslate"><span class="pre">embedding_dim</span></code>, <code class="docutils literal notranslate"><span class="pre">num_epochs</span></code>, and <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> can be adjusted depending on your dataset size.</p>
+</div>
+</section>
+<section id="evaluation">
+<h3>Evaluation<a class="headerlink" href="#evaluation" title="Link to this heading"></a></h3>
+<p>This code evaluates the trained model using filtered ranking metrics, such as MRR and Hits&#64;K.
+Filtered evaluation ignores triples already seen in training/validation to avoid penalizing correct predictions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">RankBasedEvaluator</span><span class="p">(</span><span class="n">filtered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">mapped_triples</span><span class="o">=</span><span class="n">test_tf</span><span class="o">.</span><span class="n">mapped_triples</span><span class="p">,</span>
+    <span class="n">additional_filter_triples</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">train_tf</span><span class="o">.</span><span class="n">mapped_triples</span><span class="p">,</span>
+        <span class="n">valid_tf</span><span class="o">.</span><span class="n">mapped_triples</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+<span class="n">results</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluating on cpu: 100% 7.70k/7.70k [01:19&lt;00:00, 86.9triple/s]
+INFO:pykeen.evaluation.evaluator:Evaluation took 79.32s seconds
+</pre></div>
+</div>
+</section>
 </section>
 <section id="using-kg-saf-jdex-on-custom-knowledge-graphs">
 <h2>Using KG-SaF-JDeX on Custom Knowledge Graphs<a class="headerlink" href="#using-kg-saf-jdex-on-custom-knowledge-graphs" title="Link to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please follow the <strong>Quick Start Guide</strong> before going forward.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This guide is also available as a Notebook in <code class="docutils literal notranslate"><span class="pre">tutorial/general.ipynb</span></code>, a Python shell executable script in <code class="docutils literal notranslate"><span class="pre">tutorial/general.py</span></code> and shell script <code class="docutils literal notranslate"><span class="pre">tutorial/general.sh</span></code></p>
+</div>
+<p>This guide show how to use the provided <strong>KG-SaF-JDeX Workflow</strong> Functionalities to generate a new Schema and Data Dataset from your custom Knowledge Graph.  This guide provides an example dataset in the INPUT folder to test the functionalities. All the produces files will be created in the OUTPUT folder.</p>
+<p>This notebook expectes the following inputs:</p>
+<ul class="simple">
+<li><p>Any Knowledge Graph with both Schema and Data in a unique file (any format supported by the ROBOT Utility, the file will be converted to an intermediate OWL File)</p></li>
+<li><p>The KG need to contain ABox assertions (object property assertions) in order to safely run the machine learning splitting and necessary checks</p></li>
+<li><p>This module is specifically designed for generating dataset from Knowledge graphs that contain rich schema and large scale ABox (object property assertions)</p></li>
+</ul>
+<p>And applies the following procedures following the KG-SaF-JDeX workflow:</p>
+<ul class="simple">
+<li><p>Conversion to OWL Format</p></li>
+<li><p>Consistency Check</p></li>
+<li><p>Removal of Unsatisfiable Classes</p></li>
+<li><p>Materialization and Realization</p></li>
+<li><p>Filtering of ABox Individuals and Object Properties</p></li>
+<li><p>Object Propety Assertion splitting using Coverage Criterion in Training, Test and Validatin Split</p></li>
+<li><p>Inversion Leakage check and filtering</p></li>
+<li><p>Class Assertions subset computation</p></li>
+<li><p>Schema Modularization based on ABox Signature</p></li>
+<li><p>Schema Decomposition in TBox and RBox (with subsequent division in Schema and Taxonomy)</p></li>
+<li><p>Full cleaned Ontology and Knowledge Graph Reconstruction</p></li>
+<li><p>Conversion and serialization of object property assertion to TSV format</p></li>
+<li><p>Conversion and serialization of schema axioms to JSON format</p></li>
+</ul>
+<section id="full-pipeline-script">
+<h3>Full pipeline script<a class="headerlink" href="#full-pipeline-script" title="Link to this heading"></a></h3>
+<p><strong>Usage example:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>general.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--kg_file<span class="w"> </span>/path/to/input_kg.owl<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output_path<span class="w"> </span>/path/to/output/folder<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dataset_name<span class="w"> </span>MY_DATASET<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--robot_jar<span class="w"> </span>/path/to/robot.jar<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="o">[</span>--reasoner<span class="o">]</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Argument</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--kg_file</span></code></p></td>
+<td><p>Path to your input KG (OWL/RDF file).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--output_path</span></code></p></td>
+<td><p>Folder where the processed dataset and splits will be saved.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dataset_name</span></code></p></td>
+<td><p>Base name for the dataset. Reasoned datasets will append <code class="docutils literal notranslate"><span class="pre">_reasoned</span></code> otherwise <code class="docutils literal notranslate"><span class="pre">_base</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--robot_jar</span></code></p></td>
+<td><p>Path to the ROBOT JAR file (used for merging and reasoning).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--reasoner</span></code></p></td>
+<td><p>Optional flag. If set, reasoning and unsatisfiable class removal will be performed.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 </section>
 
@@ -97,7 +446,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="quick.html" class="btn btn-neutral float-left" title="Quick Start Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="data.html" class="btn btn-neutral float-right" title="KG-SaF-Data: Consistent and Complete KGR Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="data.html" class="btn btn-neutral float-right" title="KG-SaF-Data: Complete KGR Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
