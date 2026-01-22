@@ -345,3 +345,64 @@ class TSVConverter:
         for s, p, o in triples:
             out_str += f"{str(s)}\t{str(p)}\t{str(o)}\n"
         return out_str
+    
+
+class IDMapper:
+    """Maps entity URIs to unique IDs"""
+
+    def __init__(
+        self,
+        path: str,
+    ):
+        """Initialize the mapper with a dataset base path
+
+        Args:
+            path (str): Dataset location path
+        """
+        self.p_data = dict()
+        self.base_path = Path(path).resolve().absolute()
+
+        self.onto = Graph()
+        self.onto.parse(self.base_path / pc.ONTOLOGY)
+
+        self.ind_onto = Graph()
+        self.ind_onto.parse(self.base_path / pc.INDIVIDUALS)
+
+        self.out_data = dict()
+
+    def map_to_id(self):
+
+        classes =  set(self.onto.subjects(RDF.type, OWL.Class)) - BUILTIN_URIS
+        classes = {c for c in classes if not isinstance(c, BNode)}
+
+        properties = set(self.onto.subjects(RDF.type, OWL.ObjectProperty)) - BUILTIN_URIS
+        individuals = set(self.ind_onto.subjects(RDF.type, OWL.NamedIndividual)) - BUILTIN_URIS
+
+        classes = list(classes)
+        properties = list(properties)
+        individuals = list(individuals)
+
+        classes.sort()
+        properties.sort()
+        individuals.sort()
+
+        print("Classes", len(classes))
+        print("Properties", len(properties))
+        print("Individuals", len(individuals))
+
+        self.out_data["c"] = ({str(c):i for i,c in enumerate(classes)}, self.base_path / pc.CLASS_MAPPINGS)
+        self.out_data["i"] = ({str(c):i for i,c in enumerate(individuals)}, self.base_path / pc.INDIVIDUAL_MAPPINGS )
+        self.out_data["p"] = ({str(c):i for i,c in enumerate(properties)}, self.base_path / pc.OBJ_PROP_MAPPINGS)
+
+
+    def serialize(self):
+
+        (self.base_path / pc.MAPPINGS).mkdir(exist_ok=True, parents=True)
+
+        for _, data in self.out_data.items():
+            mapping = data[0]
+            path = data[1]
+
+            with open(path, "w") as f:
+                json.dump(mapping, f, indent=4)
+

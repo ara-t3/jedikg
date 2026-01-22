@@ -11,10 +11,11 @@ from kgsaf_jdex.utils.conventions.builtins import BUILTIN_URIS
 from kgsaf_jdex.utils.modularization import SignatureModularizer, SchemaDecomposer 
 from pykeen.triples import TriplesFactory
 from pykeen.triples.splitting import CoverageSplitter
-from kgsaf_jdex.utils.conversion import OWLConverter, TSVConverter
-import kgsaf_jdex.utils.conventions.paths as pcc
-from kgsaf_jdex.utils.utility import serialize
+from kgsaf_jdex.utils.conversion import OWLConverter, TSVConverter, IDMapper
 from pykeen.triples.leakage import unleak
+from kgsaf_jdex.utils.reason import ReasonerUtility
+import kgsaf_jdex.utils.conventions.paths as pcc
+
 import argparse
 import logging
 
@@ -70,7 +71,7 @@ def main(args):
 
     OUTPUT_FILE = DATASET_PATH / "intermediate_kg.owl"
 
-
+    reasoner = ReasonerUtility(ROBOT_JAR)
 
     # Setup logging
     log_file = OUTPUT_PATH / f"{DATASET_NAME}.log"
@@ -97,16 +98,7 @@ def main(args):
     # KNOWLEDGE GRAPH CONVERSION
     # =====================
 
-    print("Conversion to OWL Format")
-    cmd = [
-        "java", "-Xmx20G", "-jar", str(ROBOT_JAR),
-        "merge",
-        "-vvv",
-        "--input", str(KG_FILE),
-        "--output", str(OUTPUT_FILE)
-    ]
-
-    result = subprocess.run(cmd, capture_output=False, text=True)
+    reasoner.convert_owl(KG_FILE, OUTPUT_FILE)
 
 
     # =====================
@@ -115,114 +107,27 @@ def main(args):
 
 
     if REASONER:
-        print("Running Unsatisfiable Classes Removal from Target Ontology")
-        report_robot = [
-            "java",
-            "-Xmx20G",
-            "-jar", str(ROBOT_JAR),
-            "reason",
-            "-vvv",
-            "--reasoner", "HermiT",
-            "--input", str(OUTPUT_FILE),
-        ]
-
-        result = subprocess.run(report_robot, capture_output=True, text=True)
-
-        unsatisfiable_classes = []
-        for line in result.stdout.split("\n"):
-            print(line)
-            if 'unsatisfiable:' in line:
-                iri = line.split('unsatisfiable:')[1].strip()
-                unsatisfiable_classes.append(iri)
-
-        print(unsatisfiable_classes)
-        
-        if unsatisfiable_classes:
-            print(f"Found {len(unsatisfiable_classes)} unsatisfiable classes. Removing them...")
-            
-            # Build the remove command with --term for each unsatisfiable class
-            remove_robot = [
-                "java",
-                "-Xmx20G",
-                "-jar", str(ROBOT_JAR),
-                "remove",
-                "--input", str(KG_FILE),
-                "--output", str(OUTPUT_FILE)
-            ]
-            
-            # Add each unsatisfiable class as a term to remove
-            for iri in unsatisfiable_classes:
-                remove_robot.extend(["--term", iri])
-            
-        
-            
-            # Run the remove command
-            remove_result = subprocess.run(remove_robot, capture_output=True, text=True)
-            
-            if remove_result.returncode == 0:
-                print("Successfully removed unsatisfiable classes!")
-            else:
-                print("Failed to remove classes:", remove_result.stderr)
-        else:
-            print("No unsatisfiable classes found!")
-        
-        if result.returncode == 0:
-            print("Reasoning completed successfully!")
-        else:
-            print("Reasoning failed with return code:", result.returncode)
-
+        reasoner.filter_unsatisfiable(OUTPUT_FILE, OUTPUT_FILE)
 
     # =====================
     # REASONING UTILITIES
     # =====================
 
-    properties = [
-        "SubClass",
-        "EquivalentClass",
-        "EquivalentObjectProperty",
-        "InverseObjectProperties",
-        "ObjectPropertyCharacteristic",
-        "SubObjectProperty",
-        "ObjectPropertyRange",
-        "ObjectPropertyDomain",
-        "ClassAssertion"
-    ]
-
-    print("Axioms Generator:")
-    prop_string = ""
-    for p in properties:
-        print(f"\t{p}")
-        prop_string += " " + p
-
-
-    debug_path = DATASET_PATH / "debug.owl"
-
-
     if REASONER:
-        print("Running Reasoner on Target Ontology: Realization and Materialization")
-        cmd = [
-            "java",
-            "-Xmx20G",
-            "-jar", str(ROBOT_JAR),
-            "reason",
-            "-vvv",
-            "--reasoner", "HermiT",
-            "--input", str(OUTPUT_FILE),
-            "--output", str(OUTPUT_FILE),
-            "--axiom-generators", prop_string,
-            "--remove-redundant-subclass-axioms", "false",
-            "--exclude-tautologies", "structural",
-            "--include-indirect", "true",
-            "-D", str(debug_path)
-    ]
+        properties = [
+            "SubClass",
+            "EquivalentClass",
+            "EquivalentObjectProperty",
+            "InverseObjectProperties",
+            "ObjectPropertyCharacteristic",
+            "SubObjectProperty",
+            "ObjectPropertyRange",
+            "ObjectPropertyDomain",
+            "ClassAssertion"
+        ]
 
-        result = subprocess.run(cmd, capture_output=False, text=True)
-
-        if result.returncode == 0:
-            print("Reasoning completed successfully!")
-        else:
-            print("Reasoning failed with return code:", result.returncode)
-
+        debug_path = DATASET_PATH / "debug.owl"
+        reasoner.reason(properties, OUTPUT_FILE, OUTPUT_FILE, debug_path)
 
     # =====================
     # ABOX FILTERING
@@ -379,7 +284,7 @@ def main(args):
     for ind in individuals:
         out_graph.add((ind, RDF.type, OWL.NamedIndividual))
 
-    serialize(out_graph, DATASET_PATH / "abox" / "individuals", robot_jar=ROBOT_JAR)
+    reasoner.serialize(out_graph, DATASET_PATH / "abox" / "individuals")
     del out_graph
     print("Done!")
 
@@ -393,7 +298,7 @@ def main(args):
             else:
                 print(f"Not a Class {ca}")
 
-    serialize(class_assertions_graph, DATASET_PATH / "abox" / "class_assertions", robot_jar=ROBOT_JAR)
+    reasoner.serialize(class_assertions_graph, DATASET_PATH / "abox" / "class_assertions")
     print("Done!")
 
 
@@ -410,7 +315,7 @@ def main(args):
     modularizer = SignatureModularizer(kg, seed_classes | seed_obj_props)
     out_graph = modularizer.modularize(verbose=False)
 
-    serialize(out_graph, DATASET_PATH / "ontology", robot_jar=ROBOT_JAR)
+    reasoner.serialize(out_graph, DATASET_PATH / "ontology")
 
     # =====================
     # Schema Decomposition 
@@ -422,9 +327,9 @@ def main(args):
     decomposer = SchemaDecomposer(onto_graph)
     rbox_graph, taxonomy_graph, schema_graph = decomposer.decompose(verbose=False)
 
-    serialize(rbox_graph, DATASET_PATH / "rbox" / "roles", robot_jar=ROBOT_JAR)
-    serialize(taxonomy_graph, DATASET_PATH / "tbox" / "taxonomy", robot_jar=ROBOT_JAR)
-    serialize(schema_graph, DATASET_PATH / "tbox" / "schema", robot_jar=ROBOT_JAR)
+    reasoner.serialize(rbox_graph, DATASET_PATH / "rbox" / "roles")
+    reasoner.serialize(taxonomy_graph, DATASET_PATH / "tbox" / "taxonomy")
+    reasoner.serialize(schema_graph, DATASET_PATH / "tbox" / "schema")
 
     # =====================
     # File Removal 
@@ -439,10 +344,10 @@ def main(args):
     # =====================
 
     inputs = [
-    DATASET_PATH / pcc.ONTOLOGY,
-    DATASET_PATH / pcc.INDIVIDUALS,
-    DATASET_PATH / pcc.RDF_TRIPLES,
-    DATASET_PATH / pcc.RDF_CLASS_ASSERTIONS
+        DATASET_PATH / pcc.ONTOLOGY,
+        DATASET_PATH / pcc.INDIVIDUALS,
+        DATASET_PATH / pcc.RDF_TRIPLES,
+        DATASET_PATH / pcc.RDF_CLASS_ASSERTIONS
     ]
 
     output_file = DATASET_PATH / "knowledge_graph.owl"
@@ -478,50 +383,10 @@ def main(args):
     processor.serialize()
 
 
-    onto = Graph()
-    onto.parse(DATASET_PATH / pcc.ONTOLOGY)
-
-    print("Loaded Ontology")
-
-    ind_onto = Graph()
-    ind_onto.parse(DATASET_PATH / pcc.INDIVIDUALS)
-
-    print("Loaded Individuals")
-
-    classes =  set(onto.subjects(RDF.type, OWL.Class)) - BUILTIN_URIS
-    classes = {c for c in classes if not isinstance(c, BNode)}
-
-    properties = set(onto.subjects(RDF.type, OWL.ObjectProperty)) - BUILTIN_URIS
-    individuals = set(ind_onto.subjects(RDF.type, OWL.NamedIndividual)) - BUILTIN_URIS
-
-    classes = list(classes)
-    properties = list(properties)
-    individuals = list(individuals)
-
-    classes.sort()
-    properties.sort()
-    individuals.sort()
-
-    print("Classes", len(classes))
-    print("Properties", len(properties))
-    print("Individuals", len(individuals))
-
-
-
-    classes_mappings = {str(c):i for i,c in enumerate(classes)}
-    individuals_mappings = {str(c):i for i,c in enumerate(individuals)}
-    properties_mappings = {str(c):i for i,c in enumerate(properties)}
-
-    (DATASET_PATH / pcc.MAPPINGS).mkdir(exist_ok=True, parents=True)
-
-    with open(DATASET_PATH / pcc.CLASS_MAPPINGS, "w") as f:
-        json.dump(classes_mappings, f, indent=4)
-
-    with open(DATASET_PATH / pcc.INDIVIDUAL_MAPPINGS, "w") as f:
-        json.dump(individuals_mappings, f, indent=4)
-
-    with open(DATASET_PATH / pcc.OBJ_PROP_MAPPINGS, "w") as f:
-        json.dump(properties_mappings, f, indent=4)
+    print(f"Mapping Dataset {DATASET_PATH.name}")
+    mapper = IDMapper(DATASET_PATH)
+    mapper.map_to_id()
+    mapper.serialize()
 
     logging.info("Finish!")
 
