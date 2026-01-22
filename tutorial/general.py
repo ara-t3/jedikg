@@ -66,6 +66,11 @@ def main(args):
     DATASET_NAME = DATASET_NAME + "_reasoned" if REASONER else DATASET_NAME + "_base"
     DATASET_PATH = OUTPUT_PATH / DATASET_NAME
     ROBOT_JAR = args.robot_jar
+    # Location of the ROBOT Jar
+
+    OUTPUT_FILE = DATASET_PATH / "intermediate_kg.owl"
+
+
 
     # Setup logging
     log_file = OUTPUT_PATH / f"{DATASET_NAME}.log"
@@ -87,6 +92,85 @@ def main(args):
     (DATASET_PATH / "rbox").mkdir(parents=True, exist_ok=True)
 
     logger.info(f"Done!")
+
+    # =====================
+    # KNOWLEDGE GRAPH CONVERSION
+    # =====================
+
+    print("Conversion to OWL Format")
+    cmd = [
+        "java", "-Xmx20G", "-jar", str(ROBOT_JAR),
+        "merge",
+        "-vvv",
+        "--input", str(KG_FILE),
+        "--output", str(OUTPUT_FILE)
+    ]
+
+    result = subprocess.run(cmd, capture_output=False, text=True)
+
+
+    # =====================
+    # FILTERING OF UNSATISFIABLE CLASSES
+    # =====================
+
+
+    if REASONER:
+        print("Running Unsatisfiable Classes Removal from Target Ontology")
+        report_robot = [
+            "java",
+            "-Xmx20G",
+            "-jar", str(ROBOT_JAR),
+            "reason",
+            "-vvv",
+            "--reasoner", "HermiT",
+            "--input", str(OUTPUT_FILE),
+        ]
+
+        result = subprocess.run(report_robot, capture_output=True, text=True)
+
+        unsatisfiable_classes = []
+        for line in result.stdout.split("\n"):
+            print(line)
+            if 'unsatisfiable:' in line:
+                iri = line.split('unsatisfiable:')[1].strip()
+                unsatisfiable_classes.append(iri)
+
+        print(unsatisfiable_classes)
+        
+        if unsatisfiable_classes:
+            print(f"Found {len(unsatisfiable_classes)} unsatisfiable classes. Removing them...")
+            
+            # Build the remove command with --term for each unsatisfiable class
+            remove_robot = [
+                "java",
+                "-Xmx20G",
+                "-jar", str(ROBOT_JAR),
+                "remove",
+                "--input", str(KG_FILE),
+                "--output", str(OUTPUT_FILE)
+            ]
+            
+            # Add each unsatisfiable class as a term to remove
+            for iri in unsatisfiable_classes:
+                remove_robot.extend(["--term", iri])
+            
+        
+            
+            # Run the remove command
+            remove_result = subprocess.run(remove_robot, capture_output=True, text=True)
+            
+            if remove_result.returncode == 0:
+                print("Successfully removed unsatisfiable classes!")
+            else:
+                print("Failed to remove classes:", remove_result.stderr)
+        else:
+            print("No unsatisfiable classes found!")
+        
+        if result.returncode == 0:
+            print("Reasoning completed successfully!")
+        else:
+            print("Reasoning failed with return code:", result.returncode)
+
 
     # =====================
     # REASONING UTILITIES
@@ -112,7 +196,6 @@ def main(args):
 
 
     debug_path = DATASET_PATH / "debug.owl"
-    output_file = DATASET_PATH / "intermediate_kg.owl"
 
 
     if REASONER:
@@ -124,30 +207,21 @@ def main(args):
             "reason",
             "-vvv",
             "--reasoner", "HermiT",
-            "--input", str(KG_FILE),
-            "--output", str(output_file),
+            "--input", str(OUTPUT_FILE),
+            "--output", str(OUTPUT_FILE),
             "--axiom-generators", prop_string,
             "--remove-redundant-subclass-axioms", "false",
             "--exclude-tautologies", "structural",
             "--include-indirect", "true",
             "-D", str(debug_path)
     ]
-    else:
-        print("Running Reasoner on Target Ontology: Conversion to OWL Format")
-        cmd = [
-            "java", "-Xmx20G", "-jar", str(ROBOT_JAR),
-            "merge",
-            "-vvv",
-            "--input", str(KG_FILE),
-            "--output", str(output_file)
-        ]
 
-    result = subprocess.run(cmd, capture_output=False, text=True)
+        result = subprocess.run(cmd, capture_output=False, text=True)
 
-    if result.returncode == 0:
-        print("Reasoning completed successfully!")
-    else:
-        print("Reasoning failed with return code:", result.returncode)
+        if result.returncode == 0:
+            print("Reasoning completed successfully!")
+        else:
+            print("Reasoning failed with return code:", result.returncode)
 
 
     # =====================
@@ -156,7 +230,7 @@ def main(args):
 
     print("Parsing and Loading Target Knowledge Graph...")
     kg = Graph()
-    kg.parse(output_file)
+    kg.parse(OUTPUT_FILE)
     print("Done!")
 
     print("Filtering <NamedIndividual, ObjectPropety, NamedIndividual> Triples")
