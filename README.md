@@ -1,5 +1,7 @@
 # KG-SaF: Building Complete and Curated Datasets for Machine Learning and Reasoning on Knowledge Graphs
 
+**[NEW!]** ReadTheDocs Style Documentation Available! Click docs button down below!
+
 [![DOI](https://zenodo.org/badge/1110012490.svg)](https://doi.org/10.5281/zenodo.17817931)
 ![GitHub License](https://img.shields.io/github/license/ivandiliso/sphm4kg)
 ![Python Version](https://img.shields.io/badge/python-3.12.8%2B-blue)
