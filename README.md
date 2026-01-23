@@ -16,6 +16,7 @@
 - ⚡ Handles inconsistencies and leverages reasoning to infer implicit knowledge
 - 🤖 Provides ML-ready **tensor representations** compatible with PyTorch and PyKEEN  
 - 🧩 Offers **schema decomposition** into themed partitions (modularization of ontology components)
+- 📄 Fully documented at [https://ivandiliso.github.io/kg-saf/](https://ivandiliso.github.io/kg-saf/)
 
 
 ## Dataset Documentation (*KG-SaF-Data*)
