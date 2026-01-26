@@ -1,7 +1,0 @@
-# Dataset Loader
-
-```{automodule} kgsaf_jdex.loaders.pytorch.dataset
-:members:
-:undoc-members:
-:show-inheritance:
-```

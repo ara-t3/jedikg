@@ -1,3 +1,0 @@
-**KG-SaF-JDeX**: Modular Dataset Generation Workflow
-=================
-
