@@ -109,4 +109,18 @@ In the `tutorial` folder, we provide example notebooks demonstrating how to use 
 
 2. **Generating a KG-SaF Dataset form a Custom KG**  
    - File: `tutorial/general.ipynb`  
-   - Description: Full pipeline for transforming a user defined KG into a machine learning ready dataset. Performs all the requires preprocessing, filtering and post processing of the KG-SaF-JDeX workflow. 
+   - Description: Full pipeline for transforming a user defined KG into a machine learning ready dataset. Performs all the requires preprocessing, filtering and post processing of the KG-SaF-JDeX workflow.
+
+
+# Citation
+```bibtex
+@misc{diliso2026returnschemabuildingcomplete,
+      title={Return of the Schema: Building Complete Datasets for Machine Learning and Reasoning on Knowledge Graphs}, 
+      author={Ivan Diliso and Roberto Barile and Claudia d'Amato and Nicola Fanizzi},
+      year={2026},
+      eprint={2602.14795},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2602.14795}, 
+}
+```
