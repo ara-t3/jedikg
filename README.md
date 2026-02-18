@@ -6,6 +6,8 @@
 ![GitHub License](https://img.shields.io/github/license/ivandiliso/sphm4kg)
 ![Python Version](https://img.shields.io/badge/python-3.12.8%2B-blue)
 [![Docs](https://img.shields.io/badge/docs-online-success.svg)](https://ivandiliso.github.io/kg-saf/)
+[![arXiv](https://img.shields.io/badge/arXiv-2602.14795-b31b1b.svg)](https://arxiv.org/abs/2602.14795)
+
 
 
 **KG-SaF** provides a workflow (*KG-SaF-JDeX*) and curated datasets  (*KG-SaF-Data*) for knowledge graph refinement (KGR) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** and **reasoning services**.
