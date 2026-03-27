@@ -7,7 +7,7 @@ SATISFIABILITY CHECK (HermiT)
 Does not work with uncosistent ontology due to Robot limitations, adivsed to use only on the schema part of the ontology (whitout the assertions)
 
 REALIZATION (Konclude)
-Writes in a new file all the class assertions. Note, if the ontology is inconsistent or unsatisfiable, it will still work, but it will output entities as membership to nothing for all entitites 
+Writes in a new file all the class assertions. Note, if the ontology is inconsistent or unsatisfiable, it will still work, but it will output entities as membership to nothing for all entitites
 
 MATERIALIZATION (HermiT)
 Does not work with unconsistent / unsatisfiable ontologies due to Robot limitatios, advides to use only on the schema part of the ontology (whitout the assertions)
@@ -16,16 +16,11 @@ CONVERSION (No Reasoner)
 No notes
 
 FILTER (Robot)
-Removes unsatisfiable uris 
+Removes unsatisfiable uris
 
 JUSTIFICATION (Pellet)
 saves the justification in OWL sytax
-
-
-
-
 """
-
 
 
 from pathlib import Path
@@ -40,216 +35,204 @@ import os
 
 sys.path.append(str(Path.cwd().parent))
 
+
 class Reasoner:
-    def __init__(self, reasoners_path: Path, java8_path, java11_path):
+    def __init__(self, reasoners_path: Path, java8_path: Path, java11_path: Path, java_max_ram: int = 20):
         self.konclude = reasoners_path / "konclude" / "Konclude"
         self.robot = reasoners_path / "robot" / "robot.jar"
         self.pellet = reasoners_path / "pellet" / "cli/target/pelletcli/bin/pellet"
-        self.temp_dir = reasoners_path / "temp"
         self.java8_path = java8_path
         self.java11_path = java11_path
+        self.jram = java_max_ram
 
-    def check_result(self, result, label, t):
-        """
-        Check the result of a subprocess execution. Prints whether the command completed successfully based on the return code.
-
-        Args:
-            result (subprocess.CompletedProcess): Result returned by subprocess.run.
-        """
-    
-        if result.returncode == 0:
-            print(f"Reasoning: {label} - completed successfully in {t:4.3f}s!")
-        else:
-            print(f"Reasoning: {label} -  failed with return code:", result.returncode)
-
-
-    def satisfiability(self, input_ontology: Path, log: bool = True) -> list:
-
-        onto = Path(input_ontology)
-
-        if not self.consistency(input_ontology, log=False):
-            raise Exception("Cannot Run Satisfiabiality on Inconsistent Ontologies due to Robot Limitations")
-            
-        out_result = (self.temp_dir / (onto.stem+ "_temp_satifiability") ).with_suffix(".owl")
-
-        env = os.environ.copy()
-        env["JAVA_HOME"] = self.java11_path
-        env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
-
-        cmd = [
-            "java", "-Xmx20G", "-jar", str(self.robot),
-            "reason",
-            "-vvv",
-            "--reasoner", "HermiT",
-            "--input", str(input_ontology),
-        ]
-
+    def _run_process(self, command: list, env = None) -> tuple[subprocess.CompletedProcess, float]:
         start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
+        result = subprocess.run(command, capture_output=True, text=True, env=env)
         end = time.perf_counter()
-        elapsed = end - start  
+        elapsed = end - start
+        return result, elapsed
 
-        if result.returncode == 1:
-            result.returncode = 0
+    def _check_result(
+        self,
+        result: subprocess.CompletedProcess,
+        label: str,
+        elapsed_time: float,
+        verbose: bool = True,
+        succesful_returns: list = [0],
+    ):
+        if result.returncode in succesful_returns:
+            if verbose:
+                print(
+                    f"Reasoning: {label} - completed successfully in {elapsed_time:4.3f}s!"
+                )
+        else:
+            if verbose:
+                print(
+                    f"Reasoning: {label} -  failed after {elapsed_time:4.3f}s - Stack Trace Available Below:"
+                )
+                print(f"===== STACK TRACE START =====")
+                print(f"{result.stderr}")
+                print(f"===== STACK TRACE END =====")
+            raise RuntimeError(f"Command failed with returncode {result.returncode}.")
+        
 
-        if log:
-            self.check_result(result, f"SATISFIABILITY CHECK (HermiT)", elapsed)
+    def _get_env(self, java_version: int):
+        env = os.environ.copy()
 
-        output = (result.stdout or "") + "\n" + (result.stderr or "")
+        match java_version:
+            case 8:
+                env["JAVA_HOME"] = self.java8_path
+            case 11:
+                env["JAVA_HOME"] = self.java11_path
+            case _:
+                raise RuntimeError(f"Java JDK Version {java_version} is not supported yet!")
+            
+        env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
+        return env
 
-        unsatisfiable_classes = re.findall(
-            r"unsatisfiable:\s*(\S+)",
-            output,
-            re.IGNORECASE
-        )
-
-        return unsatisfiable_classes
-
-
-
-    def consistency(self, input_ontology: Path, log: bool = True) -> bool:
+    def consistency(self, input_ontology: Path, verbose: bool = True) -> bool:
 
         cmd = [
             str(self.konclude),
             "consistency",
             "-w AUTO",
-            "-i", f'"{str(input_ontology)}"',
+            "-i",
+            f'"{str(input_ontology)}"',
         ]
 
-        start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        end = time.perf_counter()
-        elapsed = end - start  
+        result, elapsed = self._run_process(cmd)
+        self._check_result(
+            result, f"CONSISTENCY CHECK (Konclude)", elapsed, verbose=verbose
+        )
 
-        if log:
-            self.check_result(result, f"CONSISTENCY CHECK (Konclude)", elapsed)
+        # If PROCESS Successful =>
 
         output = (result.stdout or "") + "\n" + (result.stderr or "")
-
-        if result.returncode != 0:
-            raise RuntimeError(f"Command failed with return code {result.returncode}")
-
         if re.search(r"\bis inconsistent\.", output, re.IGNORECASE):
             return False
 
         if re.search(r"\bis consistent\.", output, re.IGNORECASE):
             return True
-        
 
-    def realization(self, input, output, log: bool = True):
+    def satisfiability(self, input_ontology: Path, verbose: bool = True) -> list:
+
+        if not self.consistency(input_ontology, verbose=False):
+            raise Exception(
+                "Cannot Run Satisfiabiality on Inconsistent Ontologies due to Robot Limitations"
+            )
+
+        cmd = [
+            "java",
+            f"-Xmx{self.jram}G",
+            "-jar",
+            str(self.robot),
+            "reason",
+            "-vvv",
+            "--reasoner",
+            "HermiT",
+            "--input",
+            str(input_ontology),
+        ]
+        
+        result, elapsed = self._run_process(cmd, env=self._get_env(java_version=11))
+        self._check_result(result, f"SATISFIABILITY CHECK (HermiT)", elapsed, succesful_returns=[0,1], verbose=verbose)
+
+        # If PROCESS Successful =>
+
+        output = (result.stdout or "") + "\n" + (result.stderr or "")
+
+        unsatisfiable_classes = re.findall(
+            r"unsatisfiable:\s*(\S+)", output, re.IGNORECASE
+        )
+
+        return unsatisfiable_classes
+
+
+    def realization(self, input: Path, output: Path, verbose: bool = True):
         cmd = [
             str(self.konclude),
             "realization",
             "-w AUTO",
-            "-i", f'"{str(input)}"',
-            "-o", f'"{str(output)}"'
+            "-i",
+            f'"{str(input)}"',
+            "-o",
+            f'"{str(output)}"',
         ]
-
-        start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        end = time.perf_counter()
-        elapsed = end - start  
-
-        if log:
-            self.check_result(result, f"REALIZATION (Konclude)", elapsed)
+        result, elapsed = self._run_process(cmd)
+        self._check_result(result, f"REALIZATION (Konclude)", elapsed, verbose=verbose)
 
 
-    def materialization(self, input, output, axioms, log: bool = True):
+    def materialization(self, input: Path, output:Path, axioms: list, verbose: bool = True):
 
-        unsatisfiable_classes = self.satisfiability(input, log=False)
-        if len(unsatisfiable_classes) > 0:
-            raise Exception("Cannot Run Materialization on Unsatisfiable / Inconsistent Ontologies")
-        
-        prop_string = ""
-        for p in axioms:
-            prop_string += " " + p
-
-        env = os.environ.copy()
-        env["JAVA_HOME"] = self.java11_path
-        env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
-        
-        cmd = [
-            "java", "-Xmx20G", "-jar", str(self.robot),
-            "reason",
-            "-vvv",
-            "--reasoner", "HermiT",
-            "--input", str(input),
-            "--output", str(output),
-            "--axiom-generators", prop_string,
-            "--remove-redundant-subclass-axioms", "false",
-            "--exclude-tautologies", "structural",
-            "--include-indirect", "true",
-        ]
-
-        start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
-        end = time.perf_counter()
-        elapsed = end - start  
-
-        if result.returncode == 1:
-            result.returncode = 0
-
-        if log:
-            self.check_result(result, f"MATERIALIZATION (HermiT)", elapsed)
-
-        
-
-        
-    def filtering(self, input, output, uris, log:bool = True):
-
-        env = os.environ.copy()
-        env["JAVA_HOME"] = self.java11_path
-        env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
+        if len(self.satisfiability(input, verbose=False)) > 0:
+            raise Exception(
+                "Cannot Run Materialization on Unsatisfiable / Inconsistent Ontologies"
+            )
 
         cmd = [
             "java",
-            "-Xmx20G",
-            "-jar", str(self.robot),
+            f"-Xmx{self.jram}G",
+            "-jar",
+            str(self.robot),
+            "reason",
+            "-vvv",
+            "--reasoner",
+            "HermiT",
+            "--input",
+            str(input),
+            "--output",
+            str(output),
+            "--axiom-generators",
+            " ".join(axioms),
+            "--remove-redundant-subclass-axioms",
+            "false",
+            "--exclude-tautologies",
+            "structural",
+            "--include-indirect",
+            "true",
+        ]
+
+        result, elapsed = self._run_process(cmd, env=self._get_env(java_version=11))
+        self._check_result(result, f"MATERIALIZATION (HermiT)", elapsed, succesful_returns=[0,1], verbose=verbose)
+
+
+
+    def filtering(self, input: Path, output: Path, uris: list, verbose: bool = True):
+
+        cmd = [
+            "java",
+            f"-Xmx{self.jram}G",
+            "-jar",
+            str(self.robot),
             "remove",
-            "--input", str(input),
-            "--output", str(output)
+            "--input",
+            str(input),
+            "--output",
+            str(output),
         ]
 
         for iri in uris:
             cmd.extend(["--term", iri])
 
-        start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
-        end = time.perf_counter()
-        elapsed = end - start  
+        result, elapsed = self._run_process(cmd, env=self._get_env(java_version=11))
+        self._check_result(result, f"FILTERING (Robot)", elapsed, verbose=verbose)
 
-        if log:
-            self.check_result(result, f"FILTERING (Robot)", elapsed)
-        
+    def justification(self, input: Path, output: Path, verbose: bool = True):
 
-
-    def justification(self, input, output, log:bool = True):
-
-        onto = Path(input_ontology)
-
-        if self.consistency(input_ontology, log=False):
+        if self.consistency(input_ontology, verbose=False):
             print("Ontology Consistent: No Consistency Justification is Needed")
             return 0
 
-        env = os.environ.copy()
-        env["JAVA_HOME"] = self.java8_path
-        env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
-
         cmd = [
-                str(self.pellet),
-                "explain",
-                "--inconsistent",
-                "-v",
-                str(input),
-            ]
+            str(self.pellet),
+            "explain",
+            "--inconsistent",
+            "-v",
+            str(input),
+        ]
 
-        start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
-        end = time.perf_counter()
-        elapsed = end - start  
-
-        if log:
-            self.check_result(result, f"JUSTIFICATION (Pellet)", elapsed)
+        result, elapsed = self._run_process(cmd, env=self._get_env(java_version=8))
+        self._check_result(result, f"JUSTIFICATION (Pellet)", elapsed, verbose=verbose)
 
         match = re.search(r"MUPS 1:\s*(\[.*\])", result.stderr)
         if match:
@@ -259,42 +242,39 @@ class Reasoner:
             )"""
             with open(output_ontology, "w") as f:
                 f.write(out_str)
-            self.conversion(output_ontology, output_ontology, format="ttl", log=False)
-    
+            self.conversion(output_ontology, output_ontology, format="ttl", verbose=False)
 
-    
-    def conversion(self, input, output, format="owl", log: bool = True):
 
-        env = os.environ.copy()
-        env["JAVA_HOME"] = self.java11_path
-        env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
+
+    def conversion(self, input, output, format="owl", verbose: bool = True):
 
         cmd = [
             "java",
-            "-Xmx20G",
-            "-jar", str(self.robot),
+            f"-Xmx{self.jram}G",
+            "-jar",
+            str(self.robot),
             "convert",
-            "--input", str(input),
-            "--format", str(format),
-            "--output", str(output),
+            "--input",
+            str(input),
+            "--format",
+            str(format),
+            "--output",
+            str(output),
         ]
 
-        start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
-        end = time.perf_counter()
-        elapsed = end - start  
-
-        if log:
-            self.check_result(result, f"CONVERSION (Robot)", elapsed)
-
-            
+        result, elapsed = self._run_process(cmd, env=self._get_env(java_version=11))
+        self._check_result(result, f"CONVERSION (Robot)", elapsed, verbose=verbose)
 
 
 if __name__ == "__main__":
     java8 = "/usr/lib/jvm/java-1.8.0-openjdk-amd64"
     java11 = "/usr/lib/jvm/java-1.11.0-openjdk-amd64"
-    input_ontology = Path("/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/TESTING/unsatif_inconsistent.owl")
-    output_ontology = Path("/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/TESTING/out.ttl")
+    input_ontology = Path(
+        "/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/TESTING/inconsistent.owl"
+    )
+    output_ontology = Path(
+        "/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/TESTING/out.ttl"
+    )
     reasoners = Path("/home/navis/dev/kg-saf-workspace/kg-saf/reasoners")
 
     axioms = [
@@ -309,13 +289,10 @@ if __name__ == "__main__":
     ]
 
     reasoner = Reasoner(reasoners, java8, java11)
-    print(reasoner.consistency(input_ontology)) # returns a bool
-    #reasoner.satisfiability(input_ontology) # returns a list of unsatisfiable class iris 
-    #reasoner.filtering(input_ontology, output_ontology, [])
-    #reasoner.realization(input_ontology, output_ontology) # writes on a file
-    #reasoner.conversion(input_ontology, output_ontology, format="ttl") # writes on a file 
+    print(reasoner.consistency(input_ontology))  # returns a bool
+    #print(reasoner.satisfiability(input_ontology)) # returns a list of unsatisfiable class iris
+    reasoner.filtering(input_ontology, output_ontology, [])
+    reasoner.realization(input_ontology, output_ontology) # writes on a file
+    reasoner.conversion(input_ontology, output_ontology, format="ttl") # writes on a file
     #reasoner.materialization(input_ontology, output_ontology, axioms=axioms) # writes on a file
     reasoner.justification(input_ontology, output_ontology)
-
-
-    
