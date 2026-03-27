@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+          xml:base="http://example.org/inconsistent-abox"
+          ontologyIRI="http://example.org/inconsistent-abox">
+
+    <Prefix name="" IRI="http://example.org/inconsistent-abox#"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+
+    <!-- TBOX -->
+
+    <Declaration>
+        <Class IRI="#Person"/>
+    </Declaration>
+
+    <Declaration>
+        <Class IRI="#Male"/>
+    </Declaration>
+
+    <Declaration>
+        <Class IRI="#Female"/>
+    </Declaration>
+
+    <Declaration>
+        <Class IRI="#Parent"/>
+    </Declaration>
+
+    <Declaration>
+        <ObjectProperty IRI="#hasChild"/>
+    </Declaration>
+
+    <SubClassOf>
+        <Class IRI="#Male"/>
+        <Class IRI="#Person"/>
+    </SubClassOf>
+
+    <SubClassOf>
+        <Class IRI="#Female"/>
+        <Class IRI="#Person"/>
+    </SubClassOf>
+
+    <DisjointClasses>
+        <Class IRI="#Male"/>
+        <Class IRI="#Female"/>
+    </DisjointClasses>
+
+    <EquivalentClasses>
+        <Class IRI="#Parent"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Person"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#hasChild"/>
+                <Class IRI="#Person"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+
+    <!-- ABOX -->
+
+    <Declaration>
+        <NamedIndividual IRI="#john"/>
+    </Declaration>
+
+    <Declaration>
+        <NamedIndividual IRI="#mary"/>
+    </Declaration>
+
+    <!-- Consistent assertions -->
+    <ClassAssertion>
+        <Class IRI="#Person"/>
+        <NamedIndividual IRI="#mary"/>
+    </ClassAssertion>
+
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasChild"/>
+        <NamedIndividual IRI="#john"/>
+        <NamedIndividual IRI="#mary"/>
+    </ObjectPropertyAssertion>
+
+    <!-- Inconsistent assertions -->
+    <ClassAssertion>
+        <Class IRI="#Male"/>
+        <NamedIndividual IRI="#john"/>
+    </ClassAssertion>
+
+    <ClassAssertion>
+        <Class IRI="#Female"/>
+        <NamedIndividual IRI="#john"/>
+    </ClassAssertion>
+
+</Ontology>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+          xml:base="http://example.org/existential"
+          ontologyIRI="http://example.org/existential">
+
+    <Prefix name="" IRI="http://example.org/existential#"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+
+    <!-- Classes -->
+    <Declaration>
+        <Class IRI="#Person"/>
+    </Declaration>
+
+    <Declaration>
+        <Class IRI="#Parent"/>
+    </Declaration>
+
+    <Declaration>
+        <Class IRI="#Mother"/>
+    </Declaration>
+
+    <Declaration>
+        <Class IRI="#Female"/>
+    </Declaration>
+
+    <!-- Object property -->
+    <Declaration>
+        <ObjectProperty IRI="#hasChild"/>
+    </Declaration>
+
+    <!-- Parent ≡ Person ⊓ (hasChild some Person) -->
+    <EquivalentClasses>
+        <Class IRI="#Parent"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Person"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#hasChild"/>
+                <Class IRI="#Person"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+
+    <!-- Mother ≡ Female ⊓ Parent -->
+    <EquivalentClasses>
+        <Class IRI="#Mother"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Female"/>
+            <Class IRI="#Parent"/>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+
+    <!-- Individuals -->
+    <Declaration>
+        <NamedIndividual IRI="#john"/>
+    </Declaration>
+
+    <Declaration>
+        <NamedIndividual IRI="#mary"/>
+    </Declaration>
+
+    <Declaration>
+        <NamedIndividual IRI="#anna"/>
+    </Declaration>
+
+    <Declaration>
+        <NamedIndividual IRI="#bob"/>
+    </Declaration>
+
+    <!-- john is a Person -->
+    <ClassAssertion>
+        <Class IRI="#Person"/>
+        <NamedIndividual IRI="#john"/>
+    </ClassAssertion>
+
+    <!-- mary is a Person -->
+    <ClassAssertion>
+        <Class IRI="#Person"/>
+        <NamedIndividual IRI="#mary"/>
+    </ClassAssertion>
+
+    <!-- john hasChild mary -->
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasChild"/>
+        <NamedIndividual IRI="#john"/>
+        <NamedIndividual IRI="#mary"/>
+    </ObjectPropertyAssertion>
+
+    <!-- anna is Female and Person -->
+    <ClassAssertion>
+        <Class IRI="#Female"/>
+        <NamedIndividual IRI="#anna"/>
+    </ClassAssertion>
+
+    <ClassAssertion>
+        <Class IRI="#Person"/>
+        <NamedIndividual IRI="#anna"/>
+    </ClassAssertion>
+
+    <!-- bob is a Person -->
+    <ClassAssertion>
+        <Class IRI="#Person"/>
+        <NamedIndividual IRI="#bob"/>
+    </ClassAssertion>
+
+    <!-- anna hasChild bob -->
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasChild"/>
+        <NamedIndividual IRI="#anna"/>
+        <NamedIndividual IRI="#bob"/>
+    </ObjectPropertyAssertion>
+
+</Ontology>
