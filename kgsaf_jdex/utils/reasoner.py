@@ -18,6 +18,9 @@ No notes
 FILTER (Robot)
 Removes unsatisfiable uris 
 
+JUSTIFICATION (Pellet)
+saves the justification in OWL sytax
+
 
 
 
@@ -153,7 +156,7 @@ class Reasoner:
 
     def materialization(self, input, output, axioms, log: bool = True):
 
-        unsatisfiable_classes = self.satisfiability(input)
+        unsatisfiable_classes = self.satisfiability(input, log=False)
         if len(unsatisfiable_classes) > 0:
             raise Exception("Cannot Run Materialization on Unsatisfiable / Inconsistent Ontologies")
         
@@ -222,6 +225,12 @@ class Reasoner:
 
     def justification(self, input, output, log:bool = True):
 
+        onto = Path(input_ontology)
+
+        if self.consistency(input_ontology, log=False):
+            print("Ontology Consistent: No Consistency Justification is Needed")
+            return 0
+
         env = os.environ.copy()
         env["JAVA_HOME"] = self.java8_path
         env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
@@ -235,19 +244,22 @@ class Reasoner:
             ]
 
         start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True, env=env)     
+        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
+        end = time.perf_counter()
+        elapsed = end - start  
+
+        if log:
+            self.check_result(result, f"JUSTIFICATION (Pellet)", elapsed)
+
         match = re.search(r"MUPS 1:\s*(\[.*\])", result.stderr)
         if match:
             explanation = [e.strip() for e in match.group(1).strip("[]").split(",")]
-            print(explanation)
-            out_str = f"""Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
-            Ontology(
+            out_str = f"""Ontology(
             {"\n".join(explanation)}
             )"""
             with open(output_ontology, "w") as f:
                 f.write(out_str)
-            self.conversion(output_ontology, output_ontology, format="ttl")
-       
+            self.conversion(output_ontology, output_ontology, format="ttl", log=False)
     
 
     
@@ -271,8 +283,6 @@ class Reasoner:
         result = subprocess.run(cmd, capture_output=True, text=True, env=env)
         end = time.perf_counter()
         elapsed = end - start  
-
-        print(result.stdout)
 
         if log:
             self.check_result(result, f"CONVERSION (Robot)", elapsed)
@@ -299,18 +309,13 @@ if __name__ == "__main__":
     ]
 
     reasoner = Reasoner(reasoners, java8, java11)
-    reasoner.justification(input_ontology, output_ontology)
-
-
-
-    #reasoner.consistency(input_ontology) # returns a bool
-    #unsatisfiable_classes = reasoner.satisfiability(input_ontology) # returns a list of unsatisfiable class iris 
-    #print(unsatisfiable_classes)
-    #reasoner.filtering(input_ontology, output_ontology, unsatisfiable_classes)
-
-
-    
+    print(reasoner.consistency(input_ontology)) # returns a bool
+    #reasoner.satisfiability(input_ontology) # returns a list of unsatisfiable class iris 
+    #reasoner.filtering(input_ontology, output_ontology, [])
     #reasoner.realization(input_ontology, output_ontology) # writes on a file
     #reasoner.conversion(input_ontology, output_ontology, format="ttl") # writes on a file 
     #reasoner.materialization(input_ontology, output_ontology, axioms=axioms) # writes on a file
+    reasoner.justification(input_ontology, output_ontology)
+
+
     
