@@ -1,0 +1,5 @@
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+            Ontology(
+            ObjectPropertyAssertion(<http://example.org/unsat#hasChild> <http://example.org/unsat#mary> <http://example.org/unsat#mary>)
+IrreflexiveObjectProperty(<http://example.org/unsat#hasChild>)
+            )

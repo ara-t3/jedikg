@@ -33,14 +33,18 @@ from rdflib.namespace import split_uri
 from rdflib.term import URIRef
 import re
 import time
+import os
 
 sys.path.append(str(Path.cwd().parent))
 
 class Reasoner:
-    def __init__(self, reasoners_path: Path):
+    def __init__(self, reasoners_path: Path, java8_path, java11_path):
         self.konclude = reasoners_path / "konclude" / "Konclude"
         self.robot = reasoners_path / "robot" / "robot.jar"
+        self.pellet = reasoners_path / "pellet" / "cli/target/pelletcli/bin/pellet"
         self.temp_dir = reasoners_path / "temp"
+        self.java8_path = java8_path
+        self.java11_path = java11_path
 
     def check_result(self, result, label, t):
         """
@@ -65,6 +69,10 @@ class Reasoner:
             
         out_result = (self.temp_dir / (onto.stem+ "_temp_satifiability") ).with_suffix(".owl")
 
+        env = os.environ.copy()
+        env["JAVA_HOME"] = self.java11_path
+        env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
+
         cmd = [
             "java", "-Xmx20G", "-jar", str(self.robot),
             "reason",
@@ -74,7 +82,7 @@ class Reasoner:
         ]
 
         start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
         end = time.perf_counter()
         elapsed = end - start  
 
@@ -152,6 +160,10 @@ class Reasoner:
         prop_string = ""
         for p in axioms:
             prop_string += " " + p
+
+        env = os.environ.copy()
+        env["JAVA_HOME"] = self.java11_path
+        env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
         
         cmd = [
             "java", "-Xmx20G", "-jar", str(self.robot),
@@ -167,7 +179,7 @@ class Reasoner:
         ]
 
         start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
         end = time.perf_counter()
         elapsed = end - start  
 
@@ -181,6 +193,11 @@ class Reasoner:
 
         
     def filtering(self, input, output, uris, log:bool = True):
+
+        env = os.environ.copy()
+        env["JAVA_HOME"] = self.java11_path
+        env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
+
         cmd = [
             "java",
             "-Xmx20G",
@@ -194,7 +211,7 @@ class Reasoner:
             cmd.extend(["--term", iri])
 
         start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
         end = time.perf_counter()
         elapsed = end - start  
 
@@ -203,9 +220,43 @@ class Reasoner:
         
 
 
+    def justification(self, input, output, log:bool = True):
+
+        env = os.environ.copy()
+        env["JAVA_HOME"] = self.java8_path
+        env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
+
+        cmd = [
+                str(self.pellet),
+                "explain",
+                "--inconsistent",
+                "-v",
+                str(input),
+            ]
+
+        start = time.perf_counter()
+        result = subprocess.run(cmd, capture_output=True, text=True, env=env)     
+        match = re.search(r"MUPS 1:\s*(\[.*\])", result.stderr)
+        if match:
+            explanation = [e.strip() for e in match.group(1).strip("[]").split(",")]
+            print(explanation)
+            out_str = f"""Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+            Ontology(
+            {"\n".join(explanation)}
+            )"""
+            with open(output_ontology, "w") as f:
+                f.write(out_str)
+            self.conversion(output_ontology, output_ontology, format="ttl")
+       
+    
 
     
     def conversion(self, input, output, format="owl", log: bool = True):
+
+        env = os.environ.copy()
+        env["JAVA_HOME"] = self.java11_path
+        env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
+
         cmd = [
             "java",
             "-Xmx20G",
@@ -217,9 +268,11 @@ class Reasoner:
         ]
 
         start = time.perf_counter()
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
         end = time.perf_counter()
         elapsed = end - start  
+
+        print(result.stdout)
 
         if log:
             self.check_result(result, f"CONVERSION (Robot)", elapsed)
@@ -228,8 +281,10 @@ class Reasoner:
 
 
 if __name__ == "__main__":
-    input_ontology = Path("/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/TESTING/consistent.owl")
-    output_ontology = Path("/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/TESTING/out.owl")
+    java8 = "/usr/lib/jvm/java-1.8.0-openjdk-amd64"
+    java11 = "/usr/lib/jvm/java-1.11.0-openjdk-amd64"
+    input_ontology = Path("/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/TESTING/unsatif_inconsistent.owl")
+    output_ontology = Path("/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/TESTING/out.ttl")
     reasoners = Path("/home/navis/dev/kg-saf-workspace/kg-saf/reasoners")
 
     axioms = [
@@ -243,11 +298,15 @@ if __name__ == "__main__":
         "ObjectPropertyDomain",
     ]
 
-    reasoner = Reasoner(reasoners)
+    reasoner = Reasoner(reasoners, java8, java11)
+    reasoner.justification(input_ontology, output_ontology)
 
-    reasoner.consistency(input_ontology) # returns a bool
-    unsatisfiable_classes = reasoner.satisfiability(input_ontology) # returns a list of unsatisfiable class iris 
-    reasoner.filtering(input_ontology, output_ontology, unsatisfiable_classes)
+
+
+    #reasoner.consistency(input_ontology) # returns a bool
+    #unsatisfiable_classes = reasoner.satisfiability(input_ontology) # returns a list of unsatisfiable class iris 
+    #print(unsatisfiable_classes)
+    #reasoner.filtering(input_ontology, output_ontology, unsatisfiable_classes)
 
 
     
