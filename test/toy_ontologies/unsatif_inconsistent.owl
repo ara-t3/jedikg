@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://example.org/unsat#"
+     xml:base="http://example.org/unsat"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+<owl:Ontology rdf:about="http://example.org/unsat"/>
+
+<owl:Class rdf:about="#Person"/>
+<owl:Class rdf:about="#Male">
+    <rdfs:subClassOf rdf:resource="#Person"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Female">
+    <rdfs:subClassOf rdf:resource="#Person"/>
+</owl:Class>
+
+<owl:AllDisjointClasses>
+    <owl:members rdf:parseType="Collection">
+        <rdf:Description rdf:about="#Male"/>
+        <rdf:Description rdf:about="#Female"/>
+    </owl:members>
+</owl:AllDisjointClasses>
+
+<!-- Unsatisfiable class -->
+<owl:Class rdf:about="#ImpossiblePerson">
+    <owl:equivalentClass>
+        <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+                <rdf:Description rdf:about="#Male"/>
+                <rdf:Description rdf:about="#Female"/>
+            </owl:intersectionOf>
+        </owl:Class>
+    </owl:equivalentClass>
+</owl:Class>
+
+<!-- Property -->
+<owl:ObjectProperty rdf:about="#hasChild">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+</owl:ObjectProperty>
+
+<!-- Another unsatisfiable class -->
+<owl:Class rdf:about="#ParentOfSelf">
+    <owl:equivalentClass>
+        <owl:Class>
+            <owl:intersectionOf rdf:parseType="Collection">
+                <rdf:Description rdf:about="#Person"/>
+                <owl:Restriction>
+                    <owl:onProperty rdf:resource="#hasChild"/>
+                    <owl:hasSelf rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</owl:hasSelf>
+                </owl:Restriction>
+            </owl:intersectionOf>
+        </owl:Class>
+    </owl:equivalentClass>
+</owl:Class>
+
+<!-- john violates disjointness -->
+<owl:NamedIndividual rdf:about="#john">
+    <rdf:type rdf:resource="#Male"/>
+    <rdf:type rdf:resource="#Female"/>
+</owl:NamedIndividual>
+
+<!-- mary violates irreflexive property -->
+<owl:NamedIndividual rdf:about="#mary">
+    <rdf:type rdf:resource="#Person"/>
+    <hasChild rdf:resource="#mary"/>
+</owl:NamedIndividual>
+
+</rdf:RDF>
