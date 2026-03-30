@@ -47,12 +47,12 @@ if __name__ == "__main__":
         ]
 
 
-    reasoner.materialization(
-        input=ONTOLOGY_PATH,
-        output=MATERIALIZED_PATH,
-        axioms=axioms,
-        safety_check=False,
-        verbose=2,
+    reasoner.merging(
+        [
+            Path("/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/ARCO-2026/materialized_CLS.owl"),
+            Path("/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/ARCO-2026/ontology.owl")
+        ],
+        output=Path("/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/ARCO-2026/materialized_CLS.owl")
     )
 
 
