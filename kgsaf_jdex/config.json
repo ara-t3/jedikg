@@ -1,0 +1,53 @@
+{
+    "dataset_name": "APULIA_TEST_DATASET",
+    "verbose": 1,
+
+    "paths": {
+        "schema": "/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_jdex/test_data/schema.owl",
+        "data": "/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_jdex/test_data/data.ttl",
+        "output": "/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_jdex/test_data/"
+    },
+
+    "reasoning": {
+        "java_8_home": "/usr/lib/jvm/java-1.8.0-openjdk-amd64",
+        "java_11_home": "/usr/lib/jvm/java-1.11.0-openjdk-amd64",
+        "java_max_ram": 20,
+        "filter_unsatisfiable": true,
+
+        "materialization": {
+            "enabled": true,
+            "axioms": [
+                "SubClass",
+                "EquivalentClass",
+                "ObjectPropertyDomain"
+            ]
+        },
+
+        "realization": {
+            "enabled": true
+        },
+
+        "modularization": {
+            "enabled": true
+        }
+    },
+
+    "test_leakage_filtering": {
+        "enabled": true
+    },
+
+    "split": {
+        "enabled": true,
+        "train_percent": 80,
+        "validation_percent": 10,
+        "test_percent": 10,
+        "transductive": true
+    },
+
+    "description_logic_profile": "EL",
+
+    "post_processing": {
+        "json_conversion": true,
+        "id_mapping": true
+    }
+}

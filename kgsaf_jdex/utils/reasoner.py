@@ -133,12 +133,13 @@ class Reasoner:
         if re.search(r"\bis consistent\.", output, re.IGNORECASE):
             return True
 
-    def satisfiability(self, input_ontology: Path, verbose: int = 1) -> list:
+    def satisfiability(self, input_ontology: Path, safety_check: bool = False, verbose: int = 1) -> list:
 
-        if not self.consistency(input_ontology, verbose=False):
-            raise Exception(
-                "Cannot Run Satisfiabiality on Inconsistent Ontologies due to Robot Limitations"
-            )
+        if safety_check:
+            if not self.consistency(input_ontology, verbose=False):
+                raise Exception(
+                    "Cannot Run Satisfiabiality on Inconsistent Ontologies due to Robot Limitations"
+                )
 
         cmd = [
             "java",
