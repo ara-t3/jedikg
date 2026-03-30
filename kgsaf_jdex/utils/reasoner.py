@@ -36,6 +36,21 @@ import os
 sys.path.append(str(Path.cwd().parent))
 
 
+class PresetAxioms:
+    @staticmethod
+    def tbox_materialization():
+        return  [
+        "SubClass",
+        "EquivalentClass",
+        "EquivalentObjectProperty",
+        "InverseObjectProperties",
+        "ObjectPropertyCharacteristic",
+        "SubObjectProperty",
+        "ObjectPropertyRange",
+        "ObjectPropertyDomain",
+        ]
+
+
 class Reasoner:
     def __init__(self, reasoners_path: Path, java8_path: Path, java11_path: Path, java_max_ram: int = 20):
         self.konclude = reasoners_path / "konclude" / "Konclude"
@@ -44,6 +59,8 @@ class Reasoner:
         self.java8_path = java8_path
         self.java11_path = java11_path
         self.jram = java_max_ram
+
+        
 
     def _run_process(self, command: list, env = None) -> tuple[subprocess.CompletedProcess, float]:
         start = time.perf_counter()
@@ -57,16 +74,16 @@ class Reasoner:
         result: subprocess.CompletedProcess,
         label: str,
         elapsed_time: float,
-        verbose: bool = True,
+        verbose: int = 1,
         succesful_returns: list = [0],
     ):
         if result.returncode in succesful_returns:
-            if verbose:
+            if verbose > 0:
                 print(
                     f"Reasoning: {label} - completed successfully in {elapsed_time:4.3f}s!"
                 )
         else:
-            if verbose:
+            if verbose > 0:
                 print(
                     f"Reasoning: {label} -  failed after {elapsed_time:4.3f}s - Stack Trace Available Below:"
                 )
@@ -90,7 +107,7 @@ class Reasoner:
         env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
         return env
 
-    def consistency(self, input_ontology: Path, verbose: bool = True) -> bool:
+    def consistency(self, input_ontology: Path, verbose: int = 1) -> bool:
 
         cmd = [
             str(self.konclude),
@@ -106,6 +123,8 @@ class Reasoner:
         )
 
         # If PROCESS Successful =>
+        if verbose >= 2:
+            print(result.stderr, result.stdout)
 
         output = (result.stdout or "") + "\n" + (result.stderr or "")
         if re.search(r"\bis inconsistent\.", output, re.IGNORECASE):
@@ -114,7 +133,7 @@ class Reasoner:
         if re.search(r"\bis consistent\.", output, re.IGNORECASE):
             return True
 
-    def satisfiability(self, input_ontology: Path, verbose: bool = True) -> list:
+    def satisfiability(self, input_ontology: Path, verbose: int = 1) -> list:
 
         if not self.consistency(input_ontology, verbose=False):
             raise Exception(
@@ -138,17 +157,21 @@ class Reasoner:
         self._check_result(result, f"SATISFIABILITY CHECK (HermiT)", elapsed, succesful_returns=[0,1], verbose=verbose)
 
         # If PROCESS Successful =>
+        if verbose >= 2:
+            print(result.stderr, result.stdout)
 
         output = (result.stdout or "") + "\n" + (result.stderr or "")
 
-        unsatisfiable_classes = re.findall(
-            r"unsatisfiable:\s*(\S+)", output, re.IGNORECASE
+        unsatisfiable_entities = re.findall(
+            r"unsatisfiable(?:\s+property)?\s*:\s*(\S+)",
+            output,
+            re.IGNORECASE,
         )
 
-        return unsatisfiable_classes
+        return unsatisfiable_entities
 
 
-    def realization(self, input: Path, output: Path, verbose: bool = True):
+    def realization(self, input: Path, output: Path, verbose: int = 1):
         cmd = [
             str(self.konclude),
             "realization",
@@ -161,13 +184,18 @@ class Reasoner:
         result, elapsed = self._run_process(cmd)
         self._check_result(result, f"REALIZATION (Konclude)", elapsed, verbose=verbose)
 
+        # If PROCESS Successful =>
+        if verbose >= 2:
+            print(result.stderr, result.stdout)
 
-    def materialization(self, input: Path, output:Path, axioms: list, verbose: bool = True):
 
-        if len(self.satisfiability(input, verbose=False)) > 0:
-            raise Exception(
-                "Cannot Run Materialization on Unsatisfiable / Inconsistent Ontologies"
-            )
+    def materialization(self, input: Path, output:Path, axioms: list, safety_check: bool = False, verbose: int = 1):
+        
+        if safety_check:
+            if len(self.satisfiability(input, verbose=False)) > 0:
+                raise Exception(
+                    "Cannot Run Materialization on Unsatisfiable / Inconsistent Ontologies"
+                )
 
         cmd = [
             "java",
@@ -195,9 +223,13 @@ class Reasoner:
         result, elapsed = self._run_process(cmd, env=self._get_env(java_version=11))
         self._check_result(result, f"MATERIALIZATION (HermiT)", elapsed, succesful_returns=[0,1], verbose=verbose)
 
+        # If PROCESS Successful =>
+        if verbose >= 2:
+            print(result.stderr, result.stdout)
 
 
-    def filtering(self, input: Path, output: Path, uris: list, verbose: bool = True):
+
+    def filtering(self, input: Path, output: Path, uris: list, verbose: int = 1):
 
         cmd = [
             "java",
@@ -217,7 +249,11 @@ class Reasoner:
         result, elapsed = self._run_process(cmd, env=self._get_env(java_version=11))
         self._check_result(result, f"FILTERING (Robot)", elapsed, verbose=verbose)
 
-    def justification(self, input: Path, output: Path, verbose: bool = True):
+        # If PROCESS Successful =>
+        if verbose >= 2:
+            print(result.stderr, result.stdout)
+
+    def justification(self, input: Path, output: Path, verbose: int = 1):
 
         if self.consistency(input_ontology, verbose=False):
             print("Ontology Consistent: No Consistency Justification is Needed")
@@ -234,6 +270,10 @@ class Reasoner:
         result, elapsed = self._run_process(cmd, env=self._get_env(java_version=8))
         self._check_result(result, f"JUSTIFICATION (Pellet)", elapsed, verbose=verbose)
 
+        # If PROCESS Successful =>
+        if verbose >= 2:
+            print(result.stderr, result.stdout)
+
         match = re.search(r"MUPS 1:\s*(\[.*\])", result.stderr)
         if match:
             explanation = [e.strip() for e in match.group(1).strip("[]").split(",")]
@@ -246,7 +286,7 @@ class Reasoner:
 
 
 
-    def conversion(self, input, output, format="owl", verbose: bool = True):
+    def conversion(self, input, output, format="owl", verbose: int = 1):
 
         cmd = [
             "java",
@@ -265,12 +305,40 @@ class Reasoner:
         result, elapsed = self._run_process(cmd, env=self._get_env(java_version=11))
         self._check_result(result, f"CONVERSION (Robot)", elapsed, verbose=verbose)
 
+        # If PROCESS Successful =>
+        if verbose >= 2:
+            print(result.stderr, result.stdout)
+
+    def merging(self, input_ontologies : list[str], output, verbose: int = 1):
+            
+        cmd = [
+            "java",
+            f"-Xmx{self.jram}G",
+            "-jar",
+            str(self.robot),
+            "merge",
+            "--output",
+            str(output),
+        ]
+
+        for iri in input_ontologies:
+            cmd.extend(["--input", iri])
+
+        result, elapsed = self._run_process(cmd, env=self._get_env(java_version=11))
+        self._check_result(result, f"MERGING (Robot)", elapsed, verbose=verbose)
+
+        # If PROCESS Successful =>
+        if verbose >= 2:
+            print(result.stderr, result.stdout)
+
+
+
 
 if __name__ == "__main__":
     java8 = "/usr/lib/jvm/java-1.8.0-openjdk-amd64"
     java11 = "/usr/lib/jvm/java-1.11.0-openjdk-amd64"
     input_ontology = Path(
-        "/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/TESTING/inconsistent.owl"
+        "/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/TESTING/unsatif.owl"
     )
     output_ontology = Path(
         "/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/TESTING/out.ttl"
@@ -290,9 +358,9 @@ if __name__ == "__main__":
 
     reasoner = Reasoner(reasoners, java8, java11)
     print(reasoner.consistency(input_ontology))  # returns a bool
-    #print(reasoner.satisfiability(input_ontology)) # returns a list of unsatisfiable class iris
-    reasoner.filtering(input_ontology, output_ontology, [])
-    reasoner.realization(input_ontology, output_ontology) # writes on a file
-    reasoner.conversion(input_ontology, output_ontology, format="ttl") # writes on a file
+    print(reasoner.satisfiability(input_ontology, verbose=2)) # returns a list of unsatisfiable class iris
+    reasoner.filtering(input_ontology, output_ontology, [], verbose=2)
+    #reasoner.realization(input_ontology, output_ontology) # writes on a file
+    #reasoner.conversion(input_ontology, output_ontology, format="ttl") # writes on a file
     #reasoner.materialization(input_ontology, output_ontology, axioms=axioms) # writes on a file
-    reasoner.justification(input_ontology, output_ontology)
+    #reasoner.justification(input_ontology, output_ontology)
