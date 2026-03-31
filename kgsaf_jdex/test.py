@@ -45,5 +45,5 @@ if __name__ == "__main__":
     }
 
     jdex = JDEX.from_dict(configuration)
-    print(jdex.config_summary())
+    jdex.run()
 

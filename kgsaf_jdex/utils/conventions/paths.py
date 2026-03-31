@@ -5,10 +5,15 @@ TRAIN = "abox/splits/train.tsv"
 TEST = "abox/splits/test.tsv"
 VALID = "abox/splits/valid.tsv"
 
+
+SPLITS = "abox/splits"
+ASSERTIONS = "assertions.owl"
 RDF_TRIPLES = "abox/obj_prop_assertions.nt"
 RDF_TRAIN = "abox/splits/train.nt"
 RDF_TEST = "abox/splits/test.nt"
 RDF_VALID = "abox/splits/valid.nt"
+
+
 
 
 # ABOX / CLASS ASSERTIONS

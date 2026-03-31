@@ -64,6 +64,17 @@ class ModularizationConfig:
     def from_dict(cls, data: dict[str, Any] | None) -> "ModularizationConfig":
         data = data or {}
         return cls(enabled=data.get("enabled", True))
+    
+
+@dataclass
+class DecompositionConfig:
+    tbox: bool = True
+    rbox: bool = True
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any] | None) -> "ModularizationConfig":
+        data = data or {}
+        return cls(rbox=data.get("rbox", True), tbox=data.get("tbox", True))
 
 
 @dataclass
@@ -75,6 +86,7 @@ class ReasoningConfig:
     materialization: MaterializationConfig = field(default_factory=MaterializationConfig)
     realization: RealizationConfig = field(default_factory=RealizationConfig)
     modularization: ModularizationConfig = field(default_factory=ModularizationConfig)
+    decomposition: DecompositionConfig = field(default_factory=DecompositionConfig)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> "ReasoningConfig":
@@ -87,17 +99,19 @@ class ReasoningConfig:
             materialization=MaterializationConfig.from_dict(data.get("materialization")),
             realization=RealizationConfig.from_dict(data.get("realization")),
             modularization=ModularizationConfig.from_dict(data.get("modularization")),
+            decomposition=DecompositionConfig.from_dict(data.get("decomposition"))
         )
 
 
 @dataclass
 class TestLeakageFilteringConfig:
     enabled: bool = True
+    minimum_frequency: float = 0.97
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> "TestLeakageFilteringConfig":
         data = data or {}
-        return cls(enabled=data.get("enabled", True))
+        return cls(enabled=data.get("enabled", True), minimum_frequency=data.get("minimum_frequency", 0.97))
 
 
 @dataclass
@@ -107,6 +121,7 @@ class SplitConfig:
     validation_percent: int = 10
     test_percent: int = 10
     transductive: bool = True
+    test_leakage_filtering : TestLeakageFilteringConfig = field(default_factory=TestLeakageFilteringConfig)
 
     def __post_init__(self) -> None:
         if self.enabled:
@@ -125,6 +140,7 @@ class SplitConfig:
             validation_percent=data.get("validation_percent", 10),
             test_percent=data.get("test_percent", 10),
             transductive=data.get("transductive", True),
+            test_leakage_filtering = TestLeakageFilteringConfig.from_dict(data.get("test_leakage_filtering"))
         )
 
 
@@ -210,12 +226,15 @@ realization:
 modularization:
     enabled: {self.reasoning.modularization.enabled}
 
+decomposition:
+    tbox: {self.reasoning.decomposition.tbox}
+    rbox: {self.reasoning.decomposition.rbox}
+
 description_logic_profile: {self.description_logic_profile}
 
 MACHINE LEARNING SETTINGS
 
-test_leakage_filtering:
-    enabled: {self.test_leakage_filtering.enabled}
+
 
 split:
     enabled: {self.split.enabled}
@@ -223,6 +242,9 @@ split:
     validation_percent: {self.split.validation_percent}
     test_percent: {self.split.test_percent}
     transductive: {self.split.transductive}
+    test_leakage_filtering:
+        enabled: {self.split.test_leakage_filtering.enabled}
+        minimum_frequency: {self.split.test_leakage_filtering.minimum_frequency}
 
 post_processing:
     json_conversion: {self.post_processing.json_conversion}

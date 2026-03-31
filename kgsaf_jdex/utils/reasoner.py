@@ -254,11 +254,12 @@ class Reasoner:
         if verbose >= 2:
             print(result.stderr, result.stdout)
 
-    def justification(self, input: Path, output: Path, verbose: int = 1):
-
-        if self.consistency(input_ontology, verbose=False):
-            print("Ontology Consistent: No Consistency Justification is Needed")
-            return 0
+    def justification(self, input: Path, output: Path, safety_check: bool = False, verbose: int = 1):
+        
+        if safety_check:
+            if self.consistency(input, verbose=False):
+                print("Ontology Consistent: No Consistency Justification is Needed")
+                return 0
 
         cmd = [
             str(self.pellet),
@@ -281,9 +282,11 @@ class Reasoner:
             out_str = f"""Ontology(
             {"\n".join(explanation)}
             )"""
-            with open(output_ontology, "w") as f:
+            with open(output, "w") as f:
                 f.write(out_str)
-            self.conversion(output_ontology, output_ontology, format="ttl", verbose=False)
+            self.conversion(output, output, format="ttl", verbose=False)
+            return explanation
+        return []
 
 
 
