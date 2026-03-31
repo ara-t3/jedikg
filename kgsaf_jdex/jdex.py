@@ -592,6 +592,6 @@ class JDEX:
 
 
 if __name__ == "__main__":
-    jdex = JDEX.from_json("./kgsaf_jdex/config.json")
+    jdex = JDEX.from_json("/home/navis/Devel/PhD/kg-saf/kgsaf_data/configurations/DBPEDIA_100K_RON.json")
     jdex.run()
 
