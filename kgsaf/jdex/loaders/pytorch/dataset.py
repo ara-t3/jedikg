@@ -7,8 +7,8 @@ import torch
 from rdflib import OWL, URIRef
 from torch.utils.data import Dataset
 
-import kgsaf_jdex.utils.conventions.ids as idc
-import kgsaf_jdex.utils.conventions.paths as pc
+import kgsaf.jdex.utils.conventions.ids as idc
+import kgsaf.jdex.utils.conventions.paths as pc
 
 
 class KnowledgeGraph(Dataset):

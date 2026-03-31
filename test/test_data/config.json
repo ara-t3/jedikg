@@ -3,9 +3,9 @@
     "verbose": 1,
 
     "paths": {
-        "schema": "./kgsaf_jdex/test_data/schema.owl",
-        "data": "./kgsaf_jdex/test_data/data.ttl",
-        "output": "./kgsaf_jdex/test_data/"
+        "schema": "./test/test_data/schema.owl",
+        "data": "./test/test_data/data.ttl",
+        "output": "./test/test_data/"
     },
 
     "reasoning": {

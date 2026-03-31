@@ -7,15 +7,16 @@ import sys
 import subprocess
 import json
 sys.path.append(str(Path.cwd().parent))
-from kgsaf_jdex.utils.conventions.builtins import BUILTIN_URIS
-from kgsaf_jdex.utils.modularization import SignatureModularizer, SchemaDecomposer 
+from kgsaf.jdex.utils.conventions.builtins import BUILTIN_URIS
+from kgsaf.jdex.modularization import SignatureModularizer
+from kgsaf.jdex.decomposition import SchemaDecomposer 
 from pykeen.triples import TriplesFactory
 from pykeen.triples.splitting import CoverageSplitter
-from kgsaf_jdex.utils.conversion import OWLConverter, TSVConverter, IDMapper
+from kgsaf.jdex.utils.conversion import OWLConverter, TSVConverter, IDMapper
 from pykeen.triples.leakage import unleak
-from kgsaf_jdex.utils.reason import ReasonerUtility
-from kgsaf_jdex.utils.reasoner import Reasoner
-import kgsaf_jdex.utils.conventions.paths as pc
+from kgsaf.jdex.utils.reason import ReasonerUtility
+from kgsaf.jdex.reasoner import Reasoner
+import kgsaf.jdex.utils.conventions.paths as pc
 import numpy as np
 import argparse
 import logging
@@ -24,12 +25,12 @@ import time
 
 
 
-from kgsaf_jdex.config import JDEXConfig
+from kgsaf.jdex.config import JDEXConfig
 from typing import Any, Literal
 from pathlib import Path
 import shutil
 import json
-from kgsaf_jdex.cli import CLI
+from kgsaf.jdex.cli import CLI
 
 
 
@@ -589,9 +590,4 @@ class JDEX:
         self.ui.success(f"JDEX Pipeline Complete in {elapsed:4.2f} seconds. Closing Process.")
         self.kill(0)
 
-
-
-if __name__ == "__main__":
-    jdex = JDEX.from_json("/home/navis/Devel/PhD/kg-saf/kgsaf_data/configurations/DBPEDIA_100K_RON.json")
-    jdex.run()
 

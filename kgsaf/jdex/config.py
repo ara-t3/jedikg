@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
-from kgsaf_jdex.utils.reasoner import PresetAxioms
+from kgsaf.jdex.reasoner import PresetAxioms
 
 
 DLProfile = Literal["EL", "ALC", "SROIQ", None]

@@ -7,10 +7,10 @@ from rdflib import OWL, RDF, RDFS, BNode, Graph, Literal, Namespace
 from rdflib.namespace import split_uri
 from rdflib.term import URIRef
 
-import kgsaf_jdex.utils.conventions.ids as idc
-import kgsaf_jdex.utils.conventions.paths as pc
-from kgsaf_jdex.utils.utility import verbose_print
-from kgsaf_jdex.utils.conventions.builtins import BUILTIN_URIS
+import kgsaf.jdex.utils.conventions.ids as idc
+import kgsaf.jdex.utils.conventions.paths as pc
+from kgsaf.jdex.utils.utility import verbose_print
+from kgsaf.jdex.utils.conventions.builtins import BUILTIN_URIS
 
 
 def rdf_list_to_python_list(graph: Graph, head: URIRef, depth: int, verbose: bool = True) -> list:
