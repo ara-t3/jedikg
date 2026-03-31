@@ -3,7 +3,7 @@
 **/.base
 **/.cache
 tutorial/output/**
-
+.vscode/
 unpack
 
 # Byte-compiled / optimized / DLL files
