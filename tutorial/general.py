@@ -7,14 +7,14 @@ import sys
 import subprocess
 import json
 sys.path.append(str(Path.cwd().parent))
-from kgsaf.jdex.utils.conventions.builtins import BUILTIN_URIS
-from kgsaf.jdex.modularization import SignatureModularizer, SchemaDecomposer 
+from kgsaf.tools.utils.conventions.builtins import BUILTIN_URIS
+from kgsaf.tools.modularization import SignatureModularizer, SchemaDecomposer 
 from pykeen.triples import TriplesFactory
 from pykeen.triples.splitting import CoverageSplitter
-from kgsaf.jdex.utils.conversion import OWLConverter, TSVConverter, IDMapper
+from kgsaf.tools.utils.conversion import OWLConverter, TSVConverter, IDMapper
 from pykeen.triples.leakage import unleak
-from kgsaf.jdex.utils.reason import ReasonerUtility
-import kgsaf.jdex.utils.conventions.paths as pcc
+from kgsaf.tools.utils.reason import ReasonerUtility
+import kgsaf.tools.utils.conventions.paths as pcc
 
 import argparse
 import logging

@@ -1,4 +1,4 @@
-from kgsaf.jdex.jdex import JDEX
+from kgsaf.jdex import JDEX
 
 
 if __name__ == "__main__":

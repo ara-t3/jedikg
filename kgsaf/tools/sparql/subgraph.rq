@@ -1,0 +1,22 @@
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT ?s ?p ?o
+WHERE {
+  ?s ?p ?o .
+  ?s a owl:NamedIndividual .
+  ?o a owl:NamedIndividual .
+  ?p a owl:ObjectProperty .
+
+  {
+    SELECT ?s (COUNT(*) AS ?sc)
+    WHERE { { ?s ?ps ?os } UNION { ?us ?ps ?s } }
+    GROUP BY ?s
+  }
+  {
+    SELECT ?o (COUNT(*) AS ?oc)
+    WHERE { { ?o ?po ?oo } UNION { ?uo ?po ?o } }
+    GROUP BY ?o
+  }
+
+  FILTER (?sc >= 5 && ?oc >= 5)
+}

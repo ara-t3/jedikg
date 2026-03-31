@@ -523,7 +523,6 @@
     <!-- https://w3id.org/italia/onto/CLV/hasCensusSection -->
 
     <owl:ObjectProperty rdf:about="https://w3id.org/italia/onto/CLV/hasCensusSection">
-        <rdfs:domain rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
         <rdfs:domain>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
@@ -641,7 +640,6 @@
     <!-- https://w3id.org/italia/onto/CLV/hasGeographicalDistribution -->
 
     <owl:ObjectProperty rdf:about="https://w3id.org/italia/onto/CLV/hasGeographicalDistribution">
-        <rdfs:domain rdf:resource="https://w3id.org/italia/onto/CLV/AdminUnitComponent"/>
         <rdfs:domain>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
@@ -1281,7 +1279,6 @@
 
     <owl:ObjectProperty rdf:about="https://w3id.org/italia/onto/SM/hasCertifiedEmail">
         <rdfs:subPropertyOf rdf:resource="https://w3id.org/italia/onto/SM/hasEmail"/>
-        <rdfs:domain rdf:resource="https://w3id.org/italia/onto/SM/OnlineContactPoint"/>
     </owl:ObjectProperty>
     
 
@@ -2012,7 +2009,6 @@
         <rdfs:subPropertyOf rdf:resource="https://w3id.org/italia/onto/l0/hasMember"/>
         <owl:inverseOf rdf:resource="https://w3id.org/italia/onto/l0/isLastMemberOf"/>
         <rdfs:domain rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:domain rdf:resource="https://w3id.org/italia/onto/l0/Sequence"/>
         <rdfs:range rdf:resource="https://w3id.org/italia/onto/l0/Sequence"/>
         <rdfs:comment xml:lang="it">Object property che permette di rappresentare una specifica entità come l&apos;ultimo membro di una sequenza.</rdfs:comment>
         <rdfs:comment xml:lang="en">Object property for representing an entity as the last member of a sequence.</rdfs:comment>
@@ -2097,7 +2093,6 @@
     <owl:ObjectProperty rdf:about="https://w3id.org/italia/onto/l0/isLastMemberOf">
         <rdfs:subPropertyOf rdf:resource="https://w3id.org/italia/onto/l0/isMemberOf"/>
         <rdfs:domain rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:domain rdf:resource="https://w3id.org/italia/onto/l0/Sequence"/>
         <rdfs:range rdf:resource="https://w3id.org/italia/onto/l0/Sequence"/>
         <rdfs:comment xml:lang="en">Inverse object property of has last member</rdfs:comment>
         <rdfs:comment xml:lang="it">Object property inversa di has last member.</rdfs:comment>
@@ -3526,7 +3521,6 @@ Esempi includono: chiusura per rinnovo locali, chiusura per ferie estive, chiusu
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/AccessCondition/AccessCondition">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/l0/description"/>
@@ -3548,7 +3542,6 @@ Esempi includono: chiusura per rinnovo locali, chiusura per ferie estive, chiusu
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/AccessCondition/AdmissionType">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/l0/name"/>
@@ -3576,8 +3569,6 @@ Esempi includono: chiusura per rinnovo locali, chiusura per ferie estive, chiusu
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/AccessCondition/Booking">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/AccessCondition/AccessCondition"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/l0/name"/>
@@ -3599,8 +3590,6 @@ Esempi includono: chiusura per rinnovo locali, chiusura per ferie estive, chiusu
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/AccessCondition/OpeningHoursSpecification">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/AccessCondition/AccessCondition"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/TI/atTime"/>
@@ -3661,8 +3650,6 @@ Con questa classe è possibile modellare dati di questo tipo &quot;Orari di aper
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/AccessCondition/TemporaryClosure">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/AccessCondition/AccessCondition"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/TI/atTime"/>
@@ -3725,9 +3712,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/Address">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/hasAddressComponent"/>
@@ -3806,10 +3790,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/AddressArea">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AddressComponent"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/l0/name"/>
@@ -3832,9 +3812,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/AddressComponent">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/situatedWithin"/>
@@ -3857,7 +3834,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
     <!-- https://w3id.org/italia/onto/CLV/AddressInTime -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/AddressInTime">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/EventOrSituation"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -3899,10 +3875,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/AdminUnitComponent">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AddressComponent"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/l0/name"/>
@@ -3926,9 +3898,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/CensusSection">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:comment xml:lang="en">Portion of territory where the national institute of statistics carries out census activities The average number of inhabitants is approximately 170 people.</rdfs:comment>
         <rdfs:comment xml:lang="it">Porzione di territorio su cui sono effettuate le rilevazioni dell&apos;Istat in occasione dei censimenti. La popolazione media è di circa 170 individui</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://w3id.org/italia/onto/CLV"/>
@@ -3943,12 +3912,7 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
     <!-- https://w3id.org/italia/onto/CLV/City -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/City">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AddressComponent"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AdminUnitComponent"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/hasDirectLowerRank"/>
@@ -3995,7 +3959,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/CivicNumbering">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/streetNumber"/>
@@ -4038,12 +4001,7 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
     <!-- https://w3id.org/italia/onto/CLV/Country -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/Country">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AddressComponent"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AdminUnitComponent"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/hasDirectLowerRank"/>
@@ -4083,12 +4041,7 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
     <!-- https://w3id.org/italia/onto/CLV/District -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/District">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AddressComponent"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AdminUnitComponent"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/hasDirectHigherRank"/>
@@ -4130,8 +4083,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/Feature">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/hasGeometry"/>
@@ -4177,12 +4128,7 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
     <!-- https://w3id.org/italia/onto/CLV/GeographicalDistribution -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/GeographicalDistribution">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AddressComponent"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AdminUnitComponent"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:comment xml:lang="it">Questa classe rappresenta la ripartizione geografica del territorio italiano. Essa assume i valori predefiniti definiti nel seguente vocabolario controllato https://w3id.org/italia/controlled-vocabulary/territorial-classifications/geographical-distribution</rdfs:comment>
         <rdfs:comment xml:lang="en">This class represents the geographical distribution of the Italian territory. It assumes the predefined values defined in the following controlled vocaulary https://w3id.org/italia/controlled-vocabulary/territorial-classifications/geographical-distribution</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://w3id.org/italia/onto/CLV"/>
@@ -4199,8 +4145,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/Geometry">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/hasGeometryType"/>
@@ -4261,7 +4205,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/GeometryType">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:comment xml:lang="it">La classe rappresenta il tipo di geometria. Attualmente, la classe asusme questi valori: poligono, linea, punto, riquadro.</rdfs:comment>
         <rdfs:comment xml:lang="en">The class represents the type of geometry. At the time being the class assume the following values: Polygon, Point, Box, Line.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://w3id.org/italia/onto/CLV"/>
@@ -4277,7 +4220,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/Identifier">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/issuedBy"/>
@@ -4313,7 +4255,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/InternalAccess">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/refersToExternalAccess"/>
@@ -4370,12 +4311,7 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
     <!-- https://w3id.org/italia/onto/CLV/Province -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/Province">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AddressComponent"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AdminUnitComponent"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/hasDirectLowerRank"/>
@@ -4440,12 +4376,7 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
     <!-- https://w3id.org/italia/onto/CLV/Region -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/Region">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AddressComponent"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AdminUnitComponent"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/hasDirectLowerRank"/>
@@ -4490,7 +4421,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
     <!-- https://w3id.org/italia/onto/CLV/SpatialObject -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/SpatialObject">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -4514,10 +4444,6 @@ Il luogo rimarrà chiuso Martedì 19 dalle 12:00 alle 13:00 per riunioni interne
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/CLV/StreetToponym">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/AddressComponent"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/Feature"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/CLV/SpatialObject"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Location"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/CLV/officialStreetName"/>
@@ -4565,7 +4491,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/MU/MeasureType">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/MU/hasMeasurementUnit"/>
@@ -4593,7 +4518,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/MU/MeasurementUnit">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:comment xml:lang="it">Questa classe è utilizzata per rappresentare un&apos;unità di misura (e.g., metro, chilometro, grammo, ecc.).</rdfs:comment>
         <rdfs:comment xml:lang="en">This class is used to model a measurement unit (e.g., meter, kilometer, gram, etc.)</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://w3id.org/italia/onto/MU"/>
@@ -4609,7 +4533,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/MU/Value">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/MU/hasMeasurementUnit"/>
@@ -4644,7 +4567,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/POI/MultiplePointOfInterest">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/POI/PointOfInterest"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/POI/includesPOI"/>
@@ -4665,7 +4587,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/POI/POINameInTime -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/POI/POINameInTime">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/EventOrSituation"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -4708,7 +4629,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/POI/POIState">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/POI/isPOIStateFor"/>
@@ -4819,7 +4739,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/POI/PointOfInterestCategory -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/POI/PointOfInterestCategory">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Topic"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -4841,7 +4760,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/SM/ContactPoint -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/ContactPoint">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:comment xml:lang="en">A contact point that can be physical or available online</rdfs:comment>
         <rdfs:comment xml:lang="it">Un punto di contatto che può essere fisico o disponibile online</rdfs:comment>
@@ -4857,7 +4775,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/SM/Email -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/Email">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -4894,8 +4811,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/EmailType">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Concept"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/SM/isEmailTypeOf"/>
@@ -4916,7 +4831,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/SM/Image -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/Image">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:comment xml:lang="it">Questa classe rappresenta le immagini (ex. loghi).</rdfs:comment>
         <rdfs:comment xml:lang="en">This class represents images.</rdfs:comment>
@@ -4933,8 +4847,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/OnlineContactPoint">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/SM/ContactPoint"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/SM/hasEmail"/>
@@ -4977,8 +4889,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/PhysicalContactPoint">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/POI/PointOfInterest"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/SM/ContactPoint"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:comment xml:lang="it">Questa classe rappresenta un punto di contatto fisico come per esempio un box informazioni, un punto turistico, una biglietteria, un ufficio, ecc. Può essere considerato un punto di interesse.</rdfs:comment>
         <rdfs:comment xml:lang="en">This class rapresents a physical contact point such as a ticket office, an office, a tourtist point</rdfs:comment>
         <rdfs:label xml:lang="en">Physical Contact Point</rdfs:label>
@@ -4993,7 +4903,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/SM/Post -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/Post">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -5023,8 +4932,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/Rating">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Description"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/SM/bestUserRating"/>
@@ -5059,8 +4966,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/Review">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/SM/Post"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/SM/hasRating"/>
@@ -5088,7 +4993,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/SM/SocialMedia -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/SocialMedia">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -5108,7 +5012,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/SM/Telephone -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/Telephone">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -5144,8 +5047,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/TelephoneType">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Concept"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/SM/isTelephoneTypeOf"/>
@@ -5167,7 +5068,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/SM/UserAccount -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/UserAccount">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -5211,7 +5111,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/SM/WebSite -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/SM/WebSite">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -5235,7 +5134,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/TI/DayOfWeek">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/TI/TemporalEntity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <owl:disjointWith rdf:resource="https://w3id.org/italia/onto/TI/MonthOfYear"/>
         <owl:disjointWith rdf:resource="https://w3id.org/italia/onto/TI/Year"/>
         <rdfs:comment xml:lang="it">Classe che rappresenta l&apos;insieme dei giorni della settimana.</rdfs:comment>
@@ -5251,8 +5149,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/TI/Duration">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/TI/TemporalEntity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
@@ -5274,7 +5170,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/TI/MonthOfYear">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/TI/TemporalEntity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/TI/month"/>
@@ -5314,7 +5209,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/TI/TimeIndexedEvent -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/TI/TimeIndexedEvent">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/EventOrSituation"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -5335,7 +5229,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/TI/TimeInstant">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/TI/TemporalEntity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/TI/fallsInside"/>
@@ -5386,7 +5279,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <owl:Class rdf:about="https://w3id.org/italia/onto/TI/TimeInterval">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/TI/TemporalEntity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Characteristic"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/TI/hasTimeInstantInside"/>
@@ -5427,7 +5319,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/TI/Year">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/TI/TemporalEntity"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/TI/year"/>
@@ -5462,7 +5353,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/l0/Agent -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/l0/Agent">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <owl:disjointWith rdf:resource="https://w3id.org/italia/onto/l0/Concept"/>
         <owl:disjointWith rdf:resource="https://w3id.org/italia/onto/l0/Description"/>
@@ -5517,7 +5407,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/l0/Concept -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/l0/Concept">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <owl:disjointWith rdf:resource="https://w3id.org/italia/onto/l0/Description"/>
         <owl:disjointWith rdf:resource="https://w3id.org/italia/onto/l0/EventOrSituation"/>
@@ -5535,7 +5424,6 @@ DUF e DUG sono due proprietà obbligatorie per la classe ed è possibile specifi
     <!-- https://w3id.org/italia/onto/l0/Description -->
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/l0/Description">
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Object"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -5626,7 +5514,6 @@ GLi oggetti si possono contrapporre agli eventi, che invece scorrono nel tempo, 
 
     <owl:Class rdf:about="https://w3id.org/italia/onto/l0/Sequence">
         <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Collection"/>
-        <rdfs:subClassOf rdf:resource="https://w3id.org/italia/onto/l0/Entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/italia/onto/l0/hasFirstMember"/>
