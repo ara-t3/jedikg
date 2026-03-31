@@ -19,6 +19,7 @@ import kgsaf_jdex.utils.conventions.paths as pc
 import numpy as np
 import argparse
 import logging
+import time
 
 
 
@@ -118,7 +119,8 @@ class JDEX:
                     self.kill(0)
                 case "Run dataset generation":
                     break
-
+        
+        start = time.perf_counter()
         self.ui.rule("JDEX Pipeline")
         self.ui.subrule("Initial Configuration and Safety Checks")
         self.ui.info("Starting JDEX Dataset Generation Suite")
@@ -173,11 +175,17 @@ class JDEX:
         # SUBFOLDERS GENERATIONS
         # ----------------------------------
 
-        (self.cwd / "abox").mkdir(parents=True, exist_ok=True)
-        (self.cwd / "tbox").mkdir(parents=True, exist_ok=True)
-        (self.cwd / "rbox").mkdir(parents=True, exist_ok=True)
 
-        self.ui.success("Subfolders ABox / TBox / RBox created")
+        (self.cwd / "abox").mkdir(parents=True, exist_ok=True)
+        self.ui.success("TBox Subfolder created")
+
+        if self.config.reasoning.decomposition.tbox:
+            (self.cwd / "tbox").mkdir(parents=True, exist_ok=True)
+            self.ui.success("TBox Subfolder created")
+
+        if self.config.reasoning.decomposition.rbox:
+            (self.cwd / "rbox").mkdir(parents=True, exist_ok=True)
+            self.ui.success("RBox Subfolder created")
 
         if self.config.split.enabled:
             (self.cwd / "abox" / "splits").mkdir(parents=True, exist_ok=True)
@@ -401,7 +409,7 @@ class JDEX:
         self.ui.success(f"Individuals serialized at {self.cwd / pc.INDIVIDUALS}")
 
         # -----------------------------------
-        # Individuals Serialization
+        # Class Assertions Serialization
         # ----------------------------------
 
 
@@ -414,6 +422,11 @@ class JDEX:
 
         self.ui.success(f"Class Assertions serialized at {self.cwd / pc.RDF_CLASS_ASSERTIONS}")
 
+        # -----------------------------------
+        # Temporary Files removal
+        # ----------------------------------
+
+        (self.cwd / pc.ASSERTIONS).unlink(missing_ok=True)
 
         # -----------------------------------
         # Consistency Check and Justification
@@ -446,6 +459,7 @@ class JDEX:
                     justification = self.reasoner.justification(input=self.cwd / pc.KNOWLEDGE_GRAPH, output=self.cwd / "justification.ttl", verbose=self.config.verbose)
                     self.ui.list("Inconsistency Justification", justification)
                     self.ui.success(f"Justification saved at {self.cwd / "justification.ttl"}")
+                    self.kill(0)
 
         # -----------------------------------
         # Class Assertions Realization
@@ -504,162 +518,80 @@ class JDEX:
             ])
 
             self.ui.success(f"Modularization successfull, stored at {self.cwd / pc.ONTOLOGY}")
+            schema = modularized_schema
 
+        # -----------------------------------
+        # Schema Decomposition
+        # ----------------------------------
 
+        decomposer = SchemaDecomposer(schema)
 
+        if self.config.reasoning.decomposition.tbox:
 
-    
+            self.ui.subrule("TBox Decomposition")
 
+            self.ui.info("Running Decomposition of Schema Axioms / Class Definition")
+            d_schema = decomposer._schema_decompose(verbose=False)
+            d_schema.serialize(self.cwd / pc.RDF_SCHEMA, format="xml")
+            self.reasoner.conversion(self.cwd / pc.RDF_SCHEMA, self.cwd / pc.RDF_SCHEMA, format="owl", verbose=self.config.verbose)
+            self.ui.success(f"Schema Decomposition stored at {self.cwd / pc.RDF_SCHEMA}")
+           
+            self.ui.info("Running Decomposition of Schema Taxonomy")
+            d_taxonomy = decomposer._taxonomy_decompose(verbose=False)
+            d_taxonomy.serialize(self.cwd / pc.RDF_TAXONOMY, format="xml")
+            self.reasoner.conversion(self.cwd / pc.RDF_TAXONOMY, self.cwd / pc.RDF_TAXONOMY, format="owl", verbose=self.config.verbose)
+            self.ui.success(f"Taxonomy Decomposition stored at {self.cwd / pc.RDF_TAXONOMY}")
 
+        
+        if self.config.reasoning.decomposition.rbox:
+            self.ui.subrule("RBox Decomposition")
+            self.ui.info("Running Decomposition on Roles Definitions and Axioms")
+            d_roles = decomposer._rbox_decompose(verbose=False)
+            d_roles.serialize(self.cwd / pc.RDF_OBJ_PROP, format="xml")
+            self.reasoner.conversion(self.cwd / pc.RDF_OBJ_PROP, self.cwd / pc.RDF_OBJ_PROP, format="owl", verbose=self.config.verbose)
+            self.ui.success(f"Roles Decomposition stored at {self.cwd / pc.RDF_OBJ_PROP}")
 
+        # -----------------------------------
+        # Full KG Reconstruction and Safety Checks
+        # ----------------------------------
 
+        self.ui.subrule("Compolete Knowledge Graph Reconstruction and Safety Checks")
+        self.ui.info(f"Merging full KG at {self.cwd / pc.KNOWLEDGE_GRAPH}")
 
-        self.kill(1)
+        self.reasoner.merging(input_ontologies=[\
+                self.cwd / pc.ONTOLOGY,
+                self.cwd / pc.RDF_TRIPLES,
+                self.cwd / pc.INDIVIDUALS,
+                self.cwd / pc.RDF_CLASS_ASSERTIONS
+                ],
+                output=self.cwd / pc.KNOWLEDGE_GRAPH,
+                verbose=self.config.verbose
+        )
 
+        self.ui.success(f"Mergin successful")
+        self.ui.info(F"Constistency check on full KG")
+        consistent = self.reasoner.consistency(self.cwd / pc.KNOWLEDGE_GRAPH, verbose=self.config.verbose)
 
+        if consistent:
+            self.ui.success("Knowledge Graph Consistent")
+        else:
+            self.ui.warning("Knowledge Graph is Inconsistent")
+            confirm = self.ui.confirm("Want to run justification using Pellet?")
+            if confirm:
+                self.ui.info("Running Justification on Target Knowledge Graph")
+                justification = self.reasoner.justification(input=self.cwd / pc.KNOWLEDGE_GRAPH, output=self.cwd / "justification.ttl", verbose=self.config.verbose)
+                self.ui.list("Inconsistency Justification", justification)
+                self.ui.success(f"Justification saved at {self.cwd / "justification.ttl"}")
+                self.kill(1)
 
-
+        end = time.perf_counter()
+        elapsed = end - start
+        self.ui.success(f"JDEX Pipeline Complete in {elapsed:4.2f} seconds. Closing Process.")
         self.kill(0)
 
 
-
-
-
-
-
-            
-
-
-        self.kill(0)
-        
-
-
-
-
-
-
-
-     
-
-
-
-
-
-
-
-        
-
-            
 
 if __name__ == "__main__":
     jdex = JDEX.from_json("./kgsaf_jdex/config.json")
     jdex.run()
 
-
-
-
-
-
-# """
-
-
-
-#     # =====================
-#     # Schema Modularization 
-#     # =====================
-
-#     seed_obj_props = predicates
-#     print("Seed Object Properties", len(seed_obj_props))
-
-#     seed_classes = set(class_assertions_graph.objects(None, RDF.type))
-#     print("Seed Classes", len(seed_classes))
-
-#     modularizer = SignatureModularizer(kg, seed_classes | seed_obj_props)
-#     out_graph = modularizer.modularize(verbose=False)
-
-#     reasoner.serialize(out_graph, DATASET_PATH / "ontology")
-
-#     # =====================
-#     # Schema Decomposition 
-#     # =====================
-
-#     onto_graph = Graph()
-#     onto_graph.parse(DATASET_PATH / "ontology.owl")
-
-#     decomposer = SchemaDecomposer(onto_graph)
-#     rbox_graph, taxonomy_graph, schema_graph = decomposer.decompose(verbose=False)
-
-#     reasoner.serialize(rbox_graph, DATASET_PATH / "rbox" / "roles")
-#     reasoner.serialize(taxonomy_graph, DATASET_PATH / "tbox" / "taxonomy")
-#     reasoner.serialize(schema_graph, DATASET_PATH / "tbox" / "schema")
-
-#     # =====================
-#     # File Removal 
-#     # =====================
-
-#     (DATASET_PATH / "intermediate_kg.owl").unlink()
-#     (DATASET_PATH / "obj_prop_assertion.nt").unlink()
-#     (DATASET_PATH / "obj_prop_assertion.tsv").unlink()
-
-#     # =====================
-#     # Full KG Decomposition 
-#     # =====================
-
-#     inputs = [
-#         DATASET_PATH / pcc.ONTOLOGY,
-#         DATASET_PATH / pcc.INDIVIDUALS,
-#         DATASET_PATH / pcc.RDF_TRIPLES,
-#         DATASET_PATH / pcc.RDF_CLASS_ASSERTIONS
-#     ]
-
-#     output_file = DATASET_PATH / "knowledge_graph.owl"
-#     cmd = ["java", "-Xmx20G", "-jar", str(ROBOT_JAR), "merge"]
-
-#     for infile in inputs:
-#         cmd += ["--input", str(infile)]
-
-#     cmd += ["--output", str(output_file)]
-
-#     result = subprocess.run(cmd, capture_output=False, text=True)
-
-#     if result.returncode != 0:
-#         raise RuntimeError(f"ROBOT merge failed with return code {result.returncode}")
-
-#     print(f"Merged knowledge graph saved to {output_file}")
-
-
-#     # =====================
-#     # Machine Learning Utilities
-#     # =====================
-
-
-#     print(f"\t Converting Dataset {DATASET_PATH.name}")
-#     processor = TSVConverter(DATASET_PATH)
-#     processor.convert()
-#     processor.serialize()
-
-
-#     print(f"\tProcessing Dataset {DATASET_PATH.name}")
-#     processor = OWLConverter(DATASET_PATH)
-#     processor.preprocess(verbose=False)
-#     processor.serialize()
-
-
-#     print(f"Mapping Dataset {DATASET_PATH.name}")
-#     mapper = IDMapper(DATASET_PATH)
-#     mapper.map_to_id()
-#     mapper.serialize()
-
-#     logging.info("Finish!")
-
-
-# if __name__ == "__main__":
-#     parser = argparse.ArgumentParser(description="Process KG and optionally run reasoner")
-#     parser.add_argument("--reasoner", action="store_true", help="Run reasoning services")
-#     parser.add_argument("--kg_file", required=True, help="Input KG file path")
-#     parser.add_argument("--output_path", required=True, help="Output dataset folder")
-#     parser.add_argument("--dataset_name", default="kg_consistent", help="Base dataset name")
-#     parser.add_argument("--robot_jar", required=True, help="Path to ROBOT jar")
-     
-#     args = parser.parse_args()
-#     main(args)

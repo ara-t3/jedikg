@@ -23,7 +23,7 @@ RDF_CLASS_ASSERTIONS = "abox/class_assertions.owl"
 INDIVIDUALS= "abox/individuals.owl"
 
 # TBOX 
-
+RDF_SCHEMA = "tbox/schema.owl"
 TAXONOMY = "tbox/taxonomy.json"
 RDF_TAXONOMY = "tbox/taxonomy.owl"
 
