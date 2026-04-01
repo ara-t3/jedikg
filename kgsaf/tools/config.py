@@ -65,6 +65,15 @@ class ModularizationConfig:
         data = data or {}
         return cls(enabled=data.get("enabled", True))
     
+@dataclass
+class ConsistencyConfig:
+    convert_ntriples: bool = False
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any] | None) -> "ConsistencyConfig":
+        data = data or {}
+        return cls(convert_ntriples=data.get("convert_ntriples", False))
+    
 
 @dataclass
 class DecompositionConfig:
@@ -72,7 +81,7 @@ class DecompositionConfig:
     rbox: bool = True
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any] | None) -> "ModularizationConfig":
+    def from_dict(cls, data: dict[str, Any] | None) -> "DecompositionConfig":
         data = data or {}
         return cls(rbox=data.get("rbox", True), tbox=data.get("tbox", True))
 
@@ -87,6 +96,7 @@ class ReasoningConfig:
     realization: RealizationConfig = field(default_factory=RealizationConfig)
     modularization: ModularizationConfig = field(default_factory=ModularizationConfig)
     decomposition: DecompositionConfig = field(default_factory=DecompositionConfig)
+    consistency: ConsistencyConfig = field(default_factory=ConsistencyConfig)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> "ReasoningConfig":
@@ -99,7 +109,8 @@ class ReasoningConfig:
             materialization=MaterializationConfig.from_dict(data.get("materialization")),
             realization=RealizationConfig.from_dict(data.get("realization")),
             modularization=ModularizationConfig.from_dict(data.get("modularization")),
-            decomposition=DecompositionConfig.from_dict(data.get("decomposition"))
+            decomposition=DecompositionConfig.from_dict(data.get("decomposition")),
+            consistency=ConsistencyConfig.from_dict(data.get("consistency"))
         )
 
 
@@ -163,6 +174,7 @@ class JDEXConfig:
     dataset_name: str
     paths: PathsConfig
     verbose: int = 1
+    interactive_shell: bool = True
     reasoning: ReasoningConfig = field(default_factory=ReasoningConfig)
     test_leakage_filtering: TestLeakageFilteringConfig = field(default_factory=TestLeakageFilteringConfig)
     split: SplitConfig = field(default_factory=SplitConfig)
@@ -181,6 +193,7 @@ class JDEXConfig:
         return cls(
             dataset_name=data["dataset_name"],
             verbose=data.get("verbose", 1),
+            interactive_shell=data.get("interactive_shell", True),
             paths=PathsConfig.from_dict(data["paths"]),
             reasoning=ReasoningConfig.from_dict(data.get("reasoning")),
             test_leakage_filtering=TestLeakageFilteringConfig.from_dict(
@@ -202,6 +215,7 @@ GENERAL SETTINGS
 
 dataset_name: {self.dataset_name}
 verbose: {self.verbose}
+interactive_shell: {self.interactive_shell}
 
 PATHS SETTINGS
 
@@ -215,6 +229,9 @@ java_8_home: {self.reasoning.java_8_home}
 java_11_home: {self.reasoning.java_11_home}
 java_max_ram: {self.reasoning.java_max_ram}
 filter_unsatisfiable: {self.reasoning.filter_unsatisfiable}
+
+consistency:
+    convert_ntriples: {self.reasoning.consistency.convert_ntriples}
 
 materialization:
     enabled: {self.reasoning.materialization.enabled}

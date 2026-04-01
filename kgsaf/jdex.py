@@ -33,10 +33,6 @@ import json
 from kgsaf.tools.cli import CLI
 
 
-
-
-
-
 class JDEX:
 
     def __init__(self, config: JDEXConfig):
@@ -105,21 +101,35 @@ class JDEX:
             else:
                 self.ui.success(f"Filtered {tot_removed} unsatisfiable URIs in {sc_it_number} steps")
                 return sc_it_number, tot_removed
+            
+    def consistency_check(self):
+        if self.config.reasoning.consistency.convert_ntriples:
+            self.ui.info(f"Converting Knowledge Graph to NTriples Format")
+            fg = Graph()
+            fg.parse(self.cwd / pc.KNOWLEDGE_GRAPH)
+            fg.serialize(self.cwd / "knowledge_graph.nt", format="ntriples", encoding="UTF-8")
+            self.ui.info(f"NTriples Knowledge Graph saved at {self.cwd / "knowledge_graph.nt"}")
+            return self.reasoner.consistency(self.cwd / "knowledge_graph.nt", verbose=self.config.verbose)
+        else:
+            return self.reasoner.consistency(self.cwd / pc.KNOWLEDGE_GRAPH, verbose=self.config.verbose)
+    
+    
 
 
     def run(self):
 
         self.startup_screen()
 
-        while True:
-            choice = self.interactive_menu()
-            match choice:
-                case "Show configuration summary":
-                    self.ui.summary("Configuration", self.config_summary())
-                case "Exit":
-                    self.kill(0)
-                case "Run dataset generation":
-                    break
+        if self.config.interactive_shell:
+            while True:
+                choice = self.interactive_menu()
+                match choice:
+                    case "Show configuration summary":
+                        self.ui.summary("Configuration", self.config_summary())
+                    case "Exit":
+                        self.kill(0)
+                    case "Run dataset generation":
+                        break
         
         start = time.perf_counter()
         self.ui.rule("JDEX Pipeline")
@@ -155,19 +165,22 @@ class JDEX:
 
         if (not self.config.reasoning.filter_unsatisfiable):
             if  (self.config.reasoning.materialization or self.config.reasoning.realization):
-                unsatifiable_classes = self.reasoner.satisfiability(
-                    input_ontology=self.config.paths.schema, 
-                    verbose=self.config.verbose
-                )
-                if not(unsatifiable_classes):
-                    self.ui.success("No Unsatisfiable Classes / Object Properties Found")
-                else:
-                    self.ui.warning(f"Reasoning services cannot be activated on ontologies with unsatisfiable classes / roles. Unsatisfiable classes found: [{unsatifiable_classes}]. Please run with 'filter_unsatisfiable':true. """)
-                    confirm = self.ui.confirm("Want to run Unsatisfiable URIs Removal Now?")
+                if self.config.interactive_shell:
+                    confirm = self.ui.confirm("Reasoning Services Active but Not Filtering of Unsatisfiable Classes / Roles. Do you want to check satisfiability?")
                     if confirm:
-                        self.filter_unsatisfiable()
-                    else:
-                        self.kill(1)
+                        unsatifiable_classes = self.reasoner.satisfiability(
+                            input_ontology=self.config.paths.schema, 
+                            verbose=self.config.verbose
+                        )
+                        if not(unsatifiable_classes):
+                            self.ui.success("No Unsatisfiable Classes / Object Properties Found")
+                        else:
+                            self.ui.warning(f"Reasoning services cannot be activated on ontologies with unsatisfiable classes / roles. Unsatisfiable classes found: [{unsatifiable_classes}]. Please run with 'filter_unsatisfiable':true. """)
+                            confirm = self.ui.confirm("Want to run Unsatisfiable URIs Removal Now?")
+                            if confirm:
+                                self.filter_unsatisfiable()
+                            else:
+                                self.kill(1)
         else:
             self.filter_unsatisfiable()
 
@@ -192,10 +205,11 @@ class JDEX:
             (self.cwd / "abox" / "splits").mkdir(parents=True, exist_ok=True)
             self.ui.success("Split Subfolder created")
 
+        """
         if self.config.post_processing.id_mapping:
             (self.cwd / "mappings").mkdir(parents=True, exist_ok=True)
             self.ui.success("ID Mappings Subfolder created")
-
+        """
        
 
         # -----------------------------------
@@ -247,19 +261,19 @@ class JDEX:
             if (s, RDF.type, OWL.NamedIndividual) in assertions and (p, RDF.type, OWL.ObjectProperty) in schema and (o, RDF.type, OWL.NamedIndividual) in assertions:
             
                 if s not in individuals and (s, RDF.type, OWL.Class) in schema:
-                    null_individuals.add(s)
+                    null_individuals.add((s, "Also Defined as Class"))
                     continue
                 else:
                     individuals.add(s)
                 
                 if o not in individuals and (o, RDF.type, OWL.Class) in schema:
-                    null_individuals.add(o)
+                    null_individuals.add((s, "Also Defined as Class"))
                     continue
                 else:
                     individuals.add(o)
 
                 if p not in object_properties and (p, RDF.type, OWL.DatatypeProperty) in schema:
-                    null_object_properties.add(p)
+                    null_object_properties.add((p, "Also Defined as DatatypeProperty"))
                     continue
                 else:
                     object_properties.add(p)
@@ -270,7 +284,7 @@ class JDEX:
             elif (s, RDF.type, OWL.NamedIndividual) in assertions and (p == RDF.type) and (o, RDF.type, OWL.Class) in schema:
 
                 if s not in individuals and (s, RDF.type, OWL.Class) in schema:
-                    null_individuals.add(s)
+                    null_individuals.add((s, "Also Defined as Class"))
                     continue
                 else:
                     individuals.add(s)
@@ -297,6 +311,16 @@ class JDEX:
         ])
 
         self.ui.success("Assertions Filtered Successfully")
+
+        if null_individuals or null_object_properties:
+            if self.config.interactive_shell:
+                confirm = self.ui.confirm("Do you want to visualize the removed URIs?")
+                if confirm:
+                    if null_individuals:
+                        self.ui.list("Removed Individuals", [f"{a} -> {b}" for a,b in null_individuals])
+                    if null_object_properties:
+                        self.ui.list("Removed Object Properties",  [f"{a} -> {b}" for a,b in null_object_properties])
+
 
 
         # -----------------------------------
@@ -448,19 +472,21 @@ class JDEX:
                 output=self.cwd / pc.KNOWLEDGE_GRAPH,
                 verbose=self.config.verbose
                 )
-            consistent = self.reasoner.consistency(self.cwd / pc.KNOWLEDGE_GRAPH, verbose=self.config.verbose)
+            
+            consistent = self.consistency_check()
 
             if consistent:
                 self.ui.success("Knowledge Graph Consistent")
             else:
                 self.ui.warning("Knowledge Graph is Inconsistent, cannot run realization services")
-                confirm = self.ui.confirm("Want to run justification using Pellet?")
-                if confirm:
-                    self.ui.info("Running Justification on Target Knowledge Graph")
-                    justification = self.reasoner.justification(input=self.cwd / pc.KNOWLEDGE_GRAPH, output=self.cwd / "justification.ttl", verbose=self.config.verbose)
-                    self.ui.list("Inconsistency Justification", justification)
-                    self.ui.success(f"Justification saved at {self.cwd / "justification.ttl"}")
-                    self.kill(0)
+                if self.config.interactive_shell:
+                    confirm = self.ui.confirm("Want to run justification using Pellet?")
+                    if confirm:
+                        self.ui.info("Running Justification on Target Knowledge Graph")
+                        justification = self.reasoner.justification(input=self.cwd / pc.KNOWLEDGE_GRAPH, output=self.cwd / "justification.ttl", verbose=self.config.verbose)
+                        self.ui.list("Inconsistency Justification", justification)
+                        self.ui.success(f"Justification saved at {self.cwd / "justification.ttl"}")
+                        self.kill(0)
 
         # -----------------------------------
         # Class Assertions Realization
@@ -571,19 +597,24 @@ class JDEX:
 
         self.ui.success(f"Mergin successful")
         self.ui.info(F"Constistency check on full KG")
-        consistent = self.reasoner.consistency(self.cwd / pc.KNOWLEDGE_GRAPH, verbose=self.config.verbose)
+
+
+        consistent = self.consistency_check()
+
+
 
         if consistent:
             self.ui.success("Knowledge Graph Consistent")
         else:
             self.ui.warning("Knowledge Graph is Inconsistent")
-            confirm = self.ui.confirm("Want to run justification using Pellet?")
-            if confirm:
-                self.ui.info("Running Justification on Target Knowledge Graph")
-                justification = self.reasoner.justification(input=self.cwd / pc.KNOWLEDGE_GRAPH, output=self.cwd / "justification.ttl", verbose=self.config.verbose)
-                self.ui.list("Inconsistency Justification", justification)
-                self.ui.success(f"Justification saved at {self.cwd / "justification.ttl"}")
-                self.kill(1)
+            if self.config.interactive_shell:
+                confirm = self.ui.confirm("Want to run justification using Pellet?")
+                if confirm:
+                    self.ui.info("Running Justification on Target Knowledge Graph")
+                    justification = self.reasoner.justification(input=self.cwd / pc.KNOWLEDGE_GRAPH, output=self.cwd / "justification.ttl", verbose=self.config.verbose)
+                    self.ui.list("Inconsistency Justification", justification)
+                    self.ui.success(f"Justification saved at {self.cwd / "justification.ttl"}")
+                    self.kill(1)
 
         end = time.perf_counter()
         elapsed = end - start

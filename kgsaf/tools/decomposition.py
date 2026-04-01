@@ -100,7 +100,8 @@ class SchemaDecomposer:
                             schema_graph.add((o, RDF.type, elem))
 
                         if isinstance(o, BNode):
-                            print(f"Found BNODE in Triple {s, p, o}")
+                            if verbose:
+                                print(f"Found BNODE in Triple {s, p, o}")
                             schema_graph += self._extract_description(o, verbose)
 
         return schema_graph

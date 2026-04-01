@@ -5,7 +5,6 @@
 tutorial/output/**
 .vscode/
 unpack
-triples
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -34,7 +34,12 @@
         "decomposition" : {
             "tbox" : true,
             "rbox" : true
+        },
+        
+        "consistency" : {
+            "convert_ntriples" : true
         }
+
 
 
     },
