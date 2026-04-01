@@ -1,7 +1,7 @@
 {
     "dataset_name": "ARCO_10_ROFF",
     "verbose": 1,
-    "interactive_shell": true,
+    "interactive_shell": false,
 
     "paths": {
         "schema": "./kgsaf/data/schemas/unpack/ARCO-2026/ontology.owl",

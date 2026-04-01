@@ -1,7 +1,9 @@
 from kgsaf.jdex import JDEX
-
+from pathlib import Path
 
 if __name__ == "__main__":
-    jdex = JDEX.from_json("./kgsaf/data/configurations/ATRAVEL_RON.json")
-    jdex.run()
+    base_folder = Path("./kgsaf/data/configurations/")
+    for conf in base_folder.glob("**/*"):
+        jdex = JDEX.from_json(conf)
+        jdex.run()
 

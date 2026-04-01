@@ -1,7 +1,7 @@
 {
     "dataset_name": "ARCO_5_RON",
     "verbose": 1,
-    "interactive_shell": true,
+    "interactive_shell": false,
 
     "paths": {
         "schema": "./kgsaf/data/schemas/unpack/ARCO-2026/materialized.owl",

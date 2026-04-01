@@ -38,6 +38,7 @@ class JDEX:
     def __init__(self, config: JDEXConfig):
         self.config = config
         self.ui = CLI(self.config.verbose)
+        self.ontology_node = URIRef("http://example.org/")
         self.cwd = (self.config.paths.output / self.config.dataset_name).absolute()
         self.reasoner = Reasoner(
                 reasoners_path=Path("./reasoners/unpack").absolute(),
@@ -155,7 +156,7 @@ class JDEX:
         self.ui.success(f"Temporary Conversion saved as {(self.cwd / pc.ONTOLOGY).absolute()}")
 
         self.ui.info(f"Converthing Assertions File {self.config.paths.data.absolute()} to OWL format")
-        self.reasoner.conversion(self.config.paths.data, self.cwd / pc.ASSERTIONS)
+        self.reasoner.conversion(self.config.paths.data, self.cwd / pc.ASSERTIONS, format="owl", verbose=self.config.verbose)
         self.ui.success(f"Temporary Conversion saved as {(self.cwd / pc.ASSERTIONS).absolute()}")
 
 
@@ -249,6 +250,8 @@ class JDEX:
 
         op_triples = Graph()
         ca_triples = Graph()
+
+        ca_triples.add((self.ontology_node, RDF.type, OWL.Ontology))
 
         individuals = set()
         classes = set()
@@ -426,6 +429,8 @@ class JDEX:
         self.ui.info("Serializing Individual Informations")
 
         out_graph = Graph()
+        out_graph.add((self.ontology_node, RDF.type, OWL.Ontology))
+
         for ind in individuals:
             out_graph.add((ind, RDF.type, OWL.NamedIndividual))
         out_graph.serialize(self.cwd / pc.INDIVIDUALS, format="xml")
@@ -488,6 +493,8 @@ class JDEX:
                         self.ui.success(f"Justification saved at {self.cwd / "justification.ttl"}")
                         self.kill(0)
 
+
+        
         # -----------------------------------
         # Class Assertions Realization
         # ----------------------------------
@@ -502,6 +509,7 @@ class JDEX:
             )
             self.reasoner.conversion(self.cwd / pc.RDF_CLASS_ASSERTIONS, self.cwd / pc.RDF_CLASS_ASSERTIONS, format="owl", verbose=self.config.verbose)
             self.ui.success(f"Realiation Output stored at {self.cwd / pc.RDF_CLASS_ASSERTIONS}")
+
 
 
         # -----------------------------------
@@ -536,6 +544,7 @@ class JDEX:
 
             modularizer = SignatureModularizer(schema, seed_classes | seed_obj_props)
             modularized_schema = modularizer.modularize(verbose=False)
+            modularized_schema.add((self.ontology_node, RDF.type, OWL.Ontology))
             modularized_schema.serialize(self.cwd / pc.ONTOLOGY)
             self.reasoner.conversion(self.cwd / pc.ONTOLOGY, self.cwd / pc.ONTOLOGY, format="owl", verbose=self.config.verbose)
 
@@ -559,12 +568,14 @@ class JDEX:
 
             self.ui.info("Running Decomposition of Schema Axioms / Class Definition")
             d_schema = decomposer._schema_decompose(verbose=False)
+            d_schema.add((self.ontology_node, RDF.type, OWL.Ontology))
             d_schema.serialize(self.cwd / pc.RDF_SCHEMA, format="xml")
             self.reasoner.conversion(self.cwd / pc.RDF_SCHEMA, self.cwd / pc.RDF_SCHEMA, format="owl", verbose=self.config.verbose)
             self.ui.success(f"Schema Decomposition stored at {self.cwd / pc.RDF_SCHEMA}")
            
             self.ui.info("Running Decomposition of Schema Taxonomy")
             d_taxonomy = decomposer._taxonomy_decompose(verbose=False)
+            d_taxonomy.add((self.ontology_node, RDF.type, OWL.Ontology))
             d_taxonomy.serialize(self.cwd / pc.RDF_TAXONOMY, format="xml")
             self.reasoner.conversion(self.cwd / pc.RDF_TAXONOMY, self.cwd / pc.RDF_TAXONOMY, format="owl", verbose=self.config.verbose)
             self.ui.success(f"Taxonomy Decomposition stored at {self.cwd / pc.RDF_TAXONOMY}")
@@ -574,6 +585,7 @@ class JDEX:
             self.ui.subrule("RBox Decomposition")
             self.ui.info("Running Decomposition on Roles Definitions and Axioms")
             d_roles = decomposer._rbox_decompose(verbose=False)
+            d_roles.add((self.ontology_node, RDF.type, OWL.Ontology))
             d_roles.serialize(self.cwd / pc.RDF_OBJ_PROP, format="xml")
             self.reasoner.conversion(self.cwd / pc.RDF_OBJ_PROP, self.cwd / pc.RDF_OBJ_PROP, format="owl", verbose=self.config.verbose)
             self.ui.success(f"Roles Decomposition stored at {self.cwd / pc.RDF_OBJ_PROP}")
@@ -619,6 +631,5 @@ class JDEX:
         end = time.perf_counter()
         elapsed = end - start
         self.ui.success(f"JDEX Pipeline Complete in {elapsed:4.2f} seconds. Closing Process.")
-        self.kill(0)
 
 
