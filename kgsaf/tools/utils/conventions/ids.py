@@ -1,4 +1,0 @@
-DOMAIN = 0
-RANGE = 1
-THING = -1
-

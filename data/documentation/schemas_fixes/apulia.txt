@@ -1,0 +1,20 @@
+Hermit Materialization produces this two axioms:
+
+    <!-- https://w3id.org/italia/onto/CLV/hasCity -->
+
+    <owl:ObjectProperty rdf:about="https://w3id.org/italia/onto/CLV/hasCity">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+    </owl:ObjectProperty>
+
+
+    <owl:ObjectProperty rdf:about="https://w3id.org/italia/onto/CLV/hasAddressComponent">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+    </owl:ObjectProperty>
+    
+
+These cannot be produced for a simple object propoerty, causing excpetion in HermiT java code.
+These will be manually removed from the produced materialized ontology.
+
+

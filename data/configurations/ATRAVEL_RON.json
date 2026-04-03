@@ -1,0 +1,57 @@
+{
+    "dataset_name": "ATRAVEL_RON",
+    "verbose": 1,
+    "interactive_shell": false,
+
+    "paths": {
+        "schema": "./data/schemas/unpack/APULIATRAVEL/materialized.owl",
+        "data": "./data/facts/unpack/atravel.owl",
+        "output": "./data/datasets/unpack"
+    },
+
+    "reasoning": {
+        "java_8_home": "/usr/lib/jvm/java-1.8.0-openjdk-amd64",
+        "java_11_home": "/usr/lib/jvm/java-1.11.0-openjdk-amd64",
+        "java_max_ram": 20,
+
+        "materialization": {
+            "enabled": false,
+            "axioms": []
+        },
+
+        "realization": {
+            "enabled": true
+        },
+
+        "modularization": {
+            "enabled": true
+        },
+
+        "decomposition" : {
+            "tbox" : true,
+            "rbox" : true
+        },
+
+        "consistency" : {
+            "convert_ntriples" : false
+        }
+    },
+
+    "split": {
+        "enabled": true,
+        "train_percent": 80,
+        "validation_percent": 10,
+        "test_percent": 10,
+        "transductive": true,
+        "test_leakage_filtering": {
+            "enabled": true,
+            "minimum_frequency": 0.97
+
+        }
+    },
+
+    "post_processing": {
+        "json_conversion": true,
+        "id_mapping": true
+    }
+}
