@@ -314,7 +314,7 @@ class Reasoner:
             )"""
             with open(output, "w") as f:
                 f.write(out_str)
-            self.conversion(output, output, format="ttl", verbose=False)
+            self.conversion(output, output, format="owl", verbose=False)
             return explanation
         return []
 

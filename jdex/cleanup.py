@@ -15,7 +15,7 @@ from rdflib.namespace import RDF, RDFS, OWL, XSD
 
 
 if __name__ == "__main__":
-    jdex = JDEX.from_json("./test/test_data/config.json")
+    jdex = JDEX.from_json("./test/configurations/test.json")
     reasoner = jdex.reasoner
 
     if False:
@@ -65,10 +65,10 @@ if __name__ == "__main__":
     if False:
         satif = reasoner.satisfiability(Path("/home/navis/Devel/PhD/kg-saf/kgsaf/data/schemas/unpack/YAGO4/materialized.owl"), verbose=2)
 
-    if True:
+    if False:
 
-        base = Path("/home/navis/Devel/PhD/kg-saf/kgsaf/data/datasets/old_unpack/YAGO3-39K-C-BASE/abox")
-        out_base = Path("/home/navis/Devel/PhD/kg-saf/kgsaf/data/facts/unpack/yago339k.owl")
+        base = Path("/home/navis/Devel/PhD/kg-saf/data/datasets/old_unpack/DBPEDIA25-100K-C-BASE/abox")
+        out_base = Path("/home/navis/Devel/PhD/kg-saf/kgsaf/data/facts/unpack/dbpedia100k.owl")
         
         reasoner.merging([
             base / "obj_prop_assertions.nt",
@@ -78,3 +78,9 @@ if __name__ == "__main__":
             out_base, verbose=2)
         
         #reasoner.filtering(out_base, out_base, uris=["file:///c:/opt/maas/build/procedure_ICCD/NCTR05/"], verbose=2)
+
+    if True:
+        p = Path("/home/navis/Devel/PhD/kg-saf/diagnosi.owl")
+        out = Path("/home/navis/Devel/PhD/kg-saf/why.owl")
+        print(reasoner.consistency(p))
+        reasoner.justification(p, out)

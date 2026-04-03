@@ -536,7 +536,7 @@ class JDEX:
                     confirm = self.ui.confirm("Want to run justification using Pellet?")
                     if confirm:
                         self.ui.info("Running Justification on Target Knowledge Graph")
-                        justification = self.reasoner.justification(input=self.cwd / pc.KNOWLEDGE_GRAPH, output=self.cwd / "justification.ttl", verbose=self.config.verbose)
+                        justification = self.reasoner.justification(input=self.cwd / pc.KNOWLEDGE_GRAPH, output=self.cwd / "justification.owl", verbose=self.config.verbose)
                         self.ui.list("Inconsistency Justification", justification)
                         self.ui.success(f"Justification saved at {self.cwd / "justification.ttl"}")
                         self.kill(0)

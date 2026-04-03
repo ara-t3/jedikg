@@ -6,7 +6,7 @@
     "paths": {
         "schema": "./data/schemas/unpack/APULIATRAVEL/materialized.owl",
         "data": "./data/facts/unpack/atravel.owl",
-        "output": "./data/datasets/unpack"
+        "output": "./test/datasets/"
     },
 
     "reasoning": {
