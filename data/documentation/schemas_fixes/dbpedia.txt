@@ -2,15 +2,6 @@
 Sbagliato semanticamente 
 
 
-solo in db50k
-    <NamedIndividual rdf:about="http://dbpedia.org/resource/1987_Munster_Senior_Hurling_Championship_Final">
-        <ontology:team rdf:resource="http://dbpedia.org/resource/Tipperary_GAA"/>
-    </NamedIndividual>
-
-
-    
-
-
 in full dbpedia
     <owl:Class rdf:about="http://dbpedia.org/ontology/Organisation">
 

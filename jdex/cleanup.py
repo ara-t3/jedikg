@@ -18,8 +18,8 @@ if __name__ == "__main__":
     jdex = JDEX.from_json("./test/configurations/test.json")
     reasoner = jdex.reasoner
 
-    if False:
-        reasoner.materialization(Path("/home/navis/Devel/PhD/kg-saf/kgsaf/data/schemas/unpack/YAGO3/ontology.owl"), Path("/home/navis/Devel/PhD/kg-saf/kgsaf/data/schemas/unpack/YAGO3/materialized.owl"), axioms=PresetAxioms.tbox_materialization(), verbose=2)
+    if True:
+        reasoner.materialization(Path("/home/navis/Devel/PhD/kg-saf/data/schemas/unpack/DBPEDIA-2026/ontology.owl"), Path("/home/navis/Devel/PhD/kg-saf/data/schemas/unpack/DBPEDIA-2026/materialized.owl"), axioms=PresetAxioms.tbox_materialization(), verbose=2)
     
     if False:
         unsatif = reasoner.satisfiability(input_ontology=Path("/home/navis/Devel/PhD/kg-saf/kgsaf/data/schemas/unpack/YAGO4/materialized.owl"), verbose=2)
@@ -79,7 +79,7 @@ if __name__ == "__main__":
         
         #reasoner.filtering(out_base, out_base, uris=["file:///c:/opt/maas/build/procedure_ICCD/NCTR05/"], verbose=2)
 
-    if True:
+    if False:
         p = Path("/home/navis/Devel/PhD/kg-saf/diagnosi.owl")
         out = Path("/home/navis/Devel/PhD/kg-saf/why.owl")
         print(reasoner.consistency(p))
