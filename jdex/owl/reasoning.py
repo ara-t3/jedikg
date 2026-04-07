@@ -58,7 +58,7 @@ class PresetAxioms:
 
 class Reasoner:
     def __init__(self, reasoners_path: Path, java8_path: Path, java11_path: Path, java_max_ram: int = 20):
-        self.konclude = reasoners_path / "konclude" / "Konclude"
+        self.konclude = reasoners_path / "konclude" / "Binaries" / "Konclude"
         self.robot = reasoners_path / "robot" / "robot.jar"
         self.pellet = reasoners_path / "pellet" / "cli/target/pelletcli/bin/pellet"
         self.java8_path = java8_path
@@ -299,7 +299,7 @@ class Reasoner:
             str(input),
         ]
 
-        result, elapsed = self._run_process(cmd, env=self._get_env(java_version=8))
+        result, elapsed = self._run_process(cmd)
         self._check_result(result, f"JUSTIFICATION (Pellet)", elapsed, verbose=verbose)
 
         # If PROCESS Successful =>
