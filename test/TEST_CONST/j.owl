@@ -22,10 +22,18 @@
     
 
 
-    <!-- http://dbpedia.org/ontology/team -->
+    <!-- http://dbpedia.org/ontology/location -->
 
-    <ObjectProperty rdf:about="http://dbpedia.org/ontology/team">
-        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+    <ObjectProperty rdf:about="http://dbpedia.org/ontology/location">
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://dbpedia.org/ontology/owner -->
+
+    <ObjectProperty rdf:about="http://dbpedia.org/ontology/owner">
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/Agent"/>
     </ObjectProperty>
     
 
@@ -41,33 +49,17 @@
     
 
 
-    <!-- http://dbpedia.org/ontology/Athlete -->
+    <!-- http://dbpedia.org/ontology/Agent -->
 
-    <Class rdf:about="http://dbpedia.org/ontology/Athlete">
-        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+    <Class rdf:about="http://dbpedia.org/ontology/Agent">
+        <disjointWith rdf:resource="http://dbpedia.org/ontology/Place"/>
     </Class>
     
 
 
-    <!-- http://dbpedia.org/ontology/Event -->
+    <!-- http://dbpedia.org/ontology/Place -->
 
-    <Class rdf:about="http://dbpedia.org/ontology/Event">
-        <disjointWith rdf:resource="http://dbpedia.org/ontology/Person"/>
-    </Class>
-    
-
-
-    <!-- http://dbpedia.org/ontology/FootballMatch -->
-
-    <Class rdf:about="http://dbpedia.org/ontology/FootballMatch">
-        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
-    </Class>
-    
-
-
-    <!-- http://dbpedia.org/ontology/Person -->
-
-    <Class rdf:about="http://dbpedia.org/ontology/Person"/>
+    <Class rdf:about="http://dbpedia.org/ontology/Place"/>
     
 
 
@@ -82,17 +74,24 @@
     
 
 
-    <!-- http://dbpedia.org/resource/Tipperary_GAA -->
+    <!-- http://dbpedia.org/resource/Government_of_Kerala -->
 
-    <NamedIndividual rdf:about="http://dbpedia.org/resource/Tipperary_GAA"/>
+    <NamedIndividual rdf:about="http://dbpedia.org/resource/Government_of_Kerala"/>
     
 
 
-    <!-- http://dbpedia.org/resource/1987_Munster_Senior_Hurling_Championship_Final -->
+    <!-- http://dbpedia.org/resource/Kerala_Gramin_Bank -->
 
-    <NamedIndividual rdf:about="http://dbpedia.org/resource/1987_Munster_Senior_Hurling_Championship_Final">
-        <rdf:type rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
-        <ontology:team rdf:resource="http://dbpedia.org/resource/Tipperary_GAA"/>
+    <NamedIndividual rdf:about="http://dbpedia.org/resource/Kerala_Gramin_Bank">
+        <ontology:owner rdf:resource="http://dbpedia.org/resource/Government_of_Kerala"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dbpedia.org/resource/Southern_Railway_zone -->
+
+    <NamedIndividual rdf:about="http://dbpedia.org/resource/Southern_Railway_zone">
+        <ontology:location rdf:resource="http://dbpedia.org/resource/Government_of_Kerala"/>
     </NamedIndividual>
 </rdf:RDF>
 

@@ -1,0 +1,2 @@
+<http://dbpedia.org/resource/1987_Munster_Senior_Hurling_Championship_Final> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/FootballMatch> .
+<http://dbpedia.org/resource/1987_Munster_Senior_Hurling_Championship_Final> <http://dbpedia.org/ontology/team> <http://dbpedia.org/resource/Tipperary_GAA> .

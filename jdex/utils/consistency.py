@@ -18,7 +18,7 @@ class ConsistencyFilterer:
         g.parse(kp)
         g.serialize(kp, format="xml")
 
-        removal = set()
+        out_removed = Graph()
         found = 0
 
         while True:
@@ -30,7 +30,7 @@ class ConsistencyFilterer:
                         data = [URIRef(e.strip("<>")) for e in data]
                         triple = (data[1], RDF.type, data[0])
                         if triple in g:
-                            removal.add(triple)
+                            out_removed.add(triple)
                             g.remove(triple)
                             found += 1
                             print(f"[{found:03d}] Removed {triple}")
@@ -39,7 +39,7 @@ class ConsistencyFilterer:
                         data = [URIRef(e.strip("<>")) for e in data]
                         triple = (data[1], data[0], data[2])
                         if triple in g:
-                            removal.add(triple)
+                            out_removed.add(triple)
                             g.remove(triple)
                             found += 1
                             print(f"[{found:03d}] Removed {triple}")
@@ -47,7 +47,8 @@ class ConsistencyFilterer:
             else:
                 break
 
-        print(f"Found {found} Inconsistencies {removal}")
+        print(f"Found {found} Inconsistencies")
+        out_removed.serialize(Path(output_folder) / "removed.nt", format="ntriples")
 
 
 
@@ -57,7 +58,7 @@ if __name__ == "__main__":
         java_11_path="/opt/homebrew/opt/openjdk@11/")
     
     filter.filter_inconsistencies(
-        "/Users/navis/dev/projects/kg-saf/TEST_CONST/kg_reas.owl",
-        "/Users/navis/dev/projects/kg-saf/TEST_CONST/"
+        "/Users/navis/dev/projects/kg-saf/test/TEST_CONST/kg_100k.owl",
+        "/Users/navis/dev/projects/kg-saf/test/TEST_CONST/"
     )
 
