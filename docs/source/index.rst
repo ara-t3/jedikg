@@ -17,6 +17,26 @@ Key Features
 - 🤖 Provides ML-ready **tensor representations** compatible with PyTorch and PyKEEN  
 - 🧩 Offers **schema decomposition** into themed partitions (modularization of ontology components)
 
+Advanced Python Reasoning Integration
+-------------------------------------
+
+- 🔌 Provides a Python abstraction layer for reasoners, tightly integrated with RDFLib, enabling seamless use of multiple engines:
+   - ☕ Java-based reasoners for materialization (HermiT, Elk)
+   - ⚙️ Konclude (C++) for parallelizable consistency checking and realization
+   - 🧩 Pellet for justification extraction
+- 🔄 Automatically detects and removes unsatisfiable classes and object properties
+- 🔍 Includes tools to analyze inconsistency justifications directly in Python
+
+Usability & Complete Customization
+----------------------------------
+
+- 🖥️ Provides an interactive CLI-based interface for easy workflow management
+- ⚙️ Fully configurable via JSON, allowing you to:
+   - Select which reasoners to use
+   - Choose specific reasoning services (e.g., materialization, consistency check, justification)
+   - Customize all parameters for dataset generation
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

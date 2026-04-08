@@ -11,6 +11,7 @@ from rich.align import Align
 from rich.rule import Rule
 from rich.progress import track
 from rich.table import Table
+from rich.prompt import Prompt
 
 class CLI:
     def __init__(self, verbose: bool = True, width = 100):
@@ -92,6 +93,15 @@ class CLI:
                 width=self.width
             )
         )
+
+    def input(
+        self,
+        message: str,
+    ) -> any:
+        
+        return Prompt.ask(message, default="/opt/homebrew/opt/openjdk@11/")
+
+        
 
     def list(
         self,

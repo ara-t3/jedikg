@@ -21,7 +21,7 @@ class JDEXUnpacker:
         sys.exit(code)
 
     def startup_screen(self):
-        self.ui.logo(tool_name="JDEX Unpacker")
+        self.ui.logo(tool_name="Data Unpacker")
 
     def run(self):
         self.startup_screen()
@@ -37,8 +37,6 @@ class JDEXUnpacker:
                     self._unpack(self.bp / "facts", self.bp / "facts" / "unpack", "Facts")
                     self.ui.subrule("Unpacking Schemas")
                     self._unpack(self.bp / "schemas", self.bp / "schemas" / "unpack", "Schemas")
-                    self.ui.subrule("Unpacking Reasoners")
-                    self._unpack(self.bp.parent / "reasoners", self.bp.parent / "reasoners" / "unpack", "Reasoners")
                     self.ui.subrule("Merging Objcect Property Assertions")
                     self.regenerate_triples(self.bp / "datasets/unpack")
                     self.ui.subrule("Merging Full Knowledge Graph")
@@ -49,7 +47,6 @@ class JDEXUnpacker:
                     self._unpack(self.bp / "datasets", self.bp / "datasets" / "unpack", "Dataset")
                     self._unpack(self.bp / "facts", self.bp / "facts" / "unpack", "Facts")
                     self._unpack(self.bp / "schemas", self.bp / "schemas" / "unpack", "Schemas")
-                    self._unpack(self.bp.parent / "reasoners", self.bp.parent / "reasoners" / "unpack", "Reasoners")
                     self.ui.subrule("Done")
                 case "Unpack Facts":
                     self.ui.subrule("Facts Unpacking")
@@ -62,10 +59,6 @@ class JDEXUnpacker:
                 case "Unpack Datasets":
                     self.ui.subrule("Dataset Unpacking")
                     self._unpack(self.bp / "datasets", self.bp / "datasets" / "unpack", "Dataset")
-                    self.ui.subrule("Done")
-                case "Unpack Reasoners":
-                    self.ui.subrule("Reasoners Unpacking")
-                    self._unpack(self.bp.parent / "reasoners", self.bp.parent / "reasoners" / "unpack", "Reasoners")
                     self.ui.subrule("Done")
                 case "Regenerate Everything":
                     self.ui.subrule("Full Dataset Regeneration")
@@ -94,7 +87,6 @@ class JDEXUnpacker:
                 "Unpack Datasets",
                 "Unpack Facts",
                 "Unpack Schemas",
-                "Unpack Reasoners",
                 "",
                 "Regenerate Everything", 
                 "Regenerate Triples",

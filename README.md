@@ -1,7 +1,5 @@
 # KG-SaF: Building Complete and Curated Datasets for Machine Learning and Reasoning on Knowledge Graphs
 
-**[NEW!]** ReadTheDocs Style Documentation Available! Click docs button down below!
-
 [![DOI](https://zenodo.org/badge/1110012490.svg)](https://doi.org/10.5281/zenodo.17817931)
 ![GitHub License](https://img.shields.io/github/license/ivandiliso/sphm4kg)
 ![Python Version](https://img.shields.io/badge/python-3.12.8%2B-blue)
@@ -9,9 +7,9 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2602.14795-b31b1b.svg)](https://arxiv.org/abs/2602.14795)
 
 
-**KG-SaF** provides a workflow (*KG-SaF-JDeX*) and curated datasets  (*KG-SaF-Data*) for knowledge graph refinement (KGR) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** and **reasoning services**.
+**KG-SaF** provides a workflow (*JDeX*) and curated datasets  (*Data*) for knowledge graph refinement (KGR) and NeuroSymbolic (NeSY) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** (PyKEEN, PyTorch) and **reasoning services** (Reasoners, Ontology Management Tools like Protege).
 
-### Key Features
+## 🚀 Key Features
 - 🗂️ Extracts datasets from RDF-based KGs with expressive schemas (RDFS/OWL2)  
 - 📦 Provides datasets in **OWL** and **TSV** formats, easily loadable in both **PyTorch** and **Protege**  
 - ⚡ Handles inconsistencies and leverages reasoning to infer implicit knowledge
@@ -19,20 +17,40 @@
 - 🧩 Offers **schema decomposition** into themed partitions (modularization of ontology components)
 - 📄 Fully documented at [https://ivandiliso.github.io/kg-saf/](https://ivandiliso.github.io/kg-saf/)
 
+### Advanced Python Reasoning Integration
+- 🔌 Provides a Python abstraction layer for reasoners, tightly integrated with RDFLib, enabling seamless use of multiple engines:
+   - ☕ Java-based reasoners for materialization (HermiT, Elk)
+   - ⚙️ Konclude (C++) for parallelizable consistency checking and realization
+   - 🧩 Pellet for justification extraction
+- 🔄 Automatically detects and removes unsatisfiable classes and object properties
+- 🔍 Includes tools to analyze inconsistency justifications directly in Python
 
-## Dataset Documentation (*KG-SaF-Data*)
+### Usability & Complete Customization
+- 🖥️ Provides an interactive CLI-based interface for easy workflow management
+- ⚙️ Fully configurable via JSON, allowing you to:
+   - Select which reasoners to use
+   - Choose specific reasoning services (e.g., materialization, consistency check, justification)
+   - Customize all parameters for dataset generation
+
+### Documentation
+- 📚 Fully documented at: https://ivandiliso.github.io/kg-saf/
+
+
+
+## Dataset Documentation (*KG-SaF Data*)
 
 ### Available Ontologies (Schema) and Datasets
 
-The table below lists the currently available **ontologies** and their corresponding **datasets** included in this resource.  
+The table below lists the currently available **ontologies** and their corresponding **datasets** included in this resource. **All dataset come in two version, with and without materialization and realization services enabled.**
 > Note: This table will be **updated** as new datasets and ontologies become available.
+
 
 | Ontology | Datasets | DL Fragment |
 |----------|---------|-------------|
-| 📚 [DBpedia](https://www.dbpedia.org/resources/ontology/) | `DBPEDIA25-50K-C`, `DBPEDIA25-100K-C` | $\mathcal{ALCHF}$ |
+| 📚 [DBpedia](https://www.dbpedia.org/resources/ontology/) | `DBPEDIA-50K-C`, `DBPEDIA-100K-C` | $\mathcal{ALCHF}$ |
 | 📚 [YAGO3](https://yago-knowledge.org/downloads/yago-3) | `YAGO3-39K-C`, `YAGO3-10-C` | $\mathcal{ALHIF+}$ |
 | 📚 [YAGO4](https://yago-knowledge.org/downloads/yago-4ap) | `YAGO4-20-C` | $\mathcal{ALCHIF}$ |
-| 📚 [ArCo](http://wit.istc.cnr.it/arco) | `ARCO25-20`, `ARCO25-10`, `ARCO25-5` | $\mathcal{SROIQ}$ |
+| 📚 [ArCo](http://wit.istc.cnr.it/arco) | `ARCO-20`, `ARCO-10`, `ARCO-5` | $\mathcal{SROIQ}$ |
 | 📚 [WHOW](https://whowproject.eu/) | `WHOW25-5` | $\mathcal{SROIQ}$ |
 | 📚 [ApuliaTravel](https://github.com/rbarile17/ApuliaTravelKG) | `ATRAVEL` | $\mathcal{SRIQ}$ |
 
@@ -108,9 +126,6 @@ In the `tutorial` folder, we provide example notebooks demonstrating how to use 
    - File: `tutorial/kge_pykeen.ipynb`  
    - Description: Demonstrates a basic pipeline for training a Knowledge Graph Embedding (KGE) model using PyKEEN on one of the KG-SaF datasets, including evaluation.  
 
-2. **Generating a KG-SaF Dataset form a Custom KG**  
-   - File: `tutorial/general.ipynb`  
-   - Description: Full pipeline for transforming a user defined KG into a machine learning ready dataset. Performs all the requires preprocessing, filtering and post processing of the KG-SaF-JDeX workflow.
 
 
 # Citation

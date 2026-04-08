@@ -9,12 +9,14 @@ Before using this project, ensure the following software is installed:
 It is highly recommended to use [pyenv](https://github.com/pyenv/pyenv) to manage Python versions. This allows easy switching between versions and avoids system conflicts.
 ```
 
+1. **Ubuntu 20** or later. The project has been developed on Linux Ubuntu System. Compatibility with other systems has not been tested.
 
 1. **Python 3.9** or later. If you already have Python 3.9+ installed system-wide, pyenv is optional but recommended.
 
-2. **Java JDK 21** or later. Make sure your `JAVA_HOME` environment variable is set, otherwise some tools may not work correctly.
+2. **Java 8** or later. This is needed only if you plan to use Justification tools, due to *Pellet* dependecies.
 
-3. **ROBOT OBO Utility** is  required for reasoning and ontology manipulation. Install following instruction from officila guide [ROBOT](http://robot.obolibrary.org/). Version `1.9.x` was used in the development of this tool. (Requires Java)
+2. **Java 11** or later. This is need by the *Robot OBO Utility* backbone of the reasoning services.
+
 
 
 ## Installation Instructions
