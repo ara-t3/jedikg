@@ -22,10 +22,18 @@
     
 
 
-    <!-- http://dbpedia.org/ontology/ceremonialCounty -->
+    <!-- http://dbpedia.org/ontology/almaMater -->
 
-    <ObjectProperty rdf:about="http://dbpedia.org/ontology/ceremonialCounty">
-        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    <ObjectProperty rdf:about="http://dbpedia.org/ontology/almaMater">
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/EducationalInstitution"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://dbpedia.org/ontology/city -->
+
+    <ObjectProperty rdf:about="http://dbpedia.org/ontology/city">
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/City"/>
     </ObjectProperty>
     
 
@@ -49,17 +57,17 @@
     
 
 
-    <!-- http://dbpedia.org/ontology/Band -->
+    <!-- http://dbpedia.org/ontology/City -->
 
-    <Class rdf:about="http://dbpedia.org/ontology/Band">
-        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Group"/>
+    <Class rdf:about="http://dbpedia.org/ontology/City">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Settlement"/>
     </Class>
     
 
 
-    <!-- http://dbpedia.org/ontology/Group -->
+    <!-- http://dbpedia.org/ontology/EducationalInstitution -->
 
-    <Class rdf:about="http://dbpedia.org/ontology/Group">
+    <Class rdf:about="http://dbpedia.org/ontology/EducationalInstitution">
         <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
     </Class>
     
@@ -87,6 +95,14 @@
     
 
 
+    <!-- http://dbpedia.org/ontology/Settlement -->
+
+    <Class rdf:about="http://dbpedia.org/ontology/Settlement">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </Class>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -98,17 +114,18 @@
     
 
 
-    <!-- http://dbpedia.org/resource/Essex -->
+    <!-- http://dbpedia.org/resource/Dulwich_College -->
 
-    <NamedIndividual rdf:about="http://dbpedia.org/resource/Essex"/>
+    <NamedIndividual rdf:about="http://dbpedia.org/resource/Dulwich_College">
+        <ontology:city rdf:resource="http://dbpedia.org/resource/Dulwich_College"/>
+    </NamedIndividual>
     
 
 
-    <!-- http://dbpedia.org/resource/The_Grays_(band) -->
+    <!-- http://dbpedia.org/resource/Nigel_Farage -->
 
-    <NamedIndividual rdf:about="http://dbpedia.org/resource/The_Grays_(band)">
-        <rdf:type rdf:resource="http://dbpedia.org/ontology/Band"/>
-        <ontology:ceremonialCounty rdf:resource="http://dbpedia.org/resource/Essex"/>
+    <NamedIndividual rdf:about="http://dbpedia.org/resource/Nigel_Farage">
+        <ontology:almaMater rdf:resource="http://dbpedia.org/resource/Dulwich_College"/>
     </NamedIndividual>
 </rdf:RDF>
 
