@@ -22,18 +22,10 @@
     
 
 
-    <!-- http://dbpedia.org/ontology/location -->
+    <!-- http://dbpedia.org/ontology/ceremonialCounty -->
 
-    <ObjectProperty rdf:about="http://dbpedia.org/ontology/location">
-        <rdfs:range rdf:resource="http://dbpedia.org/ontology/Place"/>
-    </ObjectProperty>
-    
-
-
-    <!-- http://dbpedia.org/ontology/owner -->
-
-    <ObjectProperty rdf:about="http://dbpedia.org/ontology/owner">
-        <rdfs:range rdf:resource="http://dbpedia.org/ontology/Agent"/>
+    <ObjectProperty rdf:about="http://dbpedia.org/ontology/ceremonialCounty">
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
     </ObjectProperty>
     
 
@@ -57,9 +49,41 @@
     
 
 
+    <!-- http://dbpedia.org/ontology/Band -->
+
+    <Class rdf:about="http://dbpedia.org/ontology/Band">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Group"/>
+    </Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Group -->
+
+    <Class rdf:about="http://dbpedia.org/ontology/Group">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+    </Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Organisation -->
+
+    <Class rdf:about="http://dbpedia.org/ontology/Organisation">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+    </Class>
+    
+
+
     <!-- http://dbpedia.org/ontology/Place -->
 
     <Class rdf:about="http://dbpedia.org/ontology/Place"/>
+    
+
+
+    <!-- http://dbpedia.org/ontology/PopulatedPlace -->
+
+    <Class rdf:about="http://dbpedia.org/ontology/PopulatedPlace">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </Class>
     
 
 
@@ -74,24 +98,17 @@
     
 
 
-    <!-- http://dbpedia.org/resource/Government_of_Kerala -->
+    <!-- http://dbpedia.org/resource/Essex -->
 
-    <NamedIndividual rdf:about="http://dbpedia.org/resource/Government_of_Kerala"/>
+    <NamedIndividual rdf:about="http://dbpedia.org/resource/Essex"/>
     
 
 
-    <!-- http://dbpedia.org/resource/Kerala_Gramin_Bank -->
+    <!-- http://dbpedia.org/resource/The_Grays_(band) -->
 
-    <NamedIndividual rdf:about="http://dbpedia.org/resource/Kerala_Gramin_Bank">
-        <ontology:owner rdf:resource="http://dbpedia.org/resource/Government_of_Kerala"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dbpedia.org/resource/Southern_Railway_zone -->
-
-    <NamedIndividual rdf:about="http://dbpedia.org/resource/Southern_Railway_zone">
-        <ontology:location rdf:resource="http://dbpedia.org/resource/Government_of_Kerala"/>
+    <NamedIndividual rdf:about="http://dbpedia.org/resource/The_Grays_(band)">
+        <rdf:type rdf:resource="http://dbpedia.org/ontology/Band"/>
+        <ontology:ceremonialCounty rdf:resource="http://dbpedia.org/resource/Essex"/>
     </NamedIndividual>
 </rdf:RDF>
 

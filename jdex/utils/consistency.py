@@ -2,13 +2,19 @@ from jdex.owl.reasoning import Reasoner
 from pathlib import Path
 import shutil
 from rdflib import Graph, URIRef
-from rdflib.namespace import RDF
+from rdflib.namespace import RDF, split_uri
+from jdex.cli import CLI
 
 class ConsistencyFilterer:
     def __init__(self, java_8_path: str, java_11_path: str):
+        self.ui = CLI(verbose=1)
         self.reasoner = Reasoner(Path("./reasoners/unpack").absolute(), java8_path=java_8_path, java11_path=java_11_path)
 
     def filter_inconsistencies(self, knowledge_graph: str, output_folder: str):
+        
+        self.ui.logo(tool_name="JDEX Consistency")
+        self.ui.rule("Starting Inconsistency Filtering")
+
         op = Path(output_folder)
         op.mkdir(parents=False, exist_ok=True)
         kp =  op / "fix.owl"
@@ -20,12 +26,16 @@ class ConsistencyFilterer:
 
         out_removed = Graph()
         found = 0
+        step = 0
 
         while True:
-            if not self.reasoner.consistency(kp):
-                justification = self.reasoner.justification(kp, op / "j.owl")
+            if not self.reasoner.consistency(kp, verbose=0):
+                step += 1
+                self.ui.warning(f"[Reasoning Step {step}] Knowledge Graph is NOT Consistent: Running Filtering")
+                justification = self.reasoner.justification(kp, op / "j.owl", verbose=0)
                 for elem in justification:
                     if "ClassAssertion" in elem:
+                        print("FOUND ONE")
                         data = elem.strip("ClassAssertion(").strip(")").split(" ")
                         data = [URIRef(e.strip("<>")) for e in data]
                         triple = (data[1], RDF.type, data[0])
@@ -33,7 +43,7 @@ class ConsistencyFilterer:
                             out_removed.add(triple)
                             g.remove(triple)
                             found += 1
-                            print(f"[{found:03d}] Removed {triple}")
+                            self.ui.success(f"[{found:04d}] Removed <{triple[0]} type {triple[2]}>")
                     if "ObjectPropertyAssertion" in elem:
                         data = elem.strip("ObjectPropertyAssertion(").strip(")").split(" ")
                         data = [URIRef(e.strip("<>")) for e in data]
@@ -42,7 +52,7 @@ class ConsistencyFilterer:
                             out_removed.add(triple)
                             g.remove(triple)
                             found += 1
-                            print(f"[{found:03d}] Removed {triple}")
+                            self.ui.success(f"[{found:04d}] Removed <{triple[0]} {triple[1]} {triple[2]}>")
                 g.serialize(kp, format="xml")
             else:
                 break
@@ -58,7 +68,7 @@ if __name__ == "__main__":
         java_11_path="/opt/homebrew/opt/openjdk@11/")
     
     filter.filter_inconsistencies(
-        "/Users/navis/dev/projects/kg-saf/test/TEST_CONST/kg_100k.owl",
+        "/Users/navis/dev/projects/kg-saf/test/TEST_CONST/db100.owl",
         "/Users/navis/dev/projects/kg-saf/test/TEST_CONST/"
     )
 

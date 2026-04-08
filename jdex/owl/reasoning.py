@@ -35,6 +35,28 @@ import os
 
 sys.path.append(str(Path.cwd().parent))
 
+def split_top_level(expr: str):
+    parts = []
+    current = []
+    depth = 0
+
+    for char in expr:
+        if char == '(':
+            depth += 1
+        elif char == ')':
+            depth -= 1
+
+        if char == ',' and depth == 0:
+            parts.append(''.join(current).strip())
+            current = []
+        else:
+            current.append(char)
+
+    if current:
+        parts.append(''.join(current).strip())
+
+    return parts
+
 
 class PresetAxioms:
     @staticmethod
@@ -308,7 +330,9 @@ class Reasoner:
 
         match = re.search(r"MUPS 1:\s*(\[.*\])", result.stderr)
         if match:
-            explanation = [e.strip() for e in match.group(1).strip("[]").split(",")]
+            content = match.group(1).strip("[]")
+            explanation = split_top_level(content)
+
             out_str = f"""Ontology(
             {"\n".join(explanation)}
             )"""

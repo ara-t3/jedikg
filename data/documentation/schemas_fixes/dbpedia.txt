@@ -1,10 +1,28 @@
-    
-Sbagliato semanticamente 
+# DbPedia Mapping Conventions Errors
+
+DBPedia presents several capitalization problems, in the documentation [1] it states that:
+
+```
+All props must use lowerCaseCamelCase names, while classes use UpperCaseCamelCase.
+Casing is especially important when you use a prop (in rdfs:subPropertyOf) or class (in rdfs:domain, rdfs:range).
+See what happens to those who're not careful:
+     dbo:bronzeMedalist rdfs:subPropertyOf dbo:Medalist .
+```
+
+While state in mapping, DbPedia still contains some errors derived by illegal naming convention of Classes and Properties, specifically this targets (assuming namespace dbo:http://dbpedia.org/ontology/):
+
+- dbo:Department / dbo:department
+- dbo:building / dbo:Building
+- dbo:company / dbo:Company
+- dbo:work / dbo:Work
+- dbo:name / dbo:Name
+- dbo:leader / dbo:Leader
+- dbo:medalist / dbo:Medalist
+- dbo:languageCode / dbo:LanguageCode
+- dbo:book / dbo:Book
+- dbo:year / dbo:Year
+
+The errors mainly targeted wrong RDFS:subClassOf, RDFS:range, RDFS:domain, RDFS:subPropertyOf axioms, where classe names where used as suproperties or properties in subclass axioms. These were corrected following DbPedia Ontology Mapping Conventions Guidelines.
 
 
-in full dbpedia
-    <owl:Class rdf:about="http://dbpedia.org/ontology/Organisation">
-
-        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
-
-    </owl:Class>
+[1] Website: https://mappings.dbpedia.org/index.php/Mapping_Guide
