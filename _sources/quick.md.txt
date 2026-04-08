@@ -45,6 +45,10 @@ chmod +x install
 
 Follow the instruction provided via terminal to customize you installation.
 
+```{warning}
+The KG-SaF Dataset are provided in a zipped and stripped down version due to GitHub cloud per file size limitation, do to this, full knowledge graph and full assertions files have been removed, but can be easily reconstructed using the provided installation options. Please refer to the installation instruction and process to automatically unpack all resources and reconstruc all removed files.
+```
+
 ```{tip}
 If you just want to use the JDEX utility on your custom dataset and are not interested in the KG-SaF Data Consistent Dataset, choose "No" when prompted about running dataset unpacking. THe JDEX tool can be used also whitout data!
 ```
