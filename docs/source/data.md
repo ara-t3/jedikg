@@ -1,4 +1,4 @@
-**KG-SaF-Data**: Complete KGR Datasets
+KGSaF **Data**: Complete KGR Datasets
 =================
 
 KG-SaF-Data provides **complete and curated knowledge graph datasets** designed for **machine learning** and **reasoning tasks**. Each dataset comes with both a **schema (TBox)** and **instance data (ABox)**, along with **role definitions (RBox)**, making them ready for Knowledge Graph Refinement (KGR) research and embedding-based pipelines.

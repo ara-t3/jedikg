@@ -11,13 +11,22 @@ import jdex.utils.conventions.ids as idc
 import jdex.utils.conventions.paths as pc
 from jdex.utils.conventions.builtins import BUILTIN_URIS
 
+import shutil
+from rdflib import Graph
+import jdex.utils.conventions.paths as pc
+import sys
+from pathlib import Path
+from jdex.cli import CLI
+from jdex.owl.reasoning import Reasoner
+
+
 
 def verbose_print(msg: str, verbose: bool):
-    """Primg msg if verbose is true
+    """Print a message only when verbose logging is enabled.
 
     Args:
-        msg (str): Message to print
-        verbose (bool): Verbose toggle
+        msg (str): Message to print.
+        verbose (bool): If True, the message is printed; otherwise it is ignored.
     """
     if verbose:
         print(msg)
@@ -27,17 +36,20 @@ def verbose_print(msg: str, verbose: bool):
 
 
 def rdf_list_to_python_list(graph: Graph, head: URIRef, depth: int, verbose: bool = True) -> list:
-    """Convert an RDF list (rdf:first/rest/nil chain) into a Python list.
+    """Convert an RDF collection into a standard Python list.
 
+    This function traverses an RDF list encoded with ``rdf:first``,
+    ``rdf:rest``, and ``rdf:nil`` and recursively converts each element
+    into a Python representation through ``bnode_to_dict``.
 
     Args:
-        graph (Graph): RDFLib Graph to be parsed
-        head (URIRef): List starting node
-        depth (int): Recursion depth
-        verbose (bool): Log printing. Defaults to True.
+        graph (Graph): RDFLib graph containing the RDF collection.
+        head (URIRef): Head node of the RDF list.
+        depth (int): Current recursion depth, used for indented verbose logging.
+        verbose (bool, optional): Whether to print traversal logs. Defaults to True.
 
     Returns:
-        list: Python list from RDF list
+        list: Python list containing the converted RDF list elements.
     """
     items = []
     while head and head != RDF.nil:
@@ -50,16 +62,23 @@ def rdf_list_to_python_list(graph: Graph, head: URIRef, depth: int, verbose: boo
 
 
 def bnode_to_dict(graph: Graph, node: URIRef, depth: int = 1, verbose: bool = True) -> dict:
-    """Recursively convert an RDF node (especially blank nodes) into JSON.
+    """Recursively convert an RDF node into a JSON-serializable Python object.
+
+    URI references and literals are converted to strings directly. Blank nodes
+    are recursively expanded into dictionaries keyed by predicate URI, with
+    support for OWL collection constructs such as ``owl:unionOf``,
+    ``owl:intersectionOf``, and ``owl:oneOf``.
 
     Args:
-        graph (Graph): RDFLib Graph to be parsed
-        node (URIRef): Starting node
-        depth (int, optional): Recursion depth. Defaults to 1.
-        verbose (bool): Log printing. Defaults to True.
+        graph (Graph): RDFLib graph containing the node description.
+        node (URIRef): Node to convert. This may be a URIRef, Literal, or BNode.
+        depth (int, optional): Current recursion depth, used for indented verbose
+            logging. Defaults to 1.
+        verbose (bool, optional): Whether to print traversal logs. Defaults to True.
 
     Returns:
-        dict: Python dict from RDF description
+        dict: A Python dictionary representation for blank nodes, or a string
+        representation for URIRefs, Literals, and unsupported node types.
     """
 
     if isinstance(node, URIRef):
@@ -97,16 +116,21 @@ def bnode_to_dict(graph: Graph, node: URIRef, depth: int = 1, verbose: bool = Tr
 
 
 class OWLConverter:
-    """Converts a subset of OWL Ontology axioms to JSON Serialization"""
+    """Convert selected OWL ontology components into JSON-serializable structures.
+
+    This converter loads ontology fragments from a dataset directory and
+    transforms selected parts of the schema and assertions into Python
+    dictionaries that can later be serialized as JSON.
+    """
 
     def __init__(
         self,
         path: str,
     ):
-        """Initialize the converter with a dataset base path
+        """Initialize the converter with the dataset base directory.
 
         Args:
-            path (str): Dataset location path
+            path (str): Path to the root directory of the dataset to process.
         """
         self.p_data = dict()
         self.base_path = Path(path).resolve().absolute()
@@ -119,14 +143,23 @@ class OWLConverter:
         obj_prop_hierarchy: bool = True,
         verbose: bool = True
     ):
-        """Preprocess a subset of the dataset schema into Python data structure
+        """Load and preprocess selected ontology components.
+
+        Depending on the enabled flags, this method parses the corresponding
+        ontology files and stores their converted Python representations for
+        later serialization.
 
         Args:
-            taxonomy (bool, optional): Load and convert taxonomy axioms. Defaults to True.
-            class_assertions (bool, optional): Load and convert class assertions axioms. Defaults to True.
-            obj_prop_domain_range (bool, optional): Load and convert object propoerty domain and range. Defaults to True.
-            obj_prop_hierarchy (bool, optional): Load and convert object property hierarchy. Defaults to True.
-            verbose (bool): Log printing. Defaults to True.
+            taxonomy (bool, optional): Whether to preprocess class taxonomy
+                axioms. Defaults to True.
+            class_assertions (bool, optional): Whether to preprocess individual
+                class assertions. Defaults to True.
+            obj_prop_domain_range (bool, optional): Whether to preprocess object
+                property domain and range axioms. Defaults to True.
+            obj_prop_hierarchy (bool, optional): Whether to preprocess object
+                property hierarchy axioms. Defaults to True.
+            verbose (bool, optional): Whether to print progress and traversal
+                logs. Defaults to True.
         """
 
         print(f"Processing Dataset at {self.base_path}")
@@ -160,7 +193,11 @@ class OWLConverter:
             )
 
     def serialize(self):
-        """Serialize loaded and converted data into JSON format"""
+        """Serialize all preprocessed ontology components to JSON files.
+
+        Each preprocessed object stored in ``self.p_data`` is written to the
+        corresponding target path using pretty-printed JSON formatting.
+        """
         for values in self.p_data.values():
             obj = values[0]
             path = values[1]
@@ -169,19 +206,21 @@ class OWLConverter:
                 json.dump(obj, f, indent=4)
 
     def preprocess_taxonomy(self, verbose: bool) -> dict:
-        """Process taxonomy data, the out dictionary will be formatted as:
+        """Convert class taxonomy axioms into a dictionary representation.
 
-        ```
-        uri_class : ['uri_sup_class_1',..., 'uri_sup_class_n']
-        ```
+        The output maps each class URI to the list of its direct superclasses.
+        Complex superclass expressions, such as restrictions or OWL collections,
+        are recursively represented as nested Python dictionaries.
 
-        If complex classes are found (restrictions or lists). These will be kept and recusively added as a Python dictionary
+        Output format::
+
+            uri_class : ['uri_superclass_1', ..., 'uri_superclass_n']
 
         Args:
-            verbose (bool): Log printing.
+            verbose (bool): Whether to print traversal logs.
 
         Returns:
-            dict: Dictionary with list of classes and theri super classes
+            dict: Mapping from class URIs to lists of superclass expressions.
         """
 
         onto = Graph()
@@ -201,17 +240,21 @@ class OWLConverter:
         return out_json
 
     def preprocess_class_assertions(self, verbose: bool) -> dict:
-        """Process class assertions data, the out dictionary will be formatted as:
+        """Convert individual class assertions into a dictionary representation.
 
-        ```
-        uri_individuals : ['uri_class_1',...,'uri_class_n']
-        ```
+        The output maps each named individual URI to the list of classes it
+        belongs to, excluding built-in OWL entities such as
+        ``owl:NamedIndividual``.
+
+        Output format::
+
+            uri_individual : ['uri_class_1', ..., 'uri_class_n']
 
         Args:
-            verbose (bool): Log printing.
+            verbose (bool): Whether to print traversal logs.
 
         Returns:
-            dict: Dictionary with list of individuals and their types
+            dict: Mapping from individual URIs to their asserted class URIs.
         """
 
         onto = Graph()
@@ -231,22 +274,25 @@ class OWLConverter:
         return out_json
 
     def preprocess_obj_prop_domain_range(self, verbose: bool) -> dict:
-        """Process object properties domain and range, the out dictionary will be formatted as:
+        """Convert object property domain and range axioms into a dictionary.
 
-        ```
-        uri_obj_prop : {
-            domain : ['uri_c_1', ..., 'uri_c_n']
-            range :  ['uri_c_1', ..., 'uri_c_m']
-        }
-        ```
+        For each object property, this method collects its declared domains and
+        ranges. If no explicit domain or range is present, ``owl:Thing`` is
+        used as the default value. Complex class expressions are recursively
+        converted to nested Python structures.
 
-        If complex classes are found (restrictions or lists). These will be kept and recusively added as a Python dictionary
+        Output format::
+
+            uri_obj_prop : {
+                "domain": ['uri_c_1', ..., 'uri_c_n'],
+                "range":  ['uri_c_1', ..., 'uri_c_m']
+            }
 
         Args:
-            verbose (bool): Log printing.
+            verbose (bool): Whether to print traversal logs.
 
         Returns:
-            dict: Dictionary with list of object properties and domain and range classes
+            dict: Mapping from object property URIs to their domain/range data.
         """
 
         onto = Graph()
@@ -276,19 +322,21 @@ class OWLConverter:
         return out_json
 
     def preprocess_obj_prop_hierarchy(self, verbose:bool) -> dict:
-        """Process object properties hierarchy, the out dictionary will be formatted as:
+        """Convert object property hierarchy axioms into a dictionary.
 
-        ```
-        uri_obj_prop : ['sup_uri_obj_prop_1',...,'sup_uri_obj_prop_1']
-        ```
+        The output maps each object property URI to the list of its direct
+        super-properties. Complex property expressions, if present, are
+        recursively converted to nested Python structures.
 
-        If complex classes are found (restrictions or lists). These will be kept and recusively added as a Python dictionary
+        Output format::
+
+            uri_obj_prop : ['super_obj_prop_1', ..., 'super_obj_prop_n']
 
         Args:
-            verbose (bool): Log printing.
+            verbose (bool): Whether to print traversal logs.
 
         Returns:
-            dict: Dictionary with list of object properties and their hierarchy
+            dict: Mapping from object property URIs to lists of super-properties.
         """
 
         onto = Graph()
@@ -307,16 +355,21 @@ class OWLConverter:
 
 
 class TSVConverter:
-    """Converts RDF triple files into TSV format."""
+    """Convert RDF triple files into TSV representations.
+
+    This class reads RDF triple files from a dataset directory and prepares
+    tab-separated ``subject predicate object`` text outputs, either for the
+    full triple set or for train/validation/test splits.
+    """
     def __init__(
         self,
         path: str,
     ):
         """
-        Initialize the TSV converter.
+        Initialize the converter with the dataset base directory.
 
         Args:
-            path (str): Dataset base directory.
+            path (str): Path to the root directory of the dataset.
         """
 
         self.p_data = dict()
@@ -328,11 +381,17 @@ class TSVConverter:
         splits: bool = True,
     ):
         """
-        Convert RDF triple files into TSV files. Prepares TSV representations for serialization.
+        Precompute TSV representations from RDF triple files.
+
+        Depending on the enabled flags, this method converts the complete ABox
+        object-property assertion file and/or the train/validation/test split
+        files into TSV-formatted strings stored in memory for later writing.
 
         Args:
-            triples (bool, optional): Convert full ABox triples. Defaults to True.
-            splits (bool, optional): Convert train/valid/test splits. Defaults to True.      
+            triples (bool, optional): Whether to convert the complete set of
+                object-property assertion triples. Defaults to True.
+            splits (bool, optional): Whether to convert train, validation, and
+                test split files. Defaults to True.      
         """
 
         if triples:
@@ -358,7 +417,11 @@ class TSVConverter:
 
     def serialize(self):
         """
-        Write converted TSV data to disk.
+        Write all prepared TSV outputs to disk.
+
+        Only entries corresponding to triple TSV outputs are written. The method
+        assumes that ``convert`` has already been called and that the in-memory
+        TSV strings are available in ``self.p_data``.
         """
         for key, values in self.p_data.items():
             obj = values[0]
@@ -370,13 +433,16 @@ class TSVConverter:
 
     def preprocess_triples(self, path):
         """
-        Convert an RDF triple file into a TSV string.
+        Convert an RDF graph file into a TSV-formatted string.
+
+        The produced output contains one triple per line in the format
+        ``subject<TAB>predicate<TAB>object``.
 
         Args:
-            path (Path): Path to an RDF triple file.
+            path (Path): Path to the RDF triple file to parse.
 
         Returns:
-            str: TSV-formatted string of triples (s, p, o).
+            str: TSV-formatted text containing all triples from the input graph.
         """
         triples = Graph()
         triples.parse(path)
@@ -387,16 +453,21 @@ class TSVConverter:
     
 
 class IDMapper:
-    """Maps ontology URIs to integer identifiers."""
+    """Create deterministic integer ID mappings for ontology entities.
+
+    This class loads ontology and individual files, extracts classes, object
+    properties, and named individuals, and assigns each entity a stable integer
+    identifier based on lexicographic sorting of URIs.
+    """
 
     def __init__(
         self,
         path: str,
     ):
-        """Initialize the mapper with a dataset base path
+        """Initialize the mapper with the dataset base directory.
 
         Args:
-            path (str): Dataset location path
+            path (str): Path to the root directory of the dataset.
         """
         self.p_data = dict()
         self.base_path = Path(path).resolve().absolute()
@@ -411,11 +482,15 @@ class IDMapper:
 
     def map_to_id(self):
         """
-        Assign unique integer IDs to ontology elements. IDs are assigned deterministically after sorting URIs.
-        Generates mappings for:
-            - Classes
-            - Object properties
-            - Individuals
+        Generate deterministic URI-to-integer mappings for ontology entities.
+
+        IDs are assigned after lexicographically sorting the extracted URIs,
+        which ensures reproducible mappings across runs for the same ontology
+        content. Separate mappings are produced for:
+
+        - classes
+        - object properties
+        - named individuals
         """
 
         classes =  set(self.onto.subjects(RDF.type, OWL.Class)) - BUILTIN_URIS
@@ -443,7 +518,11 @@ class IDMapper:
 
     def serialize(self):
         """
-        Write generated ID mappings to JSON files. Writes class, individual, and property mappings to disk.
+        Write generated entity-ID mappings to JSON files.
+
+        The method creates the mappings output directory if needed, then writes
+        the class, individual, and object-property mappings stored in
+        ``self.out_data`` as pretty-printed JSON files.
         """
 
         (self.base_path / pc.MAPPINGS).mkdir(exist_ok=True, parents=True)
@@ -454,4 +533,3 @@ class IDMapper:
 
             with open(path, "w") as f:
                 json.dump(mapping, f, indent=4)
-

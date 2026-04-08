@@ -5,42 +5,64 @@ from pathlib import Path
 from typing import Set, Tuple
 
 from rdflib import OWL, RDF, RDFS, BNode, Graph, URIRef
-from jdex.utils.conventions.builtins import BUILTIN_URIS
 
 import jdex.utils.conventions.paths as pc
+from jdex.utils.conventions.builtins import BUILTIN_URIS
 
 
 def verbose_print(msg: str, verbose: bool):
-    """Primg msg if verbose is true
+    """Print a message only when verbose mode is enabled.
 
     Args:
-        msg (str): Message to print
-        verbose (bool): Verbose toggle
+        msg (str): Message to print.
+        verbose (bool): If True, the message is printed; otherwise it is ignored.
     """
     if verbose:
         print(msg)
 
+
 class SignatureModularizer:
-    """Exctract a Module from an OWL Ontology given a signature (Set of target URIs)"""
+    """Extract a module (subgraph) from an OWL ontology based on a signature.
+
+    This class implements a simple signature-based modularization strategy.
+    Starting from an initial set of URIs (the seed/signature), it iteratively
+    explores the ontology graph and extracts all triples that are relevant
+    to those entities, including related classes, properties, and blank nodes.
+
+    The result is a reduced RDF graph that preserves the local context of
+    the given signature.
+    """
 
     def __init__(self, schema: Graph, seed: Set[URIRef]):
-        """Initialize modularizer with graph to be modularized and signature
+        """Initialize the modularizer.
 
         Args:
-            schema (Graph): Graph to be modularized
-            seed (Set[URIRef]): Set of URIs to use as signature
+            schema (Graph): The RDFLib graph representing the ontology to be modularized.
+            seed (Set[URIRef]): Initial set of URIs defining the signature (starting points
+                for the module extraction).
         """
         self.schema = schema
         self.seed = seed
 
     def modularize(self, verbose: bool) -> Graph:
-        """Modularize the graph and output a new RDFLib graph
+        """Extract a subgraph (module) from the ontology based on the signature.
+
+        The algorithm performs a graph traversal starting from the seed URIs.
+        For each processed element, it:
+            - Adds all outgoing triples to the extracted graph.
+            - Recursively explores related nodes if they are:
+                - Blank nodes (BNodes),
+                - OWL classes,
+                - Object properties,
+                - Datatype properties.
+
+        Built-in OWL/RDF URIs are excluded from further expansion.
 
         Args:
-            verbose (bool): Log printing.
+            verbose (bool): Whether to print progress and traversal logs.
 
         Returns:
-            Graph: Modularized sub graph
+            Graph: A new RDFLib graph containing the extracted module.
         """
 
         extracted_graph = Graph()

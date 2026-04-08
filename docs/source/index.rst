@@ -42,6 +42,7 @@ Usability & Complete Customization
    :caption: Contents:
 
    quick
+   config
    tutorial
    data
    jdex

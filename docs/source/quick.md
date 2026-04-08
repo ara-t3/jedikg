@@ -17,6 +17,14 @@ It is highly recommended to use [pyenv](https://github.com/pyenv/pyenv) to manag
 
 2. **Java 11** or later. This is need by the *Robot OBO Utility* backbone of the reasoning services.
 
+## System Requirements
+
+```{warning}
+Running this project with less than 8 GB of RAM may cause crashes or slow performance.
+```
+
+- Memory: 8 GB minimum (16GB reccomended for reasoning services)
+- Disk Space: 15 GB for dataset and ontologies
 
 
 ## Installation Instructions
@@ -28,44 +36,33 @@ git clone https://github.com/ivandiliso/kg-saf.git
 cd kg-saf
 ```
 
-2. **Install** Python dependencies
+2. Run the **Automatic Interactive Installer**
 
 ```bash
-pip install -r requirements.txt
+chmod +x install
+./install
 ```
 
-3. **Verify** requirements are installed
+Follow the instruction provided via terminal to customize you installation.
+
+```{tip}
+If you just want to use the JDEX utility on your custom dataset and are not interested in the KG-SaF Data Consistent Dataset, choose "No" when prompted about running dataset unpacking. THe JDEX tool can be used also whitout data!
+```
+
+## Run JDEX on your Knowledge Graph
+
+To run JDEX, you only need a properly defined configuration file. Once that’s ready, launch the CLI interactive interface with:
 
 ```bash
-python --version
-java -version
-java -jar robot.jar --help
+chmod +x run_jdex
+./run_jdex --config "path_to_your_json.json"
 ```
 
-## System Requirements
+This command will handle the entire pipeline for you — including all utilities, processing steps, and detailed logging.
+The only requirement is a well-defined configuration file. For guidance, refer to **"JDEX Configuration Guide"**.
 
-```{warning}
-Running this project with less than 8 GB of RAM may cause crashes or slow performance.
-```
+### Minimal Required Inputs
+- **Schema file**: your ontology schema
+- **Facts file**: your triples, including object property assertions and class assertions
 
-- Memory: 8 GB minimum (16GB reccomended for reasoning services)
-- Disk Space: 15 GB for dataset and ontologies
-
-
-## Unpack Released Datasets
-
-```{warning}
-```
-
-The released datasets and ontologies are distributed in **compressed ZIP files** due to GitHub storage limitations. Some secondary files were removed to reduce size, but they **can be reconstructed** using the provided unpacking utility. 
-
-
-1. Open the provided **dataset unpacking notebook** (`kgsaf_jdex/utils/unpack.ipynb`).  
-2. Execute **all cells sequentially**.  
-3. The notebook will automatically perform the following steps:
-    - **Unpack all compressed datasets and ontologies** into an `kgsaf_data/datasets/*/unpack` and `kgsaf_data/ontologies/*/unpack`folder.  
-    - **Re-merge object property assertion files** for each dataset.  
-    - **Merge the full knowledge graph** (TBox, RBox, and ABox) using a reasoner (Robot OBO Tool).  
-    - **Convert N-Triples files to TSV format**, ready for use with ML libraries such as **PyKEEN**.  
-    - **Convert Schema files to JSON** (taxonomy, roles, class assertions) for easier loading and manipulation in Python.
 

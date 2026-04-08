@@ -97,9 +97,10 @@ class CLI:
     def input(
         self,
         message: str,
+        default: str
     ) -> any:
         
-        return Prompt.ask(message, default="/opt/homebrew/opt/openjdk@11/")
+        return Prompt.ask(message, default=default)
 
         
 

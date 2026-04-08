@@ -1,85 +1,125 @@
 #!/usr/bin/env python3
-"""
-CONSISTENCY CHECK (Konclude)
-If no abox is present, will always ouput TRUE
 
-SATISFIABILITY CHECK (HermiT)
-Does not work with uncosistent ontology due to Robot limitations, adivsed to use only on the schema part of the ontology (whitout the assertions)
-
-REALIZATION (Konclude)
-Writes in a new file all the class assertions. Note, if the ontology is inconsistent or unsatisfiable, it will still work, but it will output entities as membership to nothing for all entitites
-
-MATERIALIZATION (HermiT)
-Does not work with unconsistent / unsatisfiable ontologies due to Robot limitatios, advides to use only on the schema part of the ontology (whitout the assertions)
-
-CONVERSION (No Reasoner)
-No notes
-
-FILTER (Robot)
-Removes unsatisfiable uris
-
-JUSTIFICATION (Pellet)
-saves the justification in OWL sytax
-"""
-
-
-from pathlib import Path
-import sys
+import os
+import re
 import subprocess
+import sys
+import time
+from pathlib import Path
+
 from rdflib import OWL, RDF, RDFS, BNode, Graph, Literal, Namespace
 from rdflib.namespace import split_uri
 from rdflib.term import URIRef
-import re
-import time
-import os
 
-sys.path.append(str(Path.cwd().parent))
 
 def split_top_level(expr: str):
+    """Split a comma-separated expression only at the top syntactic level.
+
+    This helper walks through the input string and splits on commas that are
+    not enclosed in parentheses. It is useful for parsing functional-style OWL
+    expressions where nested constructs may also contain commas.
+
+    Args:
+        expr (str): Input expression to split.
+
+    Returns:
+        list[str]: Top-level components extracted from the input expression.
+    """
     parts = []
     current = []
     depth = 0
 
     for char in expr:
-        if char == '(':
+        if char == "(":
             depth += 1
-        elif char == ')':
+        elif char == ")":
             depth -= 1
 
-        if char == ',' and depth == 0:
-            parts.append(''.join(current).strip())
+        if char == "," and depth == 0:
+            parts.append("".join(current).strip())
             current = []
         else:
             current.append(char)
 
     if current:
-        parts.append(''.join(current).strip())
+        parts.append("".join(current).strip())
 
     return parts
 
 
 class PresetAxioms:
     @staticmethod
-    def tbox_materialization():
-        return  [
-        "SubClass",
-        "EquivalentClass",
-        "EquivalentObjectProperty",
-        "InverseObjectProperties",
-        "ObjectPropertyCharacteristic",
-        "SubObjectProperty",
-        "ObjectPropertyRange",
-        "ObjectPropertyDomain",
-        ]
-    
-    def realization():
+    def tbox_materialization() -> list[str]:
+        """Return the default ROBOT axiom generators for TBox materialization.
+
+        The returned list contains the supported axiom generator names used to
+        materialize inferred schema-level axioms with ROBOT.
+
+        Returns:
+            list[str]: Default axiom generators for TBox materialization.
+        """
         return [
-            "ClassAssertion"
+            "SubClass",
+            "EquivalentClass",
+            "EquivalentObjectProperty",
+            "InverseObjectProperties",
+            "ObjectPropertyCharacteristic",
+            "SubObjectProperty",
+            "ObjectPropertyRange",
+            "ObjectPropertyDomain",
         ]
+
+    def realization() -> list[str]:
+        """Return the ROBOT axiom generators needed for realization only.
+
+        Realization is limited here to inferred class assertions, so the method
+        returns only the corresponding ROBOT generator.
+
+        Returns:
+            list[str]: A list containing only ``"ClassAssertion"``.
+        """
+        return ["ClassAssertion"]
 
 
 class Reasoner:
-    def __init__(self, reasoners_path: Path, java8_path: Path, java11_path: Path, java_max_ram: int = 20):
+    """Unified wrapper around multiple ontology reasoning command-line tools.
+
+    This class provides a Python abstraction over several external reasoners
+    and ontology utilities, enabling ontology reasoning workflows directly from
+    Python code. Supported operations include:
+
+    - Consistency checking via Konclude
+    - Satisfiability checking via ROBOT using HermiT or ELK
+    - Materialization via ROBOT using HermiT or ELK
+    - Realization via Konclude or ROBOT
+    - Filtering axioms/entities via ROBOT
+    - Merging ontologies via ROBOT
+    - Format conversion via ROBOT
+    - Justification for inconsistencies via Pellet
+
+    Notes:
+        - ROBOT-based operations require Java 11.
+        - Pellet justification requires Java 8.
+        - Konclude is used as a native executable.
+    """
+
+    def __init__(
+        self,
+        reasoners_path: Path,
+        java8_path: Path,
+        java11_path: Path,
+        java_max_ram: int = 20,
+    ):
+        """Initialize paths and runtime configuration for the reasoning tools.
+
+        Args:
+            reasoners_path (Path): Root directory containing the installed
+                reasoning tools (Konclude, ROBOT, Pellet).
+            java8_path (Path): Path to the Java 8 installation used by Pellet.
+            java11_path (Path): Path to the Java 11 installation used by ROBOT.
+            java_max_ram (int, optional): Maximum Java heap size in gigabytes
+                for Java-based reasoners. Defaults to 20.
+        """
         self.konclude = reasoners_path / "konclude" / "Binaries" / "Konclude"
         self.robot = reasoners_path / "robot" / "robot.jar"
         self.pellet = reasoners_path / "pellet" / "cli/target/pelletcli/bin/pellet"
@@ -88,9 +128,20 @@ class Reasoner:
         self.jram = java_max_ram
         self.supported_reasoners = ["hermit", "elk"]
 
-        
+    def _run_process(
+        self, command: list, env=None
+    ) -> tuple[subprocess.CompletedProcess, float]:
+        """Execute a subprocess command and measure its runtime.
 
-    def _run_process(self, command: list, env = None) -> tuple[subprocess.CompletedProcess, float]:
+        Args:
+            command (list): Command and arguments to execute.
+            env (dict, optional): Environment variables for the subprocess.
+                Defaults to None.
+
+        Returns:
+            tuple[subprocess.CompletedProcess, float]: The completed subprocess
+            result and the elapsed execution time in seconds.
+        """
         start = time.perf_counter()
         result = subprocess.run(command, capture_output=True, text=True, env=env)
         end = time.perf_counter()
@@ -105,6 +156,20 @@ class Reasoner:
         verbose: int = 1,
         succesful_returns: list = [0],
     ):
+        """Validate a subprocess result and raise on unexpected exit codes.
+
+        Args:
+            result (subprocess.CompletedProcess): Subprocess execution result.
+            label (str): Human-readable label for the executed task.
+            elapsed_time (float): Execution duration in seconds.
+            verbose (int, optional): Verbosity level. Defaults to 1.
+            succesful_returns (list, optional): Exit codes considered
+                successful. Defaults to [0].
+
+        Raises:
+            RuntimeError: If the subprocess exits with a code not listed in
+                ``succesful_returns``.
+        """
         if result.returncode in succesful_returns:
             if verbose > 0:
                 print(
@@ -119,9 +184,21 @@ class Reasoner:
                 print(f"{result.stderr}")
                 print(f"===== STACK TRACE END =====")
             raise RuntimeError(f"Command failed with returncode {result.returncode}.")
-        
 
     def _get_env(self, java_version: int):
+        """Build an execution environment for a specific Java version.
+
+        Args:
+            java_version (int): Java major version to use. Supported values are
+                8 and 11.
+
+        Returns:
+            dict: Environment variables configured with the requested
+            ``JAVA_HOME`` and updated ``PATH``.
+
+        Raises:
+            RuntimeError: If the requested Java version is not supported.
+        """
         env = os.environ.copy()
 
         match java_version:
@@ -130,12 +207,25 @@ class Reasoner:
             case 11:
                 env["JAVA_HOME"] = self.java11_path
             case _:
-                raise RuntimeError(f"Java JDK Version {java_version} is not supported yet!")
-            
+                raise RuntimeError(
+                    f"Java JDK Version {java_version} is not supported yet!"
+                )
+
         env["PATH"] = env["JAVA_HOME"] + "/bin:" + env["PATH"]
         return env
 
     def consistency(self, input_ontology: Path, verbose: int = 1) -> bool:
+        """Run a consistency check on an ontology using Konclude.
+
+        Args:
+            input_ontology (Path): Path to the input ontology file.
+            verbose (int, optional): Verbosity level for status output.
+                Defaults to 1.
+
+        Returns:
+            bool: ``True`` if the ontology is consistent, ``False`` if it is
+            inconsistent.
+        """
 
         cmd = [
             str(self.konclude),
@@ -161,12 +251,40 @@ class Reasoner:
         if re.search(r"\bis consistent\.", output, re.IGNORECASE):
             return True
 
-    def satisfiability(self, input_ontology: Path, reasoner: str = "hermit", safety_check: bool = False, verbose: int = 1) -> list:
+    def satisfiability(
+        self,
+        input_ontology: Path,
+        reasoner: str = "hermit",
+        safety_check: bool = False,
+        verbose: int = 1,
+    ) -> list:
+        """Check ontology satisfiability and collect unsatisfiable entities.
+
+        This method invokes ROBOT with the selected reasoner and parses its
+        output to extract the IRIs of unsatisfiable classes and properties.
+
+        Args:
+            input_ontology (Path): Path to the input ontology file.
+            reasoner (str, optional): ROBOT reasoner backend to use. Supported
+                values are ``"hermit"`` and ``"elk"``. Defaults to ``"hermit"``.
+            safety_check (bool, optional): If ``True``, first verify ontology
+                consistency before running satisfiability analysis. Defaults to
+                False.
+            verbose (int, optional): Verbosity level for status output.
+                Defaults to 1.
+
+        Returns:
+            list: List of URIs corresponding to unsatisfiable classes or
+            properties.
+
+        Raises:
+            ValueError: If the selected reasoner is not supported.
+            Exception: If ``safety_check`` is enabled and the ontology is
+                inconsistent.
+        """
 
         if reasoner not in self.supported_reasoners:
-            raise ValueError(
-                f"Reasoner {reasoner} not supported by ROBOT OBO Utility"
-            )
+            raise ValueError(f"Reasoner {reasoner} not supported by ROBOT OBO Utility")
 
         if safety_check:
             if not self.consistency(input_ontology, verbose=False):
@@ -186,9 +304,15 @@ class Reasoner:
             "--input",
             str(input_ontology),
         ]
-        
+
         result, elapsed = self._run_process(cmd, env=self._get_env(java_version=11))
-        self._check_result(result, f"SATISFIABILITY CHECK ({reasoner.upper()})", elapsed, succesful_returns=[0,1], verbose=verbose)
+        self._check_result(
+            result,
+            f"SATISFIABILITY CHECK ({reasoner.upper()})",
+            elapsed,
+            succesful_returns=[0, 1],
+            verbose=verbose,
+        )
 
         # If PROCESS Successful =>
         if verbose >= 2:
@@ -203,9 +327,16 @@ class Reasoner:
         )
 
         return unsatisfiable_entities
-    
 
     def _konclude_realization(self, input: Path, output: Path, verbose: int = 1):
+        """Run realization with Konclude.
+
+        Args:
+            input (Path): Input ontology file.
+            output (Path): Output file where realized assertions will be stored.
+            verbose (int, optional): Verbosity level for status output.
+                Defaults to 1.
+        """
         cmd = [
             str(self.konclude),
             "realization",
@@ -222,27 +353,91 @@ class Reasoner:
         if verbose >= 2:
             print(result.stderr, result.stdout)
 
-    def _robot_realization(self, input: Path, output: Path, reasoner: str = "hermit", verbose: int = 1, ):
-        self.materialization(input, output, reasoner=reasoner, axioms=PresetAxioms.realization(), safety_check=False, verbose=verbose)
+    def _robot_realization(
+        self,
+        input: Path,
+        output: Path,
+        reasoner: str = "hermit",
+        verbose: int = 1,
+    ):
+        """Run realization through ROBOT by materializing class assertions.
 
+        Args:
+            input (Path): Input ontology file.
+            output (Path): Output ontology file.
+            reasoner (str, optional): ROBOT reasoner backend to use.
+                Defaults to ``"hermit"``.
+            verbose (int, optional): Verbosity level for status output.
+                Defaults to 1.
+        """
+        self.materialization(
+            input,
+            output,
+            reasoner=reasoner,
+            axioms=PresetAxioms.realization(),
+            safety_check=False,
+            verbose=verbose,
+        )
 
-    def realization(self, input: Path, output: Path, reasoner: str = "konclude",  verbose: int = 1):
+    def realization(
+        self, input: Path, output: Path, reasoner: str = "konclude", verbose: int = 1
+    ):
+        """Run ontology realization with the selected reasoner backend.
+
+        Realization computes inferred class assertions for individuals in the
+        ontology.
+
+        Args:
+            input (Path): Input ontology file.
+            output (Path): Output file where realized assertions will be saved.
+            reasoner (str, optional): Reasoner to use. Supported values are
+                ``"konclude"``, ``"hermit"``, and ``"elk"``. Defaults to
+                ``"konclude"``.
+            verbose (int, optional): Verbosity level for status output.
+                Defaults to 1.
+
+        Raises:
+            ValueError: If the requested reasoner is not supported.
+        """
         if reasoner == "konclude":
             self._konclude_realization(input, output, verbose)
         elif reasoner in self.supported_reasoners:
             self._robot_realization(input, output, reasoner, verbose)
         else:
-            raise ValueError(
-                f"Reasoner {reasoner} not supported by ROBOT OBO Utility"
-            )
+            raise ValueError(f"Reasoner {reasoner} not supported by ROBOT OBO Utility")
 
+    def materialization(
+        self,
+        input: Path,
+        output: Path,
+        reasoner: str = "hermit",
+        axioms: list = PresetAxioms.tbox_materialization(),
+        safety_check: bool = False,
+        verbose: int = 1,
+    ):
+        """Materialize inferred axioms into an ontology using ROBOT.
 
-    def materialization(self, input: Path, output:Path, reasoner:str = "hermit", axioms: list = PresetAxioms.tbox_materialization(), safety_check: bool = False, verbose: int = 1):
-        
+        Args:
+            input (Path): Input ontology file.
+            output (Path): Output ontology file for the materialized result.
+            reasoner (str, optional): ROBOT reasoner backend to use. Supported
+                values are ``"hermit"`` and ``"elk"``. Defaults to ``"hermit"``.
+            axioms (list, optional): ROBOT axiom generators to materialize.
+                Defaults to ``PresetAxioms.tbox_materialization()``.
+            safety_check (bool, optional): If ``True``, first verify that the
+                ontology has no unsatisfiable classes or properties. Defaults
+                to False.
+            verbose (int, optional): Verbosity level for status output.
+                Defaults to 1.
+
+        Raises:
+            ValueError: If the selected reasoner is not supported.
+            Exception: If ``safety_check`` is enabled and the ontology is
+                unsatisfiable or inconsistent.
+        """
+
         if reasoner not in self.supported_reasoners:
-            raise ValueError(
-                f"Reasoner {reasoner} not supported by ROBOT OBO Utility"
-            )
+            raise ValueError(f"Reasoner {reasoner} not supported by ROBOT OBO Utility")
 
         if safety_check:
             if len(self.satisfiability(input, verbose=False)) > 0:
@@ -274,15 +469,28 @@ class Reasoner:
         ]
 
         result, elapsed = self._run_process(cmd, env=self._get_env(java_version=11))
-        self._check_result(result, f"MATERIALIZATION ({reasoner.upper()})", elapsed, succesful_returns=[0,1], verbose=verbose)
+        self._check_result(
+            result,
+            f"MATERIALIZATION ({reasoner.upper()})",
+            elapsed,
+            succesful_returns=[0, 1],
+            verbose=verbose,
+        )
 
         # If PROCESS Successful =>
         if verbose >= 2:
             print(result.stderr, result.stdout)
 
-
-
     def filtering(self, input: Path, output: Path, uris: list, verbose: int = 1):
+        """Remove axioms involving specified URIs from a knowledge graph.
+
+        Args:
+            input (Path): Input ontology or knowledge graph file.
+            output (Path): Output file for the filtered ontology.
+            uris (list): List of URIs to remove from the ontology signature.
+            verbose (int, optional): Verbosity level for status output.
+                Defaults to 1.
+        """
 
         cmd = [
             "java",
@@ -306,8 +514,29 @@ class Reasoner:
         if verbose >= 2:
             print(result.stderr, result.stdout)
 
-    def justification(self, input: Path, output: Path, safety_check: bool = False, verbose: int = 1):
-        
+    def justification(
+        self, input: Path, output: Path, safety_check: bool = False, verbose: int = 1
+    ) -> list[str]:
+        """Generate a justification for ontology inconsistency using Pellet.
+
+        The method extracts the first MUPS explanation reported by Pellet,
+        writes it in OWL functional syntax, converts it to OWL format, and
+        returns the explanation components.
+
+        Args:
+            input (Path): Input ontology file.
+            output (Path): Output file for the generated justification.
+            safety_check (bool, optional): If ``True``, skip justification when
+                the ontology is already consistent. Defaults to False.
+            verbose (int, optional): Verbosity level for status output.
+                Defaults to 1.
+
+        Returns:
+            list[str]: List of OWL functional syntax expressions that form the
+            extracted explanation. Returns an empty list when no explanation is
+            found.
+        """
+
         if safety_check:
             if self.consistency(input, verbose=False):
                 print("Ontology Consistent: No Consistency Justification is Needed")
@@ -342,9 +571,17 @@ class Reasoner:
             return explanation
         return []
 
+    def conversion(self, input: Path, output: Path, format="owl", verbose: int = 1):
+        """Convert an ontology file to another serialization format using ROBOT.
 
-
-    def conversion(self, input, output, format="owl", verbose: int = 1):
+        Args:
+            input (Path): Input ontology file.
+            output (Path): Output ontology file.
+            format (str, optional): Target serialization format accepted by
+                ROBOT. Defaults to ``"owl"``.
+            verbose (int, optional): Verbosity level for status output.
+                Defaults to 1.
+        """
 
         cmd = [
             "java",
@@ -367,8 +604,17 @@ class Reasoner:
         if verbose >= 2:
             print(result.stderr, result.stdout)
 
-    def merging(self, input_ontologies : list[str], output, verbose: int = 1):
-            
+    def merging(self, input_ontologies: list[str], output, verbose: int = 1):
+        """Merge multiple ontologies into a single output ontology using ROBOT.
+
+        Args:
+            input_ontologies (list[str]): List of ontology paths or IRIs to
+                merge.
+            output: Output file path for the merged ontology.
+            verbose (int, optional): Verbosity level for status output.
+                Defaults to 1.
+        """
+
         cmd = [
             "java",
             f"-Xmx{self.jram}G",
@@ -388,37 +634,3 @@ class Reasoner:
         # If PROCESS Successful =>
         if verbose >= 2:
             print(result.stderr, result.stdout)
-
-
-
-
-if __name__ == "__main__":
-    java8 = "/usr/lib/jvm/java-1.8.0-openjdk-amd64"
-    java11 = "/usr/lib/jvm/java-1.11.0-openjdk-amd64"
-    input_ontology = Path(
-        "/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/TESTING/unsatif.owl"
-    )
-    output_ontology = Path(
-        "/home/navis/dev/kg-saf-workspace/kg-saf/kgsaf_data/ontologies/unpack/TESTING/out.ttl"
-    )
-    reasoners = Path("/home/navis/dev/kg-saf-workspace/kg-saf/reasoners")
-
-    axioms = [
-        "SubClass",
-        "EquivalentClass",
-        "EquivalentObjectProperty",
-        "InverseObjectProperties",
-        "ObjectPropertyCharacteristic",
-        "SubObjectProperty",
-        "ObjectPropertyRange",
-        "ObjectPropertyDomain",
-    ]
-
-    reasoner = Reasoner(reasoners, java8, java11)
-    print(reasoner.consistency(input_ontology))  # returns a bool
-    print(reasoner.satisfiability(input_ontology, verbose=2)) # returns a list of unsatisfiable class iris
-    reasoner.filtering(input_ontology, output_ontology, [], verbose=2)
-    #reasoner.realization(input_ontology, output_ontology) # writes on a file
-    #reasoner.conversion(input_ontology, output_ontology, format="ttl") # writes on a file
-    #reasoner.materialization(input_ontology, output_ontology, axioms=axioms) # writes on a file
-    #reasoner.justification(input_ontology, output_ontology)

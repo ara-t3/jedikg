@@ -12,10 +12,11 @@ from jdex.owl.modularization import SignatureModularizer
 from jdex.owl.decomposition import SchemaDecomposer 
 from pykeen.triples import TriplesFactory
 from pykeen.triples.splitting import CoverageSplitter
-from jdex.utils.conversion import OWLConverter, TSVConverter, IDMapper
+from jdex.utils.postprocessing import OWLConverter, TSVConverter, IDMapper
 from pykeen.triples.leakage import unleak
 from jdex.owl.reasoning import Reasoner, PresetAxioms
 import jdex.utils.conventions.paths as pc
+from jdex.utils.postprocessing import TSVConverter, IDMapper, OWLConverter
 import numpy as np
 import argparse
 import logging
@@ -717,8 +718,40 @@ class JDEX:
                     self.ui.success(f"Justification saved at {self.cwd / "justification.ttl"}")
                     self.kill(1)
 
+
+        # -----------------------------------
+        # Post Processing Utilities
+        # ----------------------------------
+
+        if self.config.post_processing.id_mapping or self.config.post_processing.json_conversion or self.config.post_processing.tsv_conversion:
+            self.ui.subrule("Machine Learning Post Processing")
+
+        if self.config.post_processing.id_mapping:
+            self.ui.info("Computing Mapping to IDs")
+            utility = IDMapper(self.cwd)
+            utility.map_to_id()
+            utility.serialize()
+            self.ui.success("ID Mapping Successful")
+
+        if self.config.post_processing.json_conversion:
+            self.ui.info("Computing JSON Conversion")
+            utility = OWLConverter(self.cwd)
+            utility.preprocess(verbose=False)
+            utility.serialize()
+            self.ui.success("JSON Conversion Successful")
+
+        if self.config.post_processing.tsv_conversion:
+            self.ui.info("Computing TSV Conversion")
+            utility = TSVConverter(self.cwd)
+            utility.convert()
+            utility.serialize()
+            self.ui.success("TSV Conversion Successful")
+
         end = time.perf_counter()
         elapsed = end - start
         self.ui.success(f"JDEX Pipeline Complete in {elapsed:4.2f} seconds. Closing Process.")
+        self.ui.rule("Process Terminated")
+
+
 
 

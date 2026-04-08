@@ -5,41 +5,54 @@ from pathlib import Path
 from typing import Set, Tuple
 
 from rdflib import OWL, RDF, RDFS, BNode, Graph, URIRef
-from jdex.utils.conventions.builtins import BUILTIN_URIS
 
 import jdex.utils.conventions.paths as pc
-
+from jdex.utils.conventions.builtins import BUILTIN_URIS
 
 
 def verbose_print(msg: str, verbose: bool):
-    """Primg msg if verbose is true
+    """Print a message only when verbose mode is enabled.
 
     Args:
-        msg (str): Message to print
-        verbose (bool): Verbose toggle
+        msg (str): Message to print.
+        verbose (bool): If True, the message is printed; otherwise it is ignored.
     """
     if verbose:
         print(msg)
 
+
 class SchemaDecomposer:
-    """Decompose a given Ontology into TBox and RBox components."""
+    """Decompose an ontology graph into RBox and TBox-related components.
+
+    This class separates an ontology into three logical parts:
+
+    - RBox: object and datatype property definitions
+    - Taxonomy: subclass relations and their supporting descriptions
+    - Schema: non-taxonomic class axioms and their supporting descriptions
+
+    The decomposition is performed over an RDFLib graph and preserves the
+    recursive description of blank nodes and referenced entities where needed.
+    """
 
     def __init__(self, input_graph: Graph):
-        """Initialize Decomposer with input Graph
+        """Initialize the decomposer with the ontology graph to process.
 
         Args:
-            input_graph (Graph): Graph to be decomposed.
+            input_graph (Graph): RDFLib graph representing the ontology to be decomposed.
         """
         self.onto_graph = input_graph
 
     def decompose(self, verbose: bool) -> Tuple[Graph, Graph, Graph]:
-        """Decompose a Graph into RBox, Taxonomy and Classes
+        """Decompose the ontology into RBox, taxonomy, and schema graphs.
 
         Args:
-            verbose (bool): Log printing.
+            verbose (bool): Whether to print progress and traversal logs.
 
         Returns:
-            Tuple[Graph, Graph, Graph]: RBox graph, Taxonomy Graph and Class definitions Graph
+            Tuple[Graph, Graph, Graph]: A tuple containing:
+                - the RBox graph,
+                - the taxonomy graph,
+                - the non-taxonomic schema graph.
         """
         return (
             self._rbox_decompose(verbose),
@@ -48,13 +61,16 @@ class SchemaDecomposer:
         )
 
     def _rbox_decompose(self, verbose: bool) -> Graph:
-        """Extract RBox information from target Graph
+        """Extract the RBox component from the ontology graph.
+
+        The RBox includes descriptions of object properties and datatype
+        properties, along with any recursively required supporting structure.
 
         Args:
-            verbose (bool): Log printing.
+            verbose (bool): Whether to print progress and traversal logs.
 
         Returns:
-            Graph: RBox only graph.
+            Graph: RDFLib graph containing only the extracted RBox component.
         """
         rbox_graph = Graph()
         for prop in (
@@ -69,13 +85,17 @@ class SchemaDecomposer:
         return rbox_graph
 
     def _taxonomy_decompose(self, verbose: bool) -> Graph:
-        """Extract Taxonomy (TBox) information from target Graph
+        """Extract the class taxonomy component from the ontology graph.
+
+        The taxonomy graph contains ``rdfs:subClassOf`` axioms for named
+        classes, together with any recursively required descriptions for
+        blank-node superclass expressions.
 
         Args:
-            verbose (bool): Log printing.
+            verbose (bool): Whether to print progress and traversal logs.
 
         Returns:
-            Graph: Taxonomy only graph.
+            Graph: RDFLib graph containing only taxonomy-related axioms.
         """
         taxonomy_graph = Graph()
 
@@ -89,13 +109,17 @@ class SchemaDecomposer:
         return taxonomy_graph
 
     def _schema_decompose(self, verbose: bool) -> Graph:
-        """Extract Non Taxonomic Axioms (TBox) from target Graph
+        """Extract non-taxonomic class schema axioms from the ontology graph.
+
+        This includes class-related axioms other than ``rdfs:subClassOf``,
+        together with type declarations and recursively required descriptions
+        for referenced blank nodes.
 
         Args:
-            verbose (bool): Log printing.
+            verbose (bool): Whether to print progress and traversal logs.
 
         Returns:
-            Graph: Non Taxonomix Axioms only graph.
+            Graph: RDFLib graph containing non-taxonomic class schema axioms.
         """
         schema_graph = Graph()
 
@@ -117,14 +141,22 @@ class SchemaDecomposer:
         return schema_graph
 
     def _extract_description(self, elem: URIRef, verbose: bool) -> Graph:
-        """Recursively extract closure information of a node from a Graph. If a element is found but should be inserted in another file, only its definition is added.
+        """Recursively extract the local description of a graph element.
+
+        Starting from the given element, this method traverses outgoing triples
+        and builds a closure over relevant blank nodes. For referenced classes
+        and properties, only their type declarations are added unless they are
+        themselves recursively expanded as blank nodes.
+
+        Built-in RDF/OWL entities are not expanded.
 
         Args:
-            elem (URIRef): Starting elem from which gather recursive description
-            verbose (bool): Log pringing.
+            elem (URIRef): Starting node whose description should be extracted.
+            verbose (bool): Whether to print progress and traversal logs.
 
         Returns:
-            Graph: Closure of Graph on input node
+            Graph: RDFLib graph containing the recursively extracted description
+            of the input element.
         """
 
         extracted_graph = Graph()
