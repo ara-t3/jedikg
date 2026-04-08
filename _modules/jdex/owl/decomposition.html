@@ -5,12 +5,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>kgsaf_jdex.utils.modularization &mdash; KG-SaF: Official Documentation</title>
+  <title>jdex.owl.decomposition &mdash; KG-SaF: Official Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
 
   
-    <link rel="canonical" href="https://ivandiliso.github.io/kg-saf/_modules/kgsaf_jdex/utils/modularization.html" />
+    <link rel="canonical" href="https://ivandiliso.github.io/kg-saf/_modules/jdex/owl/decomposition.html" />
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=72d88caf"></script>
@@ -43,9 +43,10 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../quick.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorials and Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../data.html"><strong>KG-SaF-Data</strong>: Complete KGR Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jdex.html"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
@@ -67,7 +68,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">kgsaf_jdex.utils.modularization</li>
+      <li class="breadcrumb-item active">jdex.owl.decomposition</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -76,7 +77,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for kgsaf_jdex.utils.modularization</h1><div class="highlight"><pre>
+  <h1>Source code for jdex.owl.decomposition</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
@@ -84,95 +85,58 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">rdflib</span><span class="w"> </span><span class="kn">import</span> <span class="n">OWL</span><span class="p">,</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">RDFS</span><span class="p">,</span> <span class="n">BNode</span><span class="p">,</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">URIRef</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">kgsaf_jdex.utils.conventions.builtins</span><span class="w"> </span><span class="kn">import</span> <span class="n">BUILTIN_URIS</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">kgsaf_jdex.utils.conventions.paths</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">kgsaf_jdex.utils.utility</span><span class="w"> </span><span class="kn">import</span> <span class="n">verbose_print</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jdex.utils.conventions.paths</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jdex.utils.conventions.builtins</span><span class="w"> </span><span class="kn">import</span> <span class="n">BUILTIN_URIS</span>
 
 
-<div class="viewcode-block" id="SignatureModularizer">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.modularization.SignatureModularizer">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SignatureModularizer</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exctract a Module from an OWL Ontology given a signature (Set of target URIs)&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">verbose_print</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print a message only when verbose mode is enabled.</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">URIRef</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize modularizer with graph to be modularized and signature</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            schema (Graph): Graph to be modularized</span>
-<span class="sd">            seed (Set[URIRef]): Set of URIs to use as signature</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="n">schema</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
-
-<div class="viewcode-block" id="SignatureModularizer.modularize">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.modularization.SignatureModularizer.modularize">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">modularize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Modularize the graph and output a new RDFLib graph</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            verbose (bool): Log printing.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Graph: Modularized sub graph</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">extracted_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
-        <span class="n">elem_to_process</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
-        <span class="n">processed</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-
-        <span class="k">while</span> <span class="n">elem_to_process</span><span class="p">:</span>
-
-            <span class="n">e</span> <span class="o">=</span> <span class="n">elem_to_process</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-            <span class="n">processed</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-
-            <span class="n">verbose_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">e</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
-                <span class="n">extracted_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
-
-                <span class="k">if</span> <span class="p">(</span><span class="n">o</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">BUILTIN_URIS</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">o</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">processed</span><span class="p">):</span>
-
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">BNode</span><span class="p">):</span>
-                        <span class="n">elem_to_process</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-
-                    <span class="k">if</span> <span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>
-                        <span class="n">elem_to_process</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-
-                    <span class="k">if</span> <span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>
-                        <span class="n">elem_to_process</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-
-                    <span class="k">if</span> <span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">DatatypeProperty</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>
-                        <span class="n">elem_to_process</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">extracted_graph</span></div>
-</div>
-
+<span class="sd">    Args:</span>
+<span class="sd">        msg (str): Message to print.</span>
+<span class="sd">        verbose (bool): If True, the message is printed; otherwise it is ignored.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="SchemaDecomposer">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.modularization.SchemaDecomposer">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.decomposition.SchemaDecomposer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SchemaDecomposer</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decompose a given Ontology into TBox and RBox components.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decompose an ontology graph into RBox and TBox-related components.</span>
+
+<span class="sd">    This class separates an ontology into three logical parts:</span>
+
+<span class="sd">    - RBox: object and datatype property definitions</span>
+<span class="sd">    - Taxonomy: subclass relations and their supporting descriptions</span>
+<span class="sd">    - Schema: non-taxonomic class axioms and their supporting descriptions</span>
+
+<span class="sd">    The decomposition is performed over an RDFLib graph and preserves the</span>
+<span class="sd">    recursive description of blank nodes and referenced entities where needed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_graph</span><span class="p">:</span> <span class="n">Graph</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize Decomposer with input Graph</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the decomposer with the ontology graph to process.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            input_graph (Graph): Graph to be decomposed.</span>
+<span class="sd">            input_graph (Graph): RDFLib graph representing the ontology to be decomposed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span> <span class="o">=</span> <span class="n">input_graph</span>
 
 <div class="viewcode-block" id="SchemaDecomposer.decompose">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.modularization.SchemaDecomposer.decompose">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.decomposition.SchemaDecomposer.decompose">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">decompose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Graph</span><span class="p">,</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">Graph</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decompose a Graph into RBox, Taxonomy and Classes</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decompose the ontology into RBox, taxonomy, and schema graphs.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            verbose (bool): Log printing.</span>
+<span class="sd">            verbose (bool): Whether to print progress and traversal logs.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Tuple[Graph, Graph, Graph]: RBox graph, Taxonomy Graph and Class definitions Graph</span>
+<span class="sd">            Tuple[Graph, Graph, Graph]: A tuple containing:</span>
+<span class="sd">                - the RBox graph,</span>
+<span class="sd">                - the taxonomy graph,</span>
+<span class="sd">                - the non-taxonomic schema graph.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_rbox_decompose</span><span class="p">(</span><span class="n">verbose</span><span class="p">),</span>
@@ -182,13 +146,16 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_rbox_decompose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract RBox information from target Graph</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract the RBox component from the ontology graph.</span>
+
+<span class="sd">        The RBox includes descriptions of object properties and datatype</span>
+<span class="sd">        properties, along with any recursively required supporting structure.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            verbose (bool): Log printing.</span>
+<span class="sd">            verbose (bool): Whether to print progress and traversal logs.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Graph: RBox only graph.</span>
+<span class="sd">            Graph: RDFLib graph containing only the extracted RBox component.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rbox_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="p">(</span>
@@ -203,13 +170,17 @@
         <span class="k">return</span> <span class="n">rbox_graph</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_taxonomy_decompose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract Taxonomy (TBox) information from target Graph</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract the class taxonomy component from the ontology graph.</span>
+
+<span class="sd">        The taxonomy graph contains ``rdfs:subClassOf`` axioms for named</span>
+<span class="sd">        classes, together with any recursively required descriptions for</span>
+<span class="sd">        blank-node superclass expressions.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            verbose (bool): Log printing.</span>
+<span class="sd">            verbose (bool): Whether to print progress and traversal logs.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Graph: Taxonomy only graph.</span>
+<span class="sd">            Graph: RDFLib graph containing only taxonomy-related axioms.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">taxonomy_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
 
@@ -223,13 +194,17 @@
         <span class="k">return</span> <span class="n">taxonomy_graph</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_schema_decompose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract Non Taxonomic Axioms (TBox) from target Graph</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract non-taxonomic class schema axioms from the ontology graph.</span>
+
+<span class="sd">        This includes class-related axioms other than ``rdfs:subClassOf``,</span>
+<span class="sd">        together with type declarations and recursively required descriptions</span>
+<span class="sd">        for referenced blank nodes.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            verbose (bool): Log printing.</span>
+<span class="sd">            verbose (bool): Whether to print progress and traversal logs.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Graph: Non Taxonomix Axioms only graph.</span>
+<span class="sd">            Graph: RDFLib graph containing non-taxonomic class schema axioms.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">schema_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
 
@@ -244,20 +219,29 @@
                             <span class="n">schema_graph</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">o</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">elem</span><span class="p">))</span>
 
                         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">BNode</span><span class="p">):</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found BNODE in Triple </span><span class="si">{</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found BNODE in Triple </span><span class="si">{</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                             <span class="n">schema_graph</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_description</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">schema_graph</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elem</span><span class="p">:</span> <span class="n">URIRef</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively extract closure information of a node from a Graph. If a element is found but should be inserted in another file, only its definition is added.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively extract the local description of a graph element.</span>
+
+<span class="sd">        Starting from the given element, this method traverses outgoing triples</span>
+<span class="sd">        and builds a closure over relevant blank nodes. For referenced classes</span>
+<span class="sd">        and properties, only their type declarations are added unless they are</span>
+<span class="sd">        themselves recursively expanded as blank nodes.</span>
+
+<span class="sd">        Built-in RDF/OWL entities are not expanded.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            elem (URIRef): Starting elem from which gather recursive description</span>
-<span class="sd">            verbose (bool): Log pringing.</span>
+<span class="sd">            elem (URIRef): Starting node whose description should be extracted.</span>
+<span class="sd">            verbose (bool): Whether to print progress and traversal logs.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Graph: Closure of Graph on input node</span>
+<span class="sd">            Graph: RDFLib graph containing the recursively extracted description</span>
+<span class="sd">            of the input element.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">extracted_graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>

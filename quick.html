@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Tutorials and Guides" href="tutorial.html" />
+    <link rel="next" title="JDEX Configuration Guide" href="config.html" />
     <link rel="prev" title="KG-SaF: Data and Workflow Documentation" href="index.html" /> 
 </head>
 
@@ -47,14 +47,18 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#software-requirements">Software Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation-instructions">Installation Instructions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#system-requirements">System Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#unpack-released-datasets">Unpack Released Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-instructions">Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-jdex-on-your-knowledge-graph">Run JDEX on your Knowledge Graph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#minimal-required-inputs">Minimal Required Inputs</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials and Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data.html"><strong>KG-SaF-Data</strong>: Complete KGR Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jdex.html"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
@@ -95,34 +99,11 @@
 <p>It is highly recommended to use <a class="reference external" href="https://github.com/pyenv/pyenv">pyenv</a> to manage Python versions. This allows easy switching between versions and avoids system conflicts.</p>
 </div>
 <ol class="arabic simple">
+<li><p><strong>Ubuntu 20</strong> or later. The project has been developed on Linux Ubuntu System. Compatibility with other systems has not been tested.</p></li>
 <li><p><strong>Python 3.9</strong> or later. If you already have Python 3.9+ installed system-wide, pyenv is optional but recommended.</p></li>
-<li><p><strong>Java JDK 21</strong> or later. Make sure your <code class="docutils literal notranslate"><span class="pre">JAVA_HOME</span></code> environment variable is set, otherwise some tools may not work correctly.</p></li>
-<li><p><strong>ROBOT OBO Utility</strong> is  required for reasoning and ontology manipulation. Install following instruction from officila guide <a class="reference external" href="http://robot.obolibrary.org/">ROBOT</a>. Version <code class="docutils literal notranslate"><span class="pre">1.9.x</span></code> was used in the development of this tool. (Requires Java)</p></li>
+<li><p><strong>Java 8</strong> or later. This is needed only if you plan to use Justification tools, due to <em>Pellet</em> dependecies.</p></li>
+<li><p><strong>Java 11</strong> or later. This is need by the <em>Robot OBO Utility</em> backbone of the reasoning services.</p></li>
 </ol>
-</section>
-<section id="installation-instructions">
-<h2>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Link to this heading"></a></h2>
-<ol class="arabic simple">
-<li><p><strong>Clone</strong> the repository</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ivandiliso/kg-saf.git
-<span class="nb">cd</span><span class="w"> </span>kg-saf
-</pre></div>
-</div>
-<ol class="arabic simple" start="2">
-<li><p><strong>Install</strong> Python dependencies</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</pre></div>
-</div>
-<ol class="arabic simple" start="3">
-<li><p><strong>Verify</strong> requirements are installed</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>--version
-java<span class="w"> </span>-version
-java<span class="w"> </span>-jar<span class="w"> </span>robot.jar<span class="w"> </span>--help
-</pre></div>
-</div>
 </section>
 <section id="system-requirements">
 <h2>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h2>
@@ -135,22 +116,44 @@ java<span class="w"> </span>-jar<span class="w"> </span>robot.jar<span class="w"
 <li><p>Disk Space: 15 GB for dataset and ontologies</p></li>
 </ul>
 </section>
-<section id="unpack-released-datasets">
-<h2>Unpack Released Datasets<a class="headerlink" href="#unpack-released-datasets" title="Link to this heading"></a></h2>
-<p>The released datasets and ontologies are distributed in <strong>compressed ZIP files</strong> due to GitHub storage limitations. Some secondary files were removed to reduce size, but they <strong>can be reconstructed</strong> using the provided unpacking utility.</p>
+<section id="installation-instructions">
+<h2>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
-<li><p>Open the provided <strong>dataset unpacking notebook</strong> (<code class="docutils literal notranslate"><span class="pre">kgsaf_jdex/utils/unpack.ipynb</span></code>).</p></li>
-<li><p>Execute <strong>all cells sequentially</strong>.</p></li>
-<li><p>The notebook will automatically perform the following steps:</p>
-<ul class="simple">
-<li><p><strong>Unpack all compressed datasets and ontologies</strong> into an <code class="docutils literal notranslate"><span class="pre">kgsaf_data/datasets/*/unpack</span></code> and <code class="docutils literal notranslate"><span class="pre">kgsaf_data/ontologies/*/unpack</span></code>folder.</p></li>
-<li><p><strong>Re-merge object property assertion files</strong> for each dataset.</p></li>
-<li><p><strong>Merge the full knowledge graph</strong> (TBox, RBox, and ABox) using a reasoner (Robot OBO Tool).</p></li>
-<li><p><strong>Convert N-Triples files to TSV format</strong>, ready for use with ML libraries such as <strong>PyKEEN</strong>.</p></li>
-<li><p><strong>Convert Schema files to JSON</strong> (taxonomy, roles, class assertions) for easier loading and manipulation in Python.</p></li>
-</ul>
-</li>
+<li><p><strong>Clone</strong> the repository</p></li>
 </ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ivandiliso/kg-saf.git
+<span class="nb">cd</span><span class="w"> </span>kg-saf
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Run the <strong>Automatic Interactive Installer</strong></p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span>+x<span class="w"> </span>install
+./install
+</pre></div>
+</div>
+<p>Follow the instruction provided via terminal to customize you installation.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you just want to use the JDEX utility on your custom dataset and are not interested in the KG-SaF Data Consistent Dataset, choose “No” when prompted about running dataset unpacking. THe JDEX tool can be used also whitout data!</p>
+</div>
+</section>
+<section id="run-jdex-on-your-knowledge-graph">
+<h2>Run JDEX on your Knowledge Graph<a class="headerlink" href="#run-jdex-on-your-knowledge-graph" title="Link to this heading"></a></h2>
+<p>To run JDEX, you only need a properly defined configuration file. Once that’s ready, launch the CLI interactive interface with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span>+x<span class="w"> </span>run_jdex
+./run_jdex<span class="w"> </span>--config<span class="w"> </span><span class="s2">&quot;path_to_your_json.json&quot;</span>
+</pre></div>
+</div>
+<p>This command will handle the entire pipeline for you — including all utilities, processing steps, and detailed logging.
+The only requirement is a well-defined configuration file. For guidance, refer to <strong>“JDEX Configuration Guide”</strong>.</p>
+<section id="minimal-required-inputs">
+<h3>Minimal Required Inputs<a class="headerlink" href="#minimal-required-inputs" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Schema file</strong>: your ontology schema</p></li>
+<li><p><strong>Facts file</strong>: your triples, including object property assertions and class assertions</p></li>
+</ul>
+</section>
 </section>
 </section>
 
@@ -159,7 +162,7 @@ java<span class="w"> </span>-jar<span class="w"> </span>robot.jar<span class="w"
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="KG-SaF: Data and Workflow Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="tutorial.html" class="btn btn-neutral float-right" title="Tutorials and Guides" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="config.html" class="btn btn-neutral float-right" title="JDEX Configuration Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

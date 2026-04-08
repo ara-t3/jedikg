@@ -45,9 +45,10 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quick.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials and Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data.html"><strong>KG-SaF-Data</strong>: Complete KGR Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jdex.html"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
@@ -91,14 +92,53 @@
 <li><p>🤖 Provides ML-ready <strong>tensor representations</strong> compatible with PyTorch and PyKEEN</p></li>
 <li><p>🧩 Offers <strong>schema decomposition</strong> into themed partitions (modularization of ontology components)</p></li>
 </ul>
+</section>
+<section id="advanced-python-reasoning-integration">
+<h2>Advanced Python Reasoning Integration<a class="headerlink" href="#advanced-python-reasoning-integration" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt>🔌 Provides a Python abstraction layer for reasoners, tightly integrated with RDFLib, enabling seamless use of multiple engines:</dt><dd><ul>
+<li><p>☕ Java-based reasoners for materialization (HermiT, Elk)</p></li>
+<li><p>⚙️ Konclude (C++) for parallelizable consistency checking and realization</p></li>
+<li><p>🧩 Pellet for justification extraction</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>🔄 Automatically detects and removes unsatisfiable classes and object properties</p></li>
+<li><p>🔍 Includes tools to analyze inconsistency justifications directly in Python</p></li>
+</ul>
+</section>
+<section id="usability-complete-customization">
+<h2>Usability &amp; Complete Customization<a class="headerlink" href="#usability-complete-customization" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>🖥️ Provides an interactive CLI-based interface for easy workflow management</p></li>
+<li><dl class="simple">
+<dt>⚙️ Fully configurable via JSON, allowing you to:</dt><dd><ul>
+<li><p>Select which reasoners to use</p></li>
+<li><p>Choose specific reasoning services (e.g., materialization, consistency check, justification)</p></li>
+<li><p>Customize all parameters for dataset generation</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quick.html">Quick Start Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="quick.html#software-requirements">Software Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quick.html#installation-instructions">Installation Instructions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quick.html#system-requirements">System Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quick.html#unpack-released-datasets">Unpack Released Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick.html#installation-instructions">Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick.html#run-jdex-on-your-knowledge-graph">Run JDEX on your Knowledge Graph</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">JDEX Configuration Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config.html#minimal-configuration">Minimal Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#configuration-structure-overview">Configuration Structure Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#full-example">Full Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#loading-the-configuration-in-python">Loading the Configuration in Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#additional-notes">Additional Notes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials and Guides</a><ul>
@@ -107,18 +147,21 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#using-kg-saf-jdex-on-custom-knowledge-graphs">Using KG-SaF-JDeX on Custom Knowledge Graphs</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="data.html"><strong>KG-SaF-Data</strong>: Complete KGR Datasets</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="data.html#dataset-structure">Dataset Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data.html#available-ontologies">Available Ontologies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data.html#available-datasets">Available Datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data.html#dataset-statistics">Dataset Statistics</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="jdex.html"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="jdex.html#machine-learning-loaders">Machine Learning Loaders</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jdex.html#reasoning-utilities">Reasoning Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jdex.html#jdex-suite">JDeX Suite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdex.html#reasoning-utility">Reasoning Utility</a></li>
 <li class="toctree-l2"><a class="reference internal" href="jdex.html#modularization-and-decomposition">Modularization and Decomposition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jdex.html#conversion-utilities">Conversion Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdex.html#post-processing-utilities">Post Processing Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdex.html#machine-learning-loaders">Machine Learning Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdex.html#naive-inconsistencies-filtering">Naive Inconsistencies Filtering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdex.html#configuration-utility">Configuration Utility</a></li>
 </ul>
 </li>
 </ul>

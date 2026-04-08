@@ -1,0 +1,773 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jdex.owl.reasoning &mdash; KG-SaF: Official Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+    <link rel="canonical" href="https://ivandiliso.github.io/kg-saf/_modules/jdex/owl/reasoning.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=72d88caf"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            KG-SaF: Building Complete and Curated Datasets for Machine Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config.html">JDEX Configuration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorials and Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">KG-SaF: Building Complete and Curated Datasets for Machine Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">jdex.owl.reasoning</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for jdex.owl.reasoning</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib</span><span class="w"> </span><span class="kn">import</span> <span class="n">OWL</span><span class="p">,</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">RDFS</span><span class="p">,</span> <span class="n">BNode</span><span class="p">,</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Namespace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib.namespace</span><span class="w"> </span><span class="kn">import</span> <span class="n">split_uri</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib.term</span><span class="w"> </span><span class="kn">import</span> <span class="n">URIRef</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">split_top_level</span><span class="p">(</span><span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split a comma-separated expression only at the top syntactic level.</span>
+
+<span class="sd">    This helper walks through the input string and splits on commas that are</span>
+<span class="sd">    not enclosed in parentheses. It is useful for parsing functional-style OWL</span>
+<span class="sd">    expressions where nested constructs may also contain commas.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        expr (str): Input expression to split.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list[str]: Top-level components extracted from the input expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">current</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">expr</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="s2">&quot;(&quot;</span><span class="p">:</span>
+            <span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">char</span> <span class="o">==</span> <span class="s2">&quot;)&quot;</span><span class="p">:</span>
+            <span class="n">depth</span> <span class="o">-=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="s2">&quot;,&quot;</span> <span class="ow">and</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">current</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">current</span><span class="p">:</span>
+        <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">parts</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PresetAxioms</span><span class="p">:</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tbox_materialization</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the default ROBOT axiom generators for TBox materialization.</span>
+
+<span class="sd">        The returned list contains the supported axiom generator names used to</span>
+<span class="sd">        materialize inferred schema-level axioms with ROBOT.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[str]: Default axiom generators for TBox materialization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s2">&quot;SubClass&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;EquivalentClass&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;EquivalentObjectProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;InverseObjectProperties&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ObjectPropertyCharacteristic&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SubObjectProperty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ObjectPropertyRange&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ObjectPropertyDomain&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">realization</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the ROBOT axiom generators needed for realization only.</span>
+
+<span class="sd">        Realization is limited here to inferred class assertions, so the method</span>
+<span class="sd">        returns only the corresponding ROBOT generator.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[str]: A list containing only ``&quot;ClassAssertion&quot;``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;ClassAssertion&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Reasoner">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.reasoning.Reasoner">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Reasoner</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unified wrapper around multiple ontology reasoning command-line tools.</span>
+
+<span class="sd">    This class provides a Python abstraction over several external reasoners</span>
+<span class="sd">    and ontology utilities, enabling ontology reasoning workflows directly from</span>
+<span class="sd">    Python code. Supported operations include:</span>
+
+<span class="sd">    - Consistency checking via Konclude</span>
+<span class="sd">    - Satisfiability checking via ROBOT using HermiT or ELK</span>
+<span class="sd">    - Materialization via ROBOT using HermiT or ELK</span>
+<span class="sd">    - Realization via Konclude or ROBOT</span>
+<span class="sd">    - Filtering axioms/entities via ROBOT</span>
+<span class="sd">    - Merging ontologies via ROBOT</span>
+<span class="sd">    - Format conversion via ROBOT</span>
+<span class="sd">    - Justification for inconsistencies via Pellet</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - ROBOT-based operations require Java 11.</span>
+<span class="sd">        - Pellet justification requires Java 8.</span>
+<span class="sd">        - Konclude is used as a native executable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">reasoners_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+        <span class="n">java8_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+        <span class="n">java11_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+        <span class="n">java_max_ram</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize paths and runtime configuration for the reasoning tools.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            reasoners_path (Path): Root directory containing the installed</span>
+<span class="sd">                reasoning tools (Konclude, ROBOT, Pellet).</span>
+<span class="sd">            java8_path (Path): Path to the Java 8 installation used by Pellet.</span>
+<span class="sd">            java11_path (Path): Path to the Java 11 installation used by ROBOT.</span>
+<span class="sd">            java_max_ram (int, optional): Maximum Java heap size in gigabytes</span>
+<span class="sd">                for Java-based reasoners. Defaults to 20.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">konclude</span> <span class="o">=</span> <span class="n">reasoners_path</span> <span class="o">/</span> <span class="s2">&quot;konclude&quot;</span> <span class="o">/</span> <span class="s2">&quot;Binaries&quot;</span> <span class="o">/</span> <span class="s2">&quot;Konclude&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">robot</span> <span class="o">=</span> <span class="n">reasoners_path</span> <span class="o">/</span> <span class="s2">&quot;robot&quot;</span> <span class="o">/</span> <span class="s2">&quot;robot.jar&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pellet</span> <span class="o">=</span> <span class="n">reasoners_path</span> <span class="o">/</span> <span class="s2">&quot;pellet&quot;</span> <span class="o">/</span> <span class="s2">&quot;cli/target/pelletcli/bin/pellet&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">java8_path</span> <span class="o">=</span> <span class="n">java8_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">java11_path</span> <span class="o">=</span> <span class="n">java11_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jram</span> <span class="o">=</span> <span class="n">java_max_ram</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supported_reasoners</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hermit&quot;</span><span class="p">,</span> <span class="s2">&quot;elk&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_run_process</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">subprocess</span><span class="o">.</span><span class="n">CompletedProcess</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute a subprocess command and measure its runtime.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            command (list): Command and arguments to execute.</span>
+<span class="sd">            env (dict, optional): Environment variables for the subprocess.</span>
+<span class="sd">                Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple[subprocess.CompletedProcess, float]: The completed subprocess</span>
+<span class="sd">            result and the elapsed execution time in seconds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">elapsed</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="n">elapsed</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_result</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">result</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CompletedProcess</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">elapsed_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">succesful_returns</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate a subprocess result and raise on unexpected exit codes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            result (subprocess.CompletedProcess): Subprocess execution result.</span>
+<span class="sd">            label (str): Human-readable label for the executed task.</span>
+<span class="sd">            elapsed_time (float): Execution duration in seconds.</span>
+<span class="sd">            verbose (int, optional): Verbosity level. Defaults to 1.</span>
+<span class="sd">            succesful_returns (list, optional): Exit codes considered</span>
+<span class="sd">                successful. Defaults to [0].</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            RuntimeError: If the subprocess exits with a code not listed in</span>
+<span class="sd">                ``succesful_returns``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="ow">in</span> <span class="n">succesful_returns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Reasoning: </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> - completed successfully in </span><span class="si">{</span><span class="n">elapsed_time</span><span class="si">:</span><span class="s2">4.3f</span><span class="si">}</span><span class="s2">s!&quot;</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Reasoning: </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> -  failed after </span><span class="si">{</span><span class="n">elapsed_time</span><span class="si">:</span><span class="s2">4.3f</span><span class="si">}</span><span class="s2">s - Stack Trace Available Below:&quot;</span>
+                <span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;===== STACK TRACE START =====&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;===== STACK TRACE END =====&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Command failed with returncode </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">returncode</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_env</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">java_version</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build an execution environment for a specific Java version.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            java_version (int): Java major version to use. Supported values are</span>
+<span class="sd">                8 and 11.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Environment variables configured with the requested</span>
+<span class="sd">            ``JAVA_HOME`` and updated ``PATH``.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            RuntimeError: If the requested Java version is not supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">match</span> <span class="n">java_version</span><span class="p">:</span>
+            <span class="k">case</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="n">env</span><span class="p">[</span><span class="s2">&quot;JAVA_HOME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">java8_path</span>
+            <span class="k">case</span> <span class="mi">11</span><span class="p">:</span>
+                <span class="n">env</span><span class="p">[</span><span class="s2">&quot;JAVA_HOME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">java11_path</span>
+            <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Java JDK Version </span><span class="si">{</span><span class="n">java_version</span><span class="si">}</span><span class="s2"> is not supported yet!&quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">env</span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s2">&quot;JAVA_HOME&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/bin:&quot;</span> <span class="o">+</span> <span class="n">env</span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">env</span>
+
+<div class="viewcode-block" id="Reasoner.consistency">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.reasoning.Reasoner.consistency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">consistency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_ontology</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a consistency check on an ontology using Konclude.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input_ontology (Path): Path to the input ontology file.</span>
+<span class="sd">            verbose (int, optional): Verbosity level for status output.</span>
+<span class="sd">                Defaults to 1.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: ``True`` if the ontology is consistent, ``False`` if it is</span>
+<span class="sd">            inconsistent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">konclude</span><span class="p">),</span>
+            <span class="s2">&quot;consistency&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-w AUTO&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-i&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">input_ontology</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="n">result</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_result</span><span class="p">(</span>
+            <span class="n">result</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;CONSISTENCY CHECK (Konclude)&quot;</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+        <span class="p">)</span>
+
+        <span class="c1"># If PROCESS Successful =&gt;</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bis inconsistent\.&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bis consistent\.&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Reasoner.satisfiability">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.reasoning.Reasoner.satisfiability">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">satisfiability</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_ontology</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+        <span class="n">reasoner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hermit&quot;</span><span class="p">,</span>
+        <span class="n">safety_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check ontology satisfiability and collect unsatisfiable entities.</span>
+
+<span class="sd">        This method invokes ROBOT with the selected reasoner and parses its</span>
+<span class="sd">        output to extract the IRIs of unsatisfiable classes and properties.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input_ontology (Path): Path to the input ontology file.</span>
+<span class="sd">            reasoner (str, optional): ROBOT reasoner backend to use. Supported</span>
+<span class="sd">                values are ``&quot;hermit&quot;`` and ``&quot;elk&quot;``. Defaults to ``&quot;hermit&quot;``.</span>
+<span class="sd">            safety_check (bool, optional): If ``True``, first verify ontology</span>
+<span class="sd">                consistency before running satisfiability analysis. Defaults to</span>
+<span class="sd">                False.</span>
+<span class="sd">            verbose (int, optional): Verbosity level for status output.</span>
+<span class="sd">                Defaults to 1.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of URIs corresponding to unsatisfiable classes or</span>
+<span class="sd">            properties.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the selected reasoner is not supported.</span>
+<span class="sd">            Exception: If ``safety_check`` is enabled and the ontology is</span>
+<span class="sd">                inconsistent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">reasoner</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_reasoners</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reasoner </span><span class="si">{</span><span class="n">reasoner</span><span class="si">}</span><span class="s2"> not supported by ROBOT OBO Utility&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">safety_check</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">consistency</span><span class="p">(</span><span class="n">input_ontology</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Cannot Run Satisfiabiality on Inconsistent Ontologies due to Robot Limitations&quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;java&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;-Xmx</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">jram</span><span class="si">}</span><span class="s2">G&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-jar&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">robot</span><span class="p">),</span>
+            <span class="s2">&quot;reason&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-vvv&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--reasoner&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">reasoner</span><span class="p">),</span>
+            <span class="s2">&quot;--input&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">input_ontology</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="n">result</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_env</span><span class="p">(</span><span class="n">java_version</span><span class="o">=</span><span class="mi">11</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_result</span><span class="p">(</span>
+            <span class="n">result</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;SATISFIABILITY CHECK (</span><span class="si">{</span><span class="n">reasoner</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+            <span class="n">elapsed</span><span class="p">,</span>
+            <span class="n">succesful_returns</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># If PROCESS Successful =&gt;</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">unsatisfiable_entities</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;unsatisfiable(?:\s+property)?\s*:\s*(\S+)&quot;</span><span class="p">,</span>
+            <span class="n">output</span><span class="p">,</span>
+            <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">unsatisfiable_entities</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_konclude_realization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run realization with Konclude.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input (Path): Input ontology file.</span>
+<span class="sd">            output (Path): Output file where realized assertions will be stored.</span>
+<span class="sd">            verbose (int, optional): Verbosity level for status output.</span>
+<span class="sd">                Defaults to 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">konclude</span><span class="p">),</span>
+            <span class="s2">&quot;realization&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-w AUTO&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-i&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;-o&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">output</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">result</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;REALIZATION (KONCLUDE)&quot;</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="c1"># If PROCESS Successful =&gt;</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_robot_realization</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">input</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+        <span class="n">output</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+        <span class="n">reasoner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hermit&quot;</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run realization through ROBOT by materializing class assertions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input (Path): Input ontology file.</span>
+<span class="sd">            output (Path): Output ontology file.</span>
+<span class="sd">            reasoner (str, optional): ROBOT reasoner backend to use.</span>
+<span class="sd">                Defaults to ``&quot;hermit&quot;``.</span>
+<span class="sd">            verbose (int, optional): Verbosity level for status output.</span>
+<span class="sd">                Defaults to 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">materialization</span><span class="p">(</span>
+            <span class="nb">input</span><span class="p">,</span>
+            <span class="n">output</span><span class="p">,</span>
+            <span class="n">reasoner</span><span class="o">=</span><span class="n">reasoner</span><span class="p">,</span>
+            <span class="n">axioms</span><span class="o">=</span><span class="n">PresetAxioms</span><span class="o">.</span><span class="n">realization</span><span class="p">(),</span>
+            <span class="n">safety_check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Reasoner.realization">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.reasoning.Reasoner.realization">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">realization</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">reasoner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;konclude&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run ontology realization with the selected reasoner backend.</span>
+
+<span class="sd">        Realization computes inferred class assertions for individuals in the</span>
+<span class="sd">        ontology.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input (Path): Input ontology file.</span>
+<span class="sd">            output (Path): Output file where realized assertions will be saved.</span>
+<span class="sd">            reasoner (str, optional): Reasoner to use. Supported values are</span>
+<span class="sd">                ``&quot;konclude&quot;``, ``&quot;hermit&quot;``, and ``&quot;elk&quot;``. Defaults to</span>
+<span class="sd">                ``&quot;konclude&quot;``.</span>
+<span class="sd">            verbose (int, optional): Verbosity level for status output.</span>
+<span class="sd">                Defaults to 1.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the requested reasoner is not supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">reasoner</span> <span class="o">==</span> <span class="s2">&quot;konclude&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_konclude_realization</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">reasoner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_reasoners</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_robot_realization</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">reasoner</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reasoner </span><span class="si">{</span><span class="n">reasoner</span><span class="si">}</span><span class="s2"> not supported by ROBOT OBO Utility&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Reasoner.materialization">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.reasoning.Reasoner.materialization">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">materialization</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">input</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+        <span class="n">output</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+        <span class="n">reasoner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hermit&quot;</span><span class="p">,</span>
+        <span class="n">axioms</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">PresetAxioms</span><span class="o">.</span><span class="n">tbox_materialization</span><span class="p">(),</span>
+        <span class="n">safety_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Materialize inferred axioms into an ontology using ROBOT.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input (Path): Input ontology file.</span>
+<span class="sd">            output (Path): Output ontology file for the materialized result.</span>
+<span class="sd">            reasoner (str, optional): ROBOT reasoner backend to use. Supported</span>
+<span class="sd">                values are ``&quot;hermit&quot;`` and ``&quot;elk&quot;``. Defaults to ``&quot;hermit&quot;``.</span>
+<span class="sd">            axioms (list, optional): ROBOT axiom generators to materialize.</span>
+<span class="sd">                Defaults to ``PresetAxioms.tbox_materialization()``.</span>
+<span class="sd">            safety_check (bool, optional): If ``True``, first verify that the</span>
+<span class="sd">                ontology has no unsatisfiable classes or properties. Defaults</span>
+<span class="sd">                to False.</span>
+<span class="sd">            verbose (int, optional): Verbosity level for status output.</span>
+<span class="sd">                Defaults to 1.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the selected reasoner is not supported.</span>
+<span class="sd">            Exception: If ``safety_check`` is enabled and the ontology is</span>
+<span class="sd">                unsatisfiable or inconsistent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">reasoner</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_reasoners</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reasoner </span><span class="si">{</span><span class="n">reasoner</span><span class="si">}</span><span class="s2"> not supported by ROBOT OBO Utility&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">safety_check</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">satisfiability</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Cannot Run Materialization on Unsatisfiable / Inconsistent Ontologies&quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;java&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;-Xmx</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">jram</span><span class="si">}</span><span class="s2">G&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-jar&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">robot</span><span class="p">),</span>
+            <span class="s2">&quot;reason&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-vvv&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--reasoner&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">reasoner</span><span class="p">),</span>
+            <span class="s2">&quot;--input&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">),</span>
+            <span class="s2">&quot;--output&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">output</span><span class="p">),</span>
+            <span class="s2">&quot;--axiom-generators&quot;</span><span class="p">,</span>
+            <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">axioms</span><span class="p">),</span>
+            <span class="s2">&quot;--remove-redundant-subclass-axioms&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;false&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--exclude-tautologies&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;structural&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--include-indirect&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="n">result</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_env</span><span class="p">(</span><span class="n">java_version</span><span class="o">=</span><span class="mi">11</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_result</span><span class="p">(</span>
+            <span class="n">result</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;MATERIALIZATION (</span><span class="si">{</span><span class="n">reasoner</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+            <span class="n">elapsed</span><span class="p">,</span>
+            <span class="n">succesful_returns</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># If PROCESS Successful =&gt;</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Reasoner.filtering">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.reasoning.Reasoner.filtering">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filtering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">uris</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove axioms involving specified URIs from a knowledge graph.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input (Path): Input ontology or knowledge graph file.</span>
+<span class="sd">            output (Path): Output file for the filtered ontology.</span>
+<span class="sd">            uris (list): List of URIs to remove from the ontology signature.</span>
+<span class="sd">            verbose (int, optional): Verbosity level for status output.</span>
+<span class="sd">                Defaults to 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;java&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;-Xmx</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">jram</span><span class="si">}</span><span class="s2">G&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-jar&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">robot</span><span class="p">),</span>
+            <span class="s2">&quot;remove&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--input&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">),</span>
+            <span class="s2">&quot;--output&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">output</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">iri</span> <span class="ow">in</span> <span class="n">uris</span><span class="p">:</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;--term&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="p">])</span>
+
+        <span class="n">result</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_env</span><span class="p">(</span><span class="n">java_version</span><span class="o">=</span><span class="mi">11</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;FILTERING (Robot)&quot;</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="c1"># If PROCESS Successful =&gt;</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Reasoner.justification">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.reasoning.Reasoner.justification">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">justification</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">safety_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a justification for ontology inconsistency using Pellet.</span>
+
+<span class="sd">        The method extracts the first MUPS explanation reported by Pellet,</span>
+<span class="sd">        writes it in OWL functional syntax, converts it to OWL format, and</span>
+<span class="sd">        returns the explanation components.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input (Path): Input ontology file.</span>
+<span class="sd">            output (Path): Output file for the generated justification.</span>
+<span class="sd">            safety_check (bool, optional): If ``True``, skip justification when</span>
+<span class="sd">                the ontology is already consistent. Defaults to False.</span>
+<span class="sd">            verbose (int, optional): Verbosity level for status output.</span>
+<span class="sd">                Defaults to 1.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[str]: List of OWL functional syntax expressions that form the</span>
+<span class="sd">            extracted explanation. Returns an empty list when no explanation is</span>
+<span class="sd">            found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">safety_check</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">consistency</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ontology Consistent: No Consistency Justification is Needed&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pellet</span><span class="p">),</span>
+            <span class="s2">&quot;explain&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--inconsistent&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-v&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="n">result</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;JUSTIFICATION (Pellet)&quot;</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="c1"># If PROCESS Successful =&gt;</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;MUPS 1:\s*(\[.*\])&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;[]&quot;</span><span class="p">)</span>
+            <span class="n">explanation</span> <span class="o">=</span> <span class="n">split_top_level</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+            <span class="n">out_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Ontology(</span>
+<span class="s2">            </span><span class="si">{</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">explanation</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">            )&quot;&quot;&quot;</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out_str</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conversion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;owl&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">explanation</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="Reasoner.conversion">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.reasoning.Reasoner.conversion">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">conversion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;owl&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert an ontology file to another serialization format using ROBOT.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input (Path): Input ontology file.</span>
+<span class="sd">            output (Path): Output ontology file.</span>
+<span class="sd">            format (str, optional): Target serialization format accepted by</span>
+<span class="sd">                ROBOT. Defaults to ``&quot;owl&quot;``.</span>
+<span class="sd">            verbose (int, optional): Verbosity level for status output.</span>
+<span class="sd">                Defaults to 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;java&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;-Xmx</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">jram</span><span class="si">}</span><span class="s2">G&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-jar&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">robot</span><span class="p">),</span>
+            <span class="s2">&quot;convert&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--input&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">),</span>
+            <span class="s2">&quot;--format&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="nb">format</span><span class="p">),</span>
+            <span class="s2">&quot;--output&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">output</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="n">result</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_env</span><span class="p">(</span><span class="n">java_version</span><span class="o">=</span><span class="mi">11</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;CONVERSION (Robot)&quot;</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="c1"># If PROCESS Successful =&gt;</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Reasoner.merging">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.reasoning.Reasoner.merging">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">merging</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_ontologies</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">output</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge multiple ontologies into a single output ontology using ROBOT.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input_ontologies (list[str]): List of ontology paths or IRIs to</span>
+<span class="sd">                merge.</span>
+<span class="sd">            output: Output file path for the merged ontology.</span>
+<span class="sd">            verbose (int, optional): Verbosity level for status output.</span>
+<span class="sd">                Defaults to 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;java&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;-Xmx</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">jram</span><span class="si">}</span><span class="s2">G&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-jar&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">robot</span><span class="p">),</span>
+            <span class="s2">&quot;merge&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--output&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">output</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">iri</span> <span class="ow">in</span> <span class="n">input_ontologies</span><span class="p">:</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;--input&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="p">])</span>
+
+        <span class="n">result</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_env</span><span class="p">(</span><span class="n">java_version</span><span class="o">=</span><span class="mi">11</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;MERGING (Robot)&quot;</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="c1"># If PROCESS Successful =&gt;</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Ivan Diliso and Roberto Barile.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

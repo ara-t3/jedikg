@@ -5,12 +5,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>kgsaf_jdex.utils.conversion &mdash; KG-SaF: Official Documentation</title>
+  <title>jdex.utils.postprocessing &mdash; KG-SaF: Official Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
 
   
-    <link rel="canonical" href="https://ivandiliso.github.io/kg-saf/_modules/kgsaf_jdex/utils/conversion.html" />
+    <link rel="canonical" href="https://ivandiliso.github.io/kg-saf/_modules/jdex/utils/postprocessing.html" />
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=72d88caf"></script>
@@ -43,9 +43,10 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../quick.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorials and Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../data.html"><strong>KG-SaF-Data</strong>: Complete KGR Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jdex.html"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
@@ -67,7 +68,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">kgsaf_jdex.utils.conversion</li>
+      <li class="breadcrumb-item active">jdex.utils.postprocessing</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -76,7 +77,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for kgsaf_jdex.utils.conversion</h1><div class="highlight"><pre>
+  <h1>Source code for jdex.utils.postprocessing</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
@@ -86,24 +87,49 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">rdflib.namespace</span><span class="w"> </span><span class="kn">import</span> <span class="n">split_uri</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">rdflib.term</span><span class="w"> </span><span class="kn">import</span> <span class="n">URIRef</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">kgsaf_jdex.utils.conventions.ids</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">idc</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">kgsaf_jdex.utils.conventions.paths</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">kgsaf_jdex.utils.utility</span><span class="w"> </span><span class="kn">import</span> <span class="n">verbose_print</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">kgsaf_jdex.utils.conventions.builtins</span><span class="w"> </span><span class="kn">import</span> <span class="n">BUILTIN_URIS</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jdex.utils.conventions.ids</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">idc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jdex.utils.conventions.paths</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jdex.utils.conventions.builtins</span><span class="w"> </span><span class="kn">import</span> <span class="n">BUILTIN_URIS</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Graph</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jdex.utils.conventions.paths</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jdex.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">CLI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jdex.owl.reasoning</span><span class="w"> </span><span class="kn">import</span> <span class="n">Reasoner</span>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">verbose_print</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print a message only when verbose logging is enabled.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        msg (str): Message to print.</span>
+<span class="sd">        verbose (bool): If True, the message is printed; otherwise it is ignored.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+
+
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">rdf_list_to_python_list</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">head</span><span class="p">:</span> <span class="n">URIRef</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert an RDF list (rdf:first/rest/nil chain) into a Python list.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert an RDF collection into a standard Python list.</span>
 
+<span class="sd">    This function traverses an RDF list encoded with ``rdf:first``,</span>
+<span class="sd">    ``rdf:rest``, and ``rdf:nil`` and recursively converts each element</span>
+<span class="sd">    into a Python representation through ``bnode_to_dict``.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        graph (Graph): RDFLib Graph to be parsed</span>
-<span class="sd">        head (URIRef): List starting node</span>
-<span class="sd">        depth (int): Recursion depth</span>
-<span class="sd">        verbose (bool): Log printing. Defaults to True.</span>
+<span class="sd">        graph (Graph): RDFLib graph containing the RDF collection.</span>
+<span class="sd">        head (URIRef): Head node of the RDF list.</span>
+<span class="sd">        depth (int): Current recursion depth, used for indented verbose logging.</span>
+<span class="sd">        verbose (bool, optional): Whether to print traversal logs. Defaults to True.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        list: Python list from RDF list</span>
+<span class="sd">        list: Python list containing the converted RDF list elements.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">while</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">head</span> <span class="o">!=</span> <span class="n">RDF</span><span class="o">.</span><span class="n">nil</span><span class="p">:</span>
@@ -116,16 +142,23 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">bnode_to_dict</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">URIRef</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Recursively convert an RDF node (especially blank nodes) into JSON.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Recursively convert an RDF node into a JSON-serializable Python object.</span>
+
+<span class="sd">    URI references and literals are converted to strings directly. Blank nodes</span>
+<span class="sd">    are recursively expanded into dictionaries keyed by predicate URI, with</span>
+<span class="sd">    support for OWL collection constructs such as ``owl:unionOf``,</span>
+<span class="sd">    ``owl:intersectionOf``, and ``owl:oneOf``.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        graph (Graph): RDFLib Graph to be parsed</span>
-<span class="sd">        node (URIRef): Starting node</span>
-<span class="sd">        depth (int, optional): Recursion depth. Defaults to 1.</span>
-<span class="sd">        verbose (bool): Log printing. Defaults to True.</span>
+<span class="sd">        graph (Graph): RDFLib graph containing the node description.</span>
+<span class="sd">        node (URIRef): Node to convert. This may be a URIRef, Literal, or BNode.</span>
+<span class="sd">        depth (int, optional): Current recursion depth, used for indented verbose</span>
+<span class="sd">            logging. Defaults to 1.</span>
+<span class="sd">        verbose (bool, optional): Whether to print traversal logs. Defaults to True.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: Python dict from RDF description</span>
+<span class="sd">        dict: A Python dictionary representation for blank nodes, or a string</span>
+<span class="sd">        representation for URIRefs, Literals, and unsupported node types.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">):</span>
@@ -163,24 +196,29 @@
 
 
 <div class="viewcode-block" id="OWLConverter">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.OWLConverter">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.OWLConverter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">OWLConverter</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a subset of OWL Ontology axioms to JSON Serialization&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert selected OWL ontology components into JSON-serializable structures.</span>
+
+<span class="sd">    This converter loads ontology fragments from a dataset directory and</span>
+<span class="sd">    transforms selected parts of the schema and assertions into Python</span>
+<span class="sd">    dictionaries that can later be serialized as JSON.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the converter with a dataset base path</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the converter with the dataset base directory.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            path (str): Dataset location path</span>
+<span class="sd">            path (str): Path to the root directory of the dataset to process.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
 
 <div class="viewcode-block" id="OWLConverter.preprocess">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.preprocess">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.OWLConverter.preprocess">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">preprocess</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">taxonomy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -189,14 +227,23 @@
         <span class="n">obj_prop_hierarchy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Preprocess a subset of the dataset schema into Python data structure</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load and preprocess selected ontology components.</span>
+
+<span class="sd">        Depending on the enabled flags, this method parses the corresponding</span>
+<span class="sd">        ontology files and stores their converted Python representations for</span>
+<span class="sd">        later serialization.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            taxonomy (bool, optional): Load and convert taxonomy axioms. Defaults to True.</span>
-<span class="sd">            class_assertions (bool, optional): Load and convert class assertions axioms. Defaults to True.</span>
-<span class="sd">            obj_prop_domain_range (bool, optional): Load and convert object propoerty domain and range. Defaults to True.</span>
-<span class="sd">            obj_prop_hierarchy (bool, optional): Load and convert object property hierarchy. Defaults to True.</span>
-<span class="sd">            verbose (bool): Log printing. Defaults to True.</span>
+<span class="sd">            taxonomy (bool, optional): Whether to preprocess class taxonomy</span>
+<span class="sd">                axioms. Defaults to True.</span>
+<span class="sd">            class_assertions (bool, optional): Whether to preprocess individual</span>
+<span class="sd">                class assertions. Defaults to True.</span>
+<span class="sd">            obj_prop_domain_range (bool, optional): Whether to preprocess object</span>
+<span class="sd">                property domain and range axioms. Defaults to True.</span>
+<span class="sd">            obj_prop_hierarchy (bool, optional): Whether to preprocess object</span>
+<span class="sd">                property hierarchy axioms. Defaults to True.</span>
+<span class="sd">            verbose (bool, optional): Whether to print progress and traversal</span>
+<span class="sd">                logs. Defaults to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing Dataset at </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -231,9 +278,13 @@
 
 
 <div class="viewcode-block" id="OWLConverter.serialize">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.serialize">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.OWLConverter.serialize">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Serialize loaded and converted data into JSON format&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Serialize all preprocessed ontology components to JSON files.</span>
+
+<span class="sd">        Each preprocessed object stored in ``self.p_data`` is written to the</span>
+<span class="sd">        corresponding target path using pretty-printed JSON formatting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_data</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -243,21 +294,23 @@
 
 
 <div class="viewcode-block" id="OWLConverter.preprocess_taxonomy">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_taxonomy">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.OWLConverter.preprocess_taxonomy">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_taxonomy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process taxonomy data, the out dictionary will be formatted as:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert class taxonomy axioms into a dictionary representation.</span>
 
-<span class="sd">        ```</span>
-<span class="sd">        uri_class : [&#39;uri_sup_class_1&#39;,..., &#39;uri_sup_class_n&#39;]</span>
-<span class="sd">        ```</span>
+<span class="sd">        The output maps each class URI to the list of its direct superclasses.</span>
+<span class="sd">        Complex superclass expressions, such as restrictions or OWL collections,</span>
+<span class="sd">        are recursively represented as nested Python dictionaries.</span>
 
-<span class="sd">        If complex classes are found (restrictions or lists). These will be kept and recusively added as a Python dictionary</span>
+<span class="sd">        Output format::</span>
+
+<span class="sd">            uri_class : [&#39;uri_superclass_1&#39;, ..., &#39;uri_superclass_n&#39;]</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            verbose (bool): Log printing.</span>
+<span class="sd">            verbose (bool): Whether to print traversal logs.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: Dictionary with list of classes and theri super classes</span>
+<span class="sd">            dict: Mapping from class URIs to lists of superclass expressions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">onto</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
@@ -278,19 +331,23 @@
 
 
 <div class="viewcode-block" id="OWLConverter.preprocess_class_assertions">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_class_assertions">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.OWLConverter.preprocess_class_assertions">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_class_assertions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process class assertions data, the out dictionary will be formatted as:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert individual class assertions into a dictionary representation.</span>
 
-<span class="sd">        ```</span>
-<span class="sd">        uri_individuals : [&#39;uri_class_1&#39;,...,&#39;uri_class_n&#39;]</span>
-<span class="sd">        ```</span>
+<span class="sd">        The output maps each named individual URI to the list of classes it</span>
+<span class="sd">        belongs to, excluding built-in OWL entities such as</span>
+<span class="sd">        ``owl:NamedIndividual``.</span>
+
+<span class="sd">        Output format::</span>
+
+<span class="sd">            uri_individual : [&#39;uri_class_1&#39;, ..., &#39;uri_class_n&#39;]</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            verbose (bool): Log printing.</span>
+<span class="sd">            verbose (bool): Whether to print traversal logs.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: Dictionary with list of individuals and their types</span>
+<span class="sd">            dict: Mapping from individual URIs to their asserted class URIs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">onto</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
@@ -311,24 +368,27 @@
 
 
 <div class="viewcode-block" id="OWLConverter.preprocess_obj_prop_domain_range">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_obj_prop_domain_range">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.OWLConverter.preprocess_obj_prop_domain_range">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_obj_prop_domain_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process object properties domain and range, the out dictionary will be formatted as:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert object property domain and range axioms into a dictionary.</span>
 
-<span class="sd">        ```</span>
-<span class="sd">        uri_obj_prop : {</span>
-<span class="sd">            domain : [&#39;uri_c_1&#39;, ..., &#39;uri_c_n&#39;]</span>
-<span class="sd">            range :  [&#39;uri_c_1&#39;, ..., &#39;uri_c_m&#39;]</span>
-<span class="sd">        }</span>
-<span class="sd">        ```</span>
+<span class="sd">        For each object property, this method collects its declared domains and</span>
+<span class="sd">        ranges. If no explicit domain or range is present, ``owl:Thing`` is</span>
+<span class="sd">        used as the default value. Complex class expressions are recursively</span>
+<span class="sd">        converted to nested Python structures.</span>
 
-<span class="sd">        If complex classes are found (restrictions or lists). These will be kept and recusively added as a Python dictionary</span>
+<span class="sd">        Output format::</span>
+
+<span class="sd">            uri_obj_prop : {</span>
+<span class="sd">                &quot;domain&quot;: [&#39;uri_c_1&#39;, ..., &#39;uri_c_n&#39;],</span>
+<span class="sd">                &quot;range&quot;:  [&#39;uri_c_1&#39;, ..., &#39;uri_c_m&#39;]</span>
+<span class="sd">            }</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            verbose (bool): Log printing.</span>
+<span class="sd">            verbose (bool): Whether to print traversal logs.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: Dictionary with list of object properties and domain and range classes</span>
+<span class="sd">            dict: Mapping from object property URIs to their domain/range data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">onto</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
@@ -359,21 +419,23 @@
 
 
 <div class="viewcode-block" id="OWLConverter.preprocess_obj_prop_hierarchy">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_obj_prop_hierarchy">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.OWLConverter.preprocess_obj_prop_hierarchy">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_obj_prop_hierarchy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process object properties hierarchy, the out dictionary will be formatted as:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert object property hierarchy axioms into a dictionary.</span>
 
-<span class="sd">        ```</span>
-<span class="sd">        uri_obj_prop : [&#39;sup_uri_obj_prop_1&#39;,...,&#39;sup_uri_obj_prop_1&#39;]</span>
-<span class="sd">        ```</span>
+<span class="sd">        The output maps each object property URI to the list of its direct</span>
+<span class="sd">        super-properties. Complex property expressions, if present, are</span>
+<span class="sd">        recursively converted to nested Python structures.</span>
 
-<span class="sd">        If complex classes are found (restrictions or lists). These will be kept and recusively added as a Python dictionary</span>
+<span class="sd">        Output format::</span>
+
+<span class="sd">            uri_obj_prop : [&#39;super_obj_prop_1&#39;, ..., &#39;super_obj_prop_n&#39;]</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            verbose (bool): Log printing.</span>
+<span class="sd">            verbose (bool): Whether to print traversal logs.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            dict: Dictionary with list of object properties and their hierarchy</span>
+<span class="sd">            dict: Mapping from object property URIs to lists of super-properties.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">onto</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
@@ -394,36 +456,47 @@
 
 
 <div class="viewcode-block" id="TSVConverter">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.TSVConverter">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.TSVConverter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TSVConverter</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts RDF triple files into TSV format.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert RDF triple files into TSV representations.</span>
+
+<span class="sd">    This class reads RDF triple files from a dataset directory and prepares</span>
+<span class="sd">    tab-separated ``subject predicate object`` text outputs, either for the</span>
+<span class="sd">    full triple set or for train/validation/test splits.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the TSV converter.</span>
+<span class="sd">        Initialize the converter with the dataset base directory.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            path (str): Dataset base directory.</span>
+<span class="sd">            path (str): Path to the root directory of the dataset.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">p_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
 
 <div class="viewcode-block" id="TSVConverter.convert">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.TSVConverter.convert">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.TSVConverter.convert">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">triples</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">splits</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Convert RDF triple files into TSV files. Prepares TSV representations for serialization.</span>
+<span class="sd">        Precompute TSV representations from RDF triple files.</span>
+
+<span class="sd">        Depending on the enabled flags, this method converts the complete ABox</span>
+<span class="sd">        object-property assertion file and/or the train/validation/test split</span>
+<span class="sd">        files into TSV-formatted strings stored in memory for later writing.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            triples (bool, optional): Convert full ABox triples. Defaults to True.</span>
-<span class="sd">            splits (bool, optional): Convert train/valid/test splits. Defaults to True.      </span>
+<span class="sd">            triples (bool, optional): Whether to convert the complete set of</span>
+<span class="sd">                object-property assertion triples. Defaults to True.</span>
+<span class="sd">            splits (bool, optional): Whether to convert train, validation, and</span>
+<span class="sd">                test split files. Defaults to True.      </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">triples</span><span class="p">:</span>
@@ -449,10 +522,14 @@
 
 
 <div class="viewcode-block" id="TSVConverter.serialize">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.TSVConverter.serialize">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.TSVConverter.serialize">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Write converted TSV data to disk.</span>
+<span class="sd">        Write all prepared TSV outputs to disk.</span>
+
+<span class="sd">        Only entries corresponding to triple TSV outputs are written. The method</span>
+<span class="sd">        assumes that ``convert`` has already been called and that the in-memory</span>
+<span class="sd">        TSV strings are available in ``self.p_data``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -464,16 +541,19 @@
 
 
 <div class="viewcode-block" id="TSVConverter.preprocess_triples">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.TSVConverter.preprocess_triples">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.TSVConverter.preprocess_triples">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Convert an RDF triple file into a TSV string.</span>
+<span class="sd">        Convert an RDF graph file into a TSV-formatted string.</span>
+
+<span class="sd">        The produced output contains one triple per line in the format</span>
+<span class="sd">        ``subject&lt;TAB&gt;predicate&lt;TAB&gt;object``.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            path (Path): Path to an RDF triple file.</span>
+<span class="sd">            path (Path): Path to the RDF triple file to parse.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: TSV-formatted string of triples (s, p, o).</span>
+<span class="sd">            str: TSV-formatted text containing all triples from the input graph.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">triples</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
         <span class="n">triples</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -486,18 +566,23 @@
     
 
 <div class="viewcode-block" id="IDMapper">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.IDMapper">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.IDMapper">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">IDMapper</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maps ontology URIs to integer identifiers.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create deterministic integer ID mappings for ontology entities.</span>
+
+<span class="sd">    This class loads ontology and individual files, extracts classes, object</span>
+<span class="sd">    properties, and named individuals, and assigns each entity a stable integer</span>
+<span class="sd">    identifier based on lexicographic sorting of URIs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the mapper with a dataset base path</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the mapper with the dataset base directory.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            path (str): Dataset location path</span>
+<span class="sd">            path (str): Path to the root directory of the dataset.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
@@ -511,14 +596,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">out_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
 <div class="viewcode-block" id="IDMapper.map_to_id">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.IDMapper.map_to_id">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.IDMapper.map_to_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">map_to_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Assign unique integer IDs to ontology elements. IDs are assigned deterministically after sorting URIs.</span>
-<span class="sd">        Generates mappings for:</span>
-<span class="sd">            - Classes</span>
-<span class="sd">            - Object properties</span>
-<span class="sd">            - Individuals</span>
+<span class="sd">        Generate deterministic URI-to-integer mappings for ontology entities.</span>
+
+<span class="sd">        IDs are assigned after lexicographically sorting the extracted URIs,</span>
+<span class="sd">        which ensures reproducible mappings across runs for the same ontology</span>
+<span class="sd">        content. Separate mappings are produced for:</span>
+
+<span class="sd">        - classes</span>
+<span class="sd">        - object properties</span>
+<span class="sd">        - named individuals</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">classes</span> <span class="o">=</span>  <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto</span><span class="o">.</span><span class="n">subjects</span><span class="p">(</span><span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span> <span class="o">-</span> <span class="n">BUILTIN_URIS</span>
@@ -546,10 +635,14 @@
 
 
 <div class="viewcode-block" id="IDMapper.serialize">
-<a class="viewcode-back" href="../../../jdex.html#kgsaf_jdex.utils.conversion.IDMapper.serialize">[docs]</a>
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.postprocessing.IDMapper.serialize">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Write generated ID mappings to JSON files. Writes class, individual, and property mappings to disk.</span>
+<span class="sd">        Write generated entity-ID mappings to JSON files.</span>
+
+<span class="sd">        The method creates the mappings output directory if needed, then writes</span>
+<span class="sd">        the class, individual, and object-property mappings stored in</span>
+<span class="sd">        ``self.out_data`` as pretty-printed JSON files.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_path</span> <span class="o">/</span> <span class="n">pc</span><span class="o">.</span><span class="n">MAPPINGS</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -561,7 +654,6 @@
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">mapping</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 </div>
-
 
 </pre></div>
 

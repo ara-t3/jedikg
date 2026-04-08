@@ -1,0 +1,620 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jdex.config &mdash; KG-SaF: Official Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+    <link rel="canonical" href="https://ivandiliso.github.io/kg-saf/_modules/jdex/config.html" />
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=72d88caf"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            KG-SaF: Building Complete and Curated Datasets for Machine Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config.html">JDEX Configuration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorials and Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">KG-SaF: Building Complete and Curated Datasets for Machine Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">jdex.config</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for jdex.config</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jdex.owl.reasoning</span><span class="w"> </span><span class="kn">import</span> <span class="n">PresetAxioms</span>
+
+
+<span class="n">DLProfile</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;EL&quot;</span><span class="p">,</span> <span class="s2">&quot;ALC&quot;</span><span class="p">,</span> <span class="s2">&quot;SROIQ&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PathsConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for dataset input/output paths.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        schema (Path): Path to the ontology/schema file.</span>
+<span class="sd">        data (Path): Path to the dataset/triples file.</span>
+<span class="sd">        output (Path): Directory where processed outputs will be stored.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">schema</span><span class="p">:</span> <span class="n">Path</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Path</span>
+    <span class="n">output</span><span class="p">:</span> <span class="n">Path</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;PathsConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a PathsConfig instance from a dictionary.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (dict[str, Any]): Dictionary containing path definitions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            PathsConfig: Initialized PathsConfig instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">schema</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;schema&quot;</span><span class="p">]),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]),</span>
+            <span class="n">output</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]),</span>
+        <span class="p">)</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MaterializationConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for TBox materialization reasoning.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        enabled (bool): Whether materialization is enabled.</span>
+<span class="sd">        axioms (list[str]): List of axioms to materialize.</span>
+<span class="sd">        reasoner (str): Reasoner used for materialization (&quot;hermit&quot; or &quot;elk&quot;).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If unsupported axioms or reasoner are provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">axioms</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">PresetAxioms</span><span class="o">.</span><span class="n">tbox_materialization</span><span class="p">)</span>
+    <span class="n">reasoner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hermit&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate axioms and reasoner.&quot;&quot;&quot;</span>
+        <span class="n">allowed_axioms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">PresetAxioms</span><span class="o">.</span><span class="n">tbox_materialization</span><span class="p">())</span>
+        <span class="n">invalid_axioms</span> <span class="o">=</span> <span class="p">[</span><span class="n">axiom</span> <span class="k">for</span> <span class="n">axiom</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axioms</span> <span class="k">if</span> <span class="n">axiom</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_axioms</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">invalid_axioms</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Unsupported axioms: </span><span class="si">{</span><span class="n">invalid_axioms</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Allowed axioms are: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">allowed_axioms</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">allowed_reasoners</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hermit&quot;</span><span class="p">,</span> <span class="s2">&quot;elk&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reasoner</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_reasoners</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported reasoner </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoner</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MaterializationConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a MaterializationConfig from a dictionary.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (dict[str, Any] | None): Configuration dictionary.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            MaterializationConfig: Initialized instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">enabled</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">axioms</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;axioms&quot;</span><span class="p">,</span> <span class="n">PresetAxioms</span><span class="o">.</span><span class="n">tbox_materialization</span><span class="p">())),</span>
+            <span class="n">reasoner</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reasoner&quot;</span><span class="p">,</span> <span class="s2">&quot;hermit&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MaterializationConfig&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">enabled</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">axioms</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;axioms&quot;</span><span class="p">,</span> <span class="n">PresetAxioms</span><span class="o">.</span><span class="n">tbox_materialization</span><span class="p">())),</span>
+            <span class="n">reasoner</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reasoner&quot;</span><span class="p">,</span> <span class="s2">&quot;hermit&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RealizationConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for realization reasoning.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        enabled (bool): Whether realization is enabled.</span>
+<span class="sd">        reasoner (str): Reasoner used (&quot;hermit&quot;, &quot;konclude&quot;, or &quot;elk&quot;).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If an unsupported reasoner is provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">reasoner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;konclude&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate reasoner.&quot;&quot;&quot;</span>
+        <span class="n">allowed_reasoners</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hermit&quot;</span><span class="p">,</span> <span class="s2">&quot;konclude&quot;</span><span class="p">,</span> <span class="s2">&quot;elk&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reasoner</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_reasoners</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported reasoner </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoner</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RealizationConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a RealizationConfig from a dictionary.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (dict[str, Any] | None): Configuration dictionary.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            RealizationConfig: Initialized instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">enabled</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">reasoner</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reasoner&quot;</span><span class="p">,</span> <span class="s2">&quot;konclude&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+    
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModularizationConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for ontology modularization.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        enabled (bool): Whether modularization is enabled.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ModularizationConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a ModularizationConfig from a dictionary.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+    
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConsistencyConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for consistency checking.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        convert_ntriples (bool): Whether to convert data to N-Triples before checking.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">convert_ntriples</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ConsistencyConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a ConsistencyConfig from a dictionary.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">convert_ntriples</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;convert_ntriples&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+    
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DecompositionConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for ontology decomposition.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        tbox (bool): Whether to decompose the TBox.</span>
+<span class="sd">        rbox (bool): Whether to decompose the RBox.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tbox</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">rbox</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DecompositionConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a DecompositionConfig from a dictionary.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">rbox</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rbox&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">tbox</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tbox&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="p">)</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SatisfiabilityConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for satisfiability checking.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        filter_unsatisfiable (bool): Whether to remove unsatisfiable entities.</span>
+<span class="sd">        reasoner (str): Reasoner used (&quot;hermit&quot; or &quot;elk&quot;).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If an unsupported reasoner is provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">filter_unsatisfiable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">reasoner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hermit&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate reasoner.&quot;&quot;&quot;</span>
+        <span class="n">allowed_reasoners</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hermit&quot;</span><span class="p">,</span> <span class="s2">&quot;elk&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reasoner</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_reasoners</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported reasoner </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoner</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SatisfiabilityConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a SatisfiabilityConfig from a dictionary.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">filter_unsatisfiable</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filter_unsatisfiable&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">reasoner</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reasoner&quot;</span><span class="p">,</span> <span class="s2">&quot;hermit&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+    
+
+<div class="viewcode-block" id="ReasoningConfig">
+<a class="viewcode-back" href="../../jdex.html#jdex.config.ReasoningConfig">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ReasoningConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for all reasoning services.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        java_8_home (str | None): Path to Java 8 installation.</span>
+<span class="sd">        java_11_home (str | None): Path to Java 11 installation.</span>
+<span class="sd">        java_max_ram (int): Maximum RAM (GB) allocated to Java.</span>
+<span class="sd">        satisfiability (SatisfiabilityConfig): Satisfiability settings.</span>
+<span class="sd">        materialization (MaterializationConfig): Materialization settings.</span>
+<span class="sd">        realization (RealizationConfig): Realization settings.</span>
+<span class="sd">        modularization (ModularizationConfig): Modularization settings.</span>
+<span class="sd">        decomposition (DecompositionConfig): Decomposition settings.</span>
+<span class="sd">        consistency (ConsistencyConfig): Consistency settings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">java_8_home</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">java_11_home</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">java_max_ram</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">satisfiability</span><span class="p">:</span> <span class="n">SatisfiabilityConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">SatisfiabilityConfig</span><span class="p">)</span>
+    <span class="n">materialization</span><span class="p">:</span> <span class="n">MaterializationConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">MaterializationConfig</span><span class="p">)</span>
+    <span class="n">realization</span><span class="p">:</span> <span class="n">RealizationConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">RealizationConfig</span><span class="p">)</span>
+    <span class="n">modularization</span><span class="p">:</span> <span class="n">ModularizationConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">ModularizationConfig</span><span class="p">)</span>
+    <span class="n">decomposition</span><span class="p">:</span> <span class="n">DecompositionConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">DecompositionConfig</span><span class="p">)</span>
+    <span class="n">consistency</span><span class="p">:</span> <span class="n">ConsistencyConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">ConsistencyConfig</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ReasoningConfig.from_dict">
+<a class="viewcode-back" href="../../jdex.html#jdex.config.ReasoningConfig.from_dict">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ReasoningConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a ReasoningConfig from a dictionary.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">java_max_ram</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;java_max_ram&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+            <span class="n">java_8_home</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;java_8_home&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;java_8_home&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">java_11_home</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;java_11_home&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;java_11_home&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">materialization</span><span class="o">=</span><span class="n">MaterializationConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;materialization&quot;</span><span class="p">)),</span>
+            <span class="n">realization</span><span class="o">=</span><span class="n">RealizationConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;realization&quot;</span><span class="p">)),</span>
+            <span class="n">modularization</span><span class="o">=</span><span class="n">ModularizationConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modularization&quot;</span><span class="p">)),</span>
+            <span class="n">decomposition</span><span class="o">=</span><span class="n">DecompositionConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;decomposition&quot;</span><span class="p">)),</span>
+            <span class="n">consistency</span><span class="o">=</span><span class="n">ConsistencyConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;consistency&quot;</span><span class="p">)),</span>
+            <span class="n">satisfiability</span><span class="o">=</span><span class="n">SatisfiabilityConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;satisfiability&quot;</span><span class="p">)),</span>
+        <span class="p">)</span></div>
+</div>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestLeakageFilteringConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for test leakage filtering.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        enabled (bool): Whether filtering is enabled.</span>
+<span class="sd">        minimum_frequency (float): Threshold for filtering leakage.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">minimum_frequency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.97</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TestLeakageFilteringConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a TestLeakageFilteringConfig from a dictionary.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">enabled</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">minimum_frequency</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;minimum_frequency&quot;</span><span class="p">,</span> <span class="mf">0.97</span><span class="p">),</span>
+        <span class="p">)</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SplitConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for dataset splitting.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        enabled (bool): Whether splitting is enabled.</span>
+<span class="sd">        train_percent (int): Percentage of training data.</span>
+<span class="sd">        validation_percent (int): Percentage of validation data.</span>
+<span class="sd">        test_percent (int): Percentage of test data.</span>
+<span class="sd">        transductive (bool): Whether to use transductive splitting.</span>
+<span class="sd">        test_leakage_filtering (TestLeakageFilteringConfig): Leakage filtering settings.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If percentages do not sum to 100 when enabled.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">train_percent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80</span>
+    <span class="n">validation_percent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">test_percent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">transductive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">test_leakage_filtering</span><span class="p">:</span> <span class="n">TestLeakageFilteringConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">TestLeakageFilteringConfig</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate split percentages.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_percent</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">validation_percent</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_percent</span>
+            <span class="k">if</span> <span class="n">total</span> <span class="o">!=</span> <span class="mi">100</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Split percentages must sum to 100, got </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SplitConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a SplitConfig from a dictionary.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">enabled</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">train_percent</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;train_percent&quot;</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span>
+            <span class="n">validation_percent</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;validation_percent&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+            <span class="n">test_percent</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;test_percent&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+            <span class="n">transductive</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;transductive&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">test_leakage_filtering</span><span class="o">=</span><span class="n">TestLeakageFilteringConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;test_leakage_filtering&quot;</span><span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PostProcessingConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for post-processing steps.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        json_conversion (bool): Whether to export JSON files.</span>
+<span class="sd">        id_mapping (bool): Whether to generate ID mappings.</span>
+<span class="sd">        tsv_conversion (bool): Whether to export TSV files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">json_conversion</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">id_mapping</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">tsv_conversion</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PostProcessingConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a PostProcessingConfig from a dictionary.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">json_conversion</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;json_conversion&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">id_mapping</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id_mapping&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">tsv_conversion</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tsv_conversion&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="JDEXConfig">
+<a class="viewcode-back" href="../../jdex.html#jdex.config.JDEXConfig">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">JDEXConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Top-level configuration for JDEX pipeline.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        dataset_name (str): Name of the dataset.</span>
+<span class="sd">        paths (PathsConfig): Input/output paths configuration.</span>
+<span class="sd">        verbose (int): Verbosity level.</span>
+<span class="sd">        interactive_shell (bool): Whether to enable interactive mode.</span>
+<span class="sd">        reasoning (ReasoningConfig): Reasoning configuration.</span>
+<span class="sd">        test_leakage_filtering (TestLeakageFilteringConfig): Global leakage filtering.</span>
+<span class="sd">        split (SplitConfig): Dataset splitting configuration.</span>
+<span class="sd">        description_logic_profile (DLProfile): DL profile (&quot;EL&quot;, &quot;ALC&quot;, &quot;SROIQ&quot;, or None).</span>
+<span class="sd">        post_processing (PostProcessingConfig): Post-processing configuration.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If an invalid description logic profile is provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">paths</span><span class="p">:</span> <span class="n">PathsConfig</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">interactive_shell</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">reasoning</span><span class="p">:</span> <span class="n">ReasoningConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">ReasoningConfig</span><span class="p">)</span>
+    <span class="n">test_leakage_filtering</span><span class="p">:</span> <span class="n">TestLeakageFilteringConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">TestLeakageFilteringConfig</span><span class="p">)</span>
+    <span class="n">split</span><span class="p">:</span> <span class="n">SplitConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">SplitConfig</span><span class="p">)</span>
+    <span class="n">description_logic_profile</span><span class="p">:</span> <span class="n">DLProfile</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">post_processing</span><span class="p">:</span> <span class="n">PostProcessingConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">PostProcessingConfig</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate description logic profile.&quot;&quot;&quot;</span>
+        <span class="n">allowed_profiles</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;EL&quot;</span><span class="p">,</span> <span class="s2">&quot;ALC&quot;</span><span class="p">,</span> <span class="s2">&quot;SROIQ&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description_logic_profile</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_profiles</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;description_logic_profile must be one of: &quot;</span>
+                <span class="s2">&quot;&#39;EL&#39;, &#39;ALC&#39;, &#39;SROIQ&#39;, or None.&quot;</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="JDEXConfig.from_dict">
+<a class="viewcode-back" href="../../jdex.html#jdex.config.JDEXConfig.from_dict">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;JDEXConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a JDEXConfig from a dictionary.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (dict[str, Any]): Configuration dictionary.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            JDEXConfig: Initialized configuration object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">dataset_name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;dataset_name&quot;</span><span class="p">],</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">interactive_shell</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;interactive_shell&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">paths</span><span class="o">=</span><span class="n">PathsConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;paths&quot;</span><span class="p">]),</span>
+            <span class="n">reasoning</span><span class="o">=</span><span class="n">ReasoningConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reasoning&quot;</span><span class="p">)),</span>
+            <span class="n">test_leakage_filtering</span><span class="o">=</span><span class="n">TestLeakageFilteringConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;test_leakage_filtering&quot;</span><span class="p">)</span>
+            <span class="p">),</span>
+            <span class="n">split</span><span class="o">=</span><span class="n">SplitConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;split&quot;</span><span class="p">)),</span>
+            <span class="n">description_logic_profile</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description_logic_profile&quot;</span><span class="p">),</span>
+            <span class="n">post_processing</span><span class="o">=</span><span class="n">PostProcessingConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;post_processing&quot;</span><span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="JDEXConfig.pretty_print">
+<a class="viewcode-back" href="../../jdex.html#jdex.config.JDEXConfig.pretty_print">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a formatted string summarizing the configuration.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Human-readable configuration summary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">JDEX Configuration Summary</span>
+<span class="s2">--------------------------</span>
+
+<span class="s2">GENERAL SETTINGS</span>
+
+<span class="s2">dataset_name: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_name</span><span class="si">}</span>
+<span class="s2">verbose: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="si">}</span>
+<span class="s2">interactive_shell: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">interactive_shell</span><span class="si">}</span>
+
+<span class="s2">PATHS SETTINGS</span>
+
+<span class="s2">schema: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span>
+<span class="s2">data: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">data</span><span class="si">}</span>
+<span class="s2">output: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">output</span><span class="si">}</span>
+
+<span class="s2">REASONING SERVICES SETTINGS</span>
+
+<span class="s2">java_8_home: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">java_8_home</span><span class="si">}</span>
+<span class="s2">java_11_home: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">java_11_home</span><span class="si">}</span>
+<span class="s2">java_max_ram: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">java_max_ram</span><span class="si">}</span>
+
+<span class="s2">consistency:</span>
+<span class="s2">    convert_ntriples: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">consistency</span><span class="o">.</span><span class="n">convert_ntriples</span><span class="si">}</span>
+
+<span class="s2">satisfiability:</span>
+<span class="s2">    filter_unsatisfiable: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">satisfiability</span><span class="o">.</span><span class="n">filter_unsatisfiable</span><span class="si">}</span>
+<span class="s2">    reasoner: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">satisfiability</span><span class="o">.</span><span class="n">reasoner</span><span class="si">}</span>
+
+<span class="s2">materialization:</span>
+<span class="s2">    enabled: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">materialization</span><span class="o">.</span><span class="n">enabled</span><span class="si">}</span>
+<span class="s2">    axioms: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">materialization</span><span class="o">.</span><span class="n">axioms</span><span class="si">}</span>
+<span class="s2">    reasoner: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">materialization</span><span class="o">.</span><span class="n">reasoner</span><span class="si">}</span>
+
+<span class="s2">realization:</span>
+<span class="s2">    enabled: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">realization</span><span class="o">.</span><span class="n">enabled</span><span class="si">}</span>
+<span class="s2">    reasoner: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">realization</span><span class="o">.</span><span class="n">reasoner</span><span class="si">}</span>
+
+<span class="s2">modularization:</span>
+<span class="s2">    enabled: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">modularization</span><span class="o">.</span><span class="n">enabled</span><span class="si">}</span>
+
+<span class="s2">decomposition:</span>
+<span class="s2">    tbox: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">decomposition</span><span class="o">.</span><span class="n">tbox</span><span class="si">}</span>
+<span class="s2">    rbox: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning</span><span class="o">.</span><span class="n">decomposition</span><span class="o">.</span><span class="n">rbox</span><span class="si">}</span>
+
+<span class="s2">description_logic_profile: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">description_logic_profile</span><span class="si">}</span>
+
+<span class="s2">MACHINE LEARNING SETTINGS</span>
+
+
+
+<span class="s2">split:</span>
+<span class="s2">    enabled: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">enabled</span><span class="si">}</span>
+<span class="s2">    train_percent: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">train_percent</span><span class="si">}</span>
+<span class="s2">    validation_percent: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">validation_percent</span><span class="si">}</span>
+<span class="s2">    test_percent: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">test_percent</span><span class="si">}</span>
+<span class="s2">    transductive: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">transductive</span><span class="si">}</span>
+<span class="s2">    test_leakage_filtering:</span>
+<span class="s2">        enabled: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">test_leakage_filtering</span><span class="o">.</span><span class="n">enabled</span><span class="si">}</span>
+<span class="s2">        minimum_frequency: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">test_leakage_filtering</span><span class="o">.</span><span class="n">minimum_frequency</span><span class="si">}</span>
+
+<span class="s2">post_processing:</span>
+<span class="s2">    json_conversion: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">post_processing</span><span class="o">.</span><span class="n">json_conversion</span><span class="si">}</span>
+<span class="s2">    id_mapping: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">post_processing</span><span class="o">.</span><span class="n">id_mapping</span><span class="si">}</span>
+<span class="s2">    tsv_conversion: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">post_processing</span><span class="o">.</span><span class="n">tsv_conversion</span><span class="si">}</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+</div>
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Ivan Diliso and Roberto Barile.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

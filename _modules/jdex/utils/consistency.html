@@ -1,0 +1,233 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jdex.utils.consistency &mdash; KG-SaF: Official Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+    <link rel="canonical" href="https://ivandiliso.github.io/kg-saf/_modules/jdex/utils/consistency.html" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=72d88caf"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            KG-SaF: Building Complete and Curated Datasets for Machine Learning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config.html">JDEX Configuration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorials and Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">KG-SaF: Building Complete and Curated Datasets for Machine Learning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">jdex.utils.consistency</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for jdex.utils.consistency</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">URIRef</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib.namespace</span><span class="w"> </span><span class="kn">import</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">split_uri</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">jdex.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">CLI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jdex.owl.reasoning</span><span class="w"> </span><span class="kn">import</span> <span class="n">Reasoner</span>
+
+
+<div class="viewcode-block" id="InconsistenciesFilterer">
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.consistency.InconsistenciesFilterer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">InconsistenciesFilterer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iteratively detect and remove inconsistent assertions from a knowledge graph.</span>
+
+<span class="sd">    This class uses an external OWL reasoner (via the ``Reasoner`` abstraction)</span>
+<span class="sd">    to check ontology consistency and compute justifications for inconsistencies.</span>
+<span class="sd">    It then removes offending assertions (class assertions and object property</span>
+<span class="sd">    assertions) until the knowledge graph becomes consistent.</span>
+
+<span class="sd">    The filtering process is destructive with respect to the working copy of the</span>
+<span class="sd">    ontology but preserves the original input file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">java_8_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">java_11_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the consistency filterer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            java_8_path (str): Path to a Java 8 installation (required for Pellet justification).</span>
+<span class="sd">            java_11_path (str): Path to a Java 11 installation (required for ROBOT and related tools).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">CLI</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reasoner</span> <span class="o">=</span> <span class="n">Reasoner</span><span class="p">(</span>
+            <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./reasoners/unpack&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">(),</span>
+            <span class="n">java8_path</span><span class="o">=</span><span class="n">java_8_path</span><span class="p">,</span>
+            <span class="n">java11_path</span><span class="o">=</span><span class="n">java_11_path</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="InconsistenciesFilterer.filter_inconsistencies">
+<a class="viewcode-back" href="../../../jdex.html#jdex.utils.consistency.InconsistenciesFilterer.filter_inconsistencies">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_inconsistencies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">knowledge_graph</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run iterative inconsistency detection and filtering on a knowledge graph.</span>
+
+<span class="sd">        The method performs the following steps:</span>
+
+<span class="sd">        1. Copies the input ontology to a working file (``fkg.owl``).</span>
+<span class="sd">        2. Parses and normalizes the ontology serialization.</span>
+<span class="sd">        3. Repeatedly:</span>
+<span class="sd">            - Checks consistency using the configured reasoner.</span>
+<span class="sd">            - If inconsistent, computes a justification.</span>
+<span class="sd">            - Extracts offending assertions (ClassAssertion and ObjectPropertyAssertion).</span>
+<span class="sd">            - Removes those assertions from the graph.</span>
+<span class="sd">        4. Stops when the ontology becomes consistent.</span>
+<span class="sd">        5. Writes removed triples to a separate file for inspection.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            knowledge_graph (str): Path to the input ontology file (.owl).</span>
+<span class="sd">            output_folder (str): Directory where intermediate and output files will be stored.</span>
+
+<span class="sd">        Side Effects:</span>
+<span class="sd">            - Creates a working ontology file ``fkg.owl`` in the output directory.</span>
+<span class="sd">            - Writes a justification file ``justification.owl`` during processing.</span>
+<span class="sd">            - Writes removed triples to ``removed.nt``.</span>
+<span class="sd">            - Modifies the working ontology until it becomes consistent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">logo</span><span class="p">(</span><span class="n">tool_name</span><span class="o">=</span><span class="s2">&quot;JDEX Consistency&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">rule</span><span class="p">(</span><span class="s2">&quot;Starting Inconsistency Filtering&quot;</span><span class="p">)</span>
+
+        <span class="n">op</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_folder</span><span class="p">)</span>
+        <span class="n">op</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">kp</span> <span class="o">=</span> <span class="n">op</span> <span class="o">/</span> <span class="s2">&quot;fkg.owl&quot;</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">knowledge_graph</span><span class="p">),</span> <span class="n">kp</span><span class="p">)</span>
+
+        <span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">kp</span><span class="p">)</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">kp</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xml&quot;</span><span class="p">)</span>
+
+        <span class="n">out_removed</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reasoner</span><span class="o">.</span><span class="n">consistency</span><span class="p">(</span><span class="n">kp</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+                <span class="n">step</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;[Reasoning Step </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">] Knowledge Graph is NOT Consistent: Running Filtering&quot;</span>
+                <span class="p">)</span>
+                <span class="n">justification</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reasoner</span><span class="o">.</span><span class="n">justification</span><span class="p">(</span><span class="n">kp</span><span class="p">,</span> <span class="n">op</span> <span class="o">/</span> <span class="s2">&quot;justification.owl&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">justification</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;ClassAssertion&quot;</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FOUND ONE&quot;</span><span class="p">)</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;ClassAssertion(&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">URIRef</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&lt;&gt;&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+                        <span class="n">triple</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">triple</span> <span class="ow">in</span> <span class="n">g</span><span class="p">:</span>
+                            <span class="n">out_removed</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
+                            <span class="n">g</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
+                            <span class="n">found</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">success</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">found</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">] Removed &lt;</span><span class="si">{</span><span class="n">triple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> type </span><span class="si">{</span><span class="n">triple</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+                            <span class="p">)</span>
+                    <span class="k">if</span> <span class="s2">&quot;ObjectPropertyAssertion&quot;</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">:</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">elem</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;ObjectPropertyAssertion(&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">URIRef</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&lt;&gt;&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+                        <span class="n">triple</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">triple</span> <span class="ow">in</span> <span class="n">g</span><span class="p">:</span>
+                            <span class="n">out_removed</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
+                            <span class="n">g</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
+                            <span class="n">found</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">success</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">found</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">] Removed &lt;</span><span class="si">{</span><span class="n">triple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">triple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">triple</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+                            <span class="p">)</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">kp</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xml&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">found</span><span class="si">}</span><span class="s2"> Inconsistencies&quot;</span><span class="p">)</span>
+        <span class="n">out_removed</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">output_folder</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;removed.nt&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;ntriples&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Ivan Diliso and Roberto Barile.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

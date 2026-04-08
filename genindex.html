@@ -43,9 +43,10 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quick.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials and Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data.html"><strong>KG-SaF-Data</strong>: Complete KGR Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jdex.html"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
@@ -83,6 +84,7 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#O"><strong>O</strong></a>
@@ -96,17 +98,19 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.reason.ReasonerUtility.check_result">check_result() (kgsaf_jdex.utils.reason.ReasonerUtility method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.class_assertions">class_assertions (jdex.loaders.torch.KnowledgeGraph property)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.class_assertions">class_assertions (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph property)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.class_to_id">class_to_id() (jdex.loaders.torch.KnowledgeGraph method)</a>
+</li>
+      <li><a href="jdex.html#id0">consistency (jdex.config.ReasoningConfig attribute)</a>, <a href="jdex.html#jdex.config.ReasoningConfig.consistency">[1]</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.class_to_id">class_to_id() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.owl.reasoning.Reasoner.consistency">consistency() (jdex.owl.reasoning.Reasoner method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.TSVConverter.convert">convert() (kgsaf_jdex.utils.conversion.TSVConverter method)</a>
+      <li><a href="jdex.html#jdex.owl.reasoning.Reasoner.conversion">conversion() (jdex.owl.reasoning.Reasoner method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.utils.reason.ReasonerUtility.convert_owl">convert_owl() (kgsaf_jdex.utils.reason.ReasonerUtility method)</a>
+      <li><a href="jdex.html#jdex.utils.postprocessing.TSVConverter.convert">convert() (jdex.utils.postprocessing.TSVConverter method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -114,11 +118,17 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.dataset_location">dataset_location (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph property)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.dataset_location">dataset_location (jdex.loaders.torch.KnowledgeGraph property)</a>
+</li>
+      <li><a href="jdex.html#id9">dataset_name (jdex.config.JDEXConfig attribute)</a>, <a href="jdex.html#jdex.config.JDEXConfig.dataset_name">[1]</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.modularization.SchemaDecomposer.decompose">decompose() (kgsaf_jdex.utils.modularization.SchemaDecomposer method)</a>
+      <li><a href="jdex.html#jdex.owl.decomposition.SchemaDecomposer.decompose">decompose() (jdex.owl.decomposition.SchemaDecomposer method)</a>
+</li>
+      <li><a href="jdex.html#id1">decomposition (jdex.config.ReasoningConfig attribute)</a>, <a href="jdex.html#jdex.config.ReasoningConfig.decomposition">[1]</a>
+</li>
+      <li><a href="jdex.html#id10">description_logic_profile (jdex.config.JDEXConfig attribute)</a>, <a href="jdex.html#jdex.config.JDEXConfig.description_logic_profile">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -126,29 +136,61 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.reason.ReasonerUtility.filter_unsatisfiable">filter_unsatisfiable() (kgsaf_jdex.utils.reason.ReasonerUtility method)</a>
+      <li><a href="jdex.html#jdex.utils.consistency.InconsistenciesFilterer.filter_inconsistencies">filter_inconsistencies() (jdex.utils.consistency.InconsistenciesFilterer method)</a>
 </li>
+      <li><a href="jdex.html#jdex.owl.reasoning.Reasoner.filtering">filtering() (jdex.owl.reasoning.Reasoner method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="jdex.html#jdex.config.JDEXConfig.from_dict">from_dict() (jdex.config.JDEXConfig class method)</a>
+
+      <ul>
+        <li><a href="jdex.html#jdex.config.ReasoningConfig.from_dict">(jdex.config.ReasoningConfig class method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.id_to_class">id_to_class() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.id_to_class">id_to_class() (jdex.loaders.torch.KnowledgeGraph method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.id_to_individual">id_to_individual() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.id_to_individual">id_to_individual() (jdex.loaders.torch.KnowledgeGraph method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.id_to_obj_prop">id_to_obj_prop() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.id_to_obj_prop">id_to_obj_prop() (jdex.loaders.torch.KnowledgeGraph method)</a>
+</li>
+      <li><a href="jdex.html#jdex.utils.postprocessing.IDMapper">IDMapper (class in jdex.utils.postprocessing)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.IDMapper">IDMapper (class in kgsaf_jdex.utils.conversion)</a>
+      <li><a href="jdex.html#jdex.utils.consistency.InconsistenciesFilterer">InconsistenciesFilterer (class in jdex.utils.consistency)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.individual_classes">individual_classes() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.individual_classes">individual_classes() (jdex.loaders.torch.KnowledgeGraph method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.individual_to_id">individual_to_id() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.individual_to_id">individual_to_id() (jdex.loaders.torch.KnowledgeGraph method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.is_leaf">is_leaf() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#id11">interactive_shell (jdex.config.JDEXConfig attribute)</a>, <a href="jdex.html#jdex.config.JDEXConfig.interactive_shell">[1]</a>
+</li>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.is_leaf">is_leaf() (jdex.loaders.torch.KnowledgeGraph method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="jdex.html#id2">java_11_home (jdex.config.ReasoningConfig attribute)</a>, <a href="jdex.html#jdex.config.ReasoningConfig.java_11_home">[1]</a>
+</li>
+      <li><a href="jdex.html#id3">java_8_home (jdex.config.ReasoningConfig attribute)</a>, <a href="jdex.html#jdex.config.ReasoningConfig.java_8_home">[1]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="jdex.html#id4">java_max_ram (jdex.config.ReasoningConfig attribute)</a>, <a href="jdex.html#jdex.config.ReasoningConfig.java_max_ram">[1]</a>
+</li>
+      <li><a href="jdex.html#jdex.config.JDEXConfig">JDEXConfig (class in jdex.config)</a>
+</li>
+      <li><a href="jdex.html#jdex.owl.reasoning.Reasoner.justification">justification() (jdex.owl.reasoning.Reasoner method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -156,7 +198,7 @@
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph">KnowledgeGraph (class in kgsaf_jdex.loaders.pytorch.dataset)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph">KnowledgeGraph (class in jdex.loaders.torch)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -164,11 +206,19 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.IDMapper.map_to_id">map_to_id() (kgsaf_jdex.utils.conversion.IDMapper method)</a>
+      <li><a href="jdex.html#jdex.utils.postprocessing.IDMapper.map_to_id">map_to_id() (jdex.utils.postprocessing.IDMapper method)</a>
+</li>
+      <li><a href="jdex.html#id5">materialization (jdex.config.ReasoningConfig attribute)</a>, <a href="jdex.html#jdex.config.ReasoningConfig.materialization">[1]</a>
+</li>
+      <li><a href="jdex.html#jdex.owl.reasoning.Reasoner.materialization">materialization() (jdex.owl.reasoning.Reasoner method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.modularization.SignatureModularizer.modularize">modularize() (kgsaf_jdex.utils.modularization.SignatureModularizer method)</a>
+      <li><a href="jdex.html#jdex.owl.reasoning.Reasoner.merging">merging() (jdex.owl.reasoning.Reasoner method)</a>
+</li>
+      <li><a href="jdex.html#id6">modularization (jdex.config.ReasoningConfig attribute)</a>, <a href="jdex.html#jdex.config.ReasoningConfig.modularization">[1]</a>
+</li>
+      <li><a href="jdex.html#jdex.owl.modularization.SignatureModularizer.modularize">modularize() (jdex.owl.modularization.SignatureModularizer method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -176,23 +226,23 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.obj_prop_domain">obj_prop_domain() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.obj_prop_domain">obj_prop_domain() (jdex.loaders.torch.KnowledgeGraph method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.obj_prop_range">obj_prop_range() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.obj_prop_range">obj_prop_range() (jdex.loaders.torch.KnowledgeGraph method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.obj_prop_to_id">obj_prop_to_id() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.obj_prop_to_id">obj_prop_to_id() (jdex.loaders.torch.KnowledgeGraph method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.obj_props_domain">obj_props_domain (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph property)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.obj_props_domain">obj_props_domain (jdex.loaders.torch.KnowledgeGraph property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.obj_props_domains_range">obj_props_domains_range (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph property)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.obj_props_domains_range">obj_props_domains_range (jdex.loaders.torch.KnowledgeGraph property)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.obj_props_hierarchy">obj_props_hierarchy (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph property)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.obj_props_hierarchy">obj_props_hierarchy (jdex.loaders.torch.KnowledgeGraph property)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.obj_props_range">obj_props_range (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph property)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.obj_props_range">obj_props_range (jdex.loaders.torch.KnowledgeGraph property)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.OWLConverter">OWLConverter (class in kgsaf_jdex.utils.conversion)</a>
+      <li><a href="jdex.html#jdex.utils.postprocessing.OWLConverter">OWLConverter (class in jdex.utils.postprocessing)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -200,19 +250,25 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.preprocess">preprocess() (kgsaf_jdex.utils.conversion.OWLConverter method)</a>
+      <li><a href="jdex.html#id12">paths (jdex.config.JDEXConfig attribute)</a>, <a href="jdex.html#jdex.config.JDEXConfig.paths">[1]</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_class_assertions">preprocess_class_assertions() (kgsaf_jdex.utils.conversion.OWLConverter method)</a>
+      <li><a href="jdex.html#id13">post_processing (jdex.config.JDEXConfig attribute)</a>, <a href="jdex.html#jdex.config.JDEXConfig.post_processing">[1]</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_obj_prop_domain_range">preprocess_obj_prop_domain_range() (kgsaf_jdex.utils.conversion.OWLConverter method)</a>
+      <li><a href="jdex.html#jdex.utils.postprocessing.OWLConverter.preprocess">preprocess() (jdex.utils.postprocessing.OWLConverter method)</a>
+</li>
+      <li><a href="jdex.html#jdex.utils.postprocessing.OWLConverter.preprocess_class_assertions">preprocess_class_assertions() (jdex.utils.postprocessing.OWLConverter method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_obj_prop_hierarchy">preprocess_obj_prop_hierarchy() (kgsaf_jdex.utils.conversion.OWLConverter method)</a>
+      <li><a href="jdex.html#jdex.utils.postprocessing.OWLConverter.preprocess_obj_prop_domain_range">preprocess_obj_prop_domain_range() (jdex.utils.postprocessing.OWLConverter method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.preprocess_taxonomy">preprocess_taxonomy() (kgsaf_jdex.utils.conversion.OWLConverter method)</a>
+      <li><a href="jdex.html#jdex.utils.postprocessing.OWLConverter.preprocess_obj_prop_hierarchy">preprocess_obj_prop_hierarchy() (jdex.utils.postprocessing.OWLConverter method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.TSVConverter.preprocess_triples">preprocess_triples() (kgsaf_jdex.utils.conversion.TSVConverter method)</a>
+      <li><a href="jdex.html#jdex.utils.postprocessing.OWLConverter.preprocess_taxonomy">preprocess_taxonomy() (jdex.utils.postprocessing.OWLConverter method)</a>
+</li>
+      <li><a href="jdex.html#jdex.utils.postprocessing.TSVConverter.preprocess_triples">preprocess_triples() (jdex.utils.postprocessing.TSVConverter method)</a>
+</li>
+      <li><a href="jdex.html#jdex.config.JDEXConfig.pretty_print">pretty_print() (jdex.config.JDEXConfig method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -220,11 +276,17 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.reason.ReasonerUtility.reason">reason() (kgsaf_jdex.utils.reason.ReasonerUtility method)</a>
+      <li><a href="jdex.html#id7">realization (jdex.config.ReasoningConfig attribute)</a>, <a href="jdex.html#jdex.config.ReasoningConfig.realization">[1]</a>
+</li>
+      <li><a href="jdex.html#jdex.owl.reasoning.Reasoner.realization">realization() (jdex.owl.reasoning.Reasoner method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.reason.ReasonerUtility">ReasonerUtility (class in kgsaf_jdex.utils.reason)</a>
+      <li><a href="jdex.html#jdex.owl.reasoning.Reasoner">Reasoner (class in jdex.owl.reasoning)</a>
+</li>
+      <li><a href="jdex.html#id14">reasoning (jdex.config.JDEXConfig attribute)</a>, <a href="jdex.html#jdex.config.JDEXConfig.reasoning">[1]</a>
+</li>
+      <li><a href="jdex.html#jdex.config.ReasoningConfig">ReasoningConfig (class in jdex.config)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -232,29 +294,33 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.modularization.SchemaDecomposer">SchemaDecomposer (class in kgsaf_jdex.utils.modularization)</a>
+      <li><a href="jdex.html#id8">satisfiability (jdex.config.ReasoningConfig attribute)</a>, <a href="jdex.html#jdex.config.ReasoningConfig.satisfiability">[1]</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.IDMapper.serialize">serialize() (kgsaf_jdex.utils.conversion.IDMapper method)</a>
+      <li><a href="jdex.html#jdex.owl.reasoning.Reasoner.satisfiability">satisfiability() (jdex.owl.reasoning.Reasoner method)</a>
+</li>
+      <li><a href="jdex.html#jdex.owl.decomposition.SchemaDecomposer">SchemaDecomposer (class in jdex.owl.decomposition)</a>
+</li>
+      <li><a href="jdex.html#jdex.utils.postprocessing.IDMapper.serialize">serialize() (jdex.utils.postprocessing.IDMapper method)</a>
 
       <ul>
-        <li><a href="jdex.html#kgsaf_jdex.utils.conversion.OWLConverter.serialize">(kgsaf_jdex.utils.conversion.OWLConverter method)</a>
+        <li><a href="jdex.html#jdex.utils.postprocessing.OWLConverter.serialize">(jdex.utils.postprocessing.OWLConverter method)</a>
 </li>
-        <li><a href="jdex.html#kgsaf_jdex.utils.conversion.TSVConverter.serialize">(kgsaf_jdex.utils.conversion.TSVConverter method)</a>
-</li>
-        <li><a href="jdex.html#kgsaf_jdex.utils.reason.ReasonerUtility.serialize">(kgsaf_jdex.utils.reason.ReasonerUtility method)</a>
+        <li><a href="jdex.html#jdex.utils.postprocessing.TSVConverter.serialize">(jdex.utils.postprocessing.TSVConverter method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.utils.modularization.SignatureModularizer">SignatureModularizer (class in kgsaf_jdex.utils.modularization)</a>
+      <li><a href="jdex.html#jdex.owl.modularization.SignatureModularizer">SignatureModularizer (class in jdex.owl.modularization)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.sub_classes">sub_classes() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#id15">split (jdex.config.JDEXConfig attribute)</a>, <a href="jdex.html#jdex.config.JDEXConfig.split">[1]</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.sub_obj_prop">sub_obj_prop() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.sub_classes">sub_classes() (jdex.loaders.torch.KnowledgeGraph method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.sup_classes">sup_classes() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.sub_obj_prop">sub_obj_prop() (jdex.loaders.torch.KnowledgeGraph method)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.sup_obj_prop">sup_obj_prop() (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph method)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.sup_classes">sup_classes() (jdex.loaders.torch.KnowledgeGraph method)</a>
+</li>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.sup_obj_prop">sup_obj_prop() (jdex.loaders.torch.KnowledgeGraph method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -262,15 +328,17 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.taxonomy">taxonomy (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph property)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.taxonomy">taxonomy (jdex.loaders.torch.KnowledgeGraph property)</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.test">test (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph property)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.test">test (jdex.loaders.torch.KnowledgeGraph property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.train">train (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph property)</a>
+      <li><a href="jdex.html#id16">test_leakage_filtering (jdex.config.JDEXConfig attribute)</a>, <a href="jdex.html#jdex.config.JDEXConfig.test_leakage_filtering">[1]</a>
 </li>
-      <li><a href="jdex.html#kgsaf_jdex.utils.conversion.TSVConverter">TSVConverter (class in kgsaf_jdex.utils.conversion)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.train">train (jdex.loaders.torch.KnowledgeGraph property)</a>
+</li>
+      <li><a href="jdex.html#jdex.utils.postprocessing.TSVConverter">TSVConverter (class in jdex.utils.postprocessing)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -278,7 +346,11 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jdex.html#kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph.valid">valid (kgsaf_jdex.loaders.pytorch.dataset.KnowledgeGraph property)</a>
+      <li><a href="jdex.html#jdex.loaders.torch.KnowledgeGraph.valid">valid (jdex.loaders.torch.KnowledgeGraph property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="jdex.html#id17">verbose (jdex.config.JDEXConfig attribute)</a>, <a href="jdex.html#jdex.config.JDEXConfig.verbose">[1]</a>
 </li>
   </ul></td>
 </tr></table>
