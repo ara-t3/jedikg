@@ -1,8 +1,30 @@
 # Tutorials and Guides
 
+## Running JDEX on Example Files
+
+We provided in the `tutorial_input` folder a set of ontology schema `schema.owl`, and facts `facts.owl` (class and object property assertions) derived from DbPedia to show of our JDEX Suite. Be aware that we added an artificial unsatisfiable class to this schema, in order to show you how the tool can automatically recognize these and prompt you with the possibility of automatically filtering them form the knowledge base. A ready-to-use example configuration is available as `configuration.json`, in this all reaosning step are enabled, feel free to play around with configuration to understand all the possible JDEX generation possibilities!
+
+```{warning}
+Be aware that `configuration.json` need to be modified with your JAVA_8_HOME and JAVA_11_HOME paths! For this tutorial, Java 8 is not needed, since the ontology is consistent and no justification tool (Pellet) is needed!
+```
+
+
+
+### Instructions
+After installation, from the base folder run:
+```bash
+./run_jdex --config ./tutorials/tutorial_input/configuration.json
+```
+
+The JDEX banner will show, follow the CLI instruction to go forward!
+
+![](./jdex.png)
+
+
+
 ## Loading and Analyzing a KG-SaF Datasets in PyTorch 
 
-This tutorial demonstrates how to load a Knowledge Graph dataset using kgsaf_jdex and inspect its components, classes, and object property hierarchies. You can find a full executable Notebook in `tutorial/dataset_loader.ipynb`. For this example the `APULIATRAVEL` dataset will be used.
+This tutorial demonstrates how to load a Knowledge Graph dataset using kgsaf_jdex and inspect its components, classes, and object property hierarchies. You can find a full executable Notebook in `tutorials/torch_loader.ipynb`. This example will be run on the tutorial dataset generated in previous phase (an already generated dataset is available)
 
 **Setup and Imports**
 
@@ -18,17 +40,15 @@ import kgsaf_jdex.utils.conventions.paths as pc
 from kgsaf_jdex.loaders.pytorch.dataset import KnowledgeGraph
 ```
 
-```{tip}
-Adding the parent directory to `sys.path` allows Python to locate your `kgsaf_jdex` package if it is not installed system-wide.
-```
-
 ### Loading the Dataset
 
 Use the `KnowledgeGraph` class to load a dataset from the folder created by the unpacking utility:
 
 ```python
+cwd = Path.cwd().parent
+
 kg = KnowledgeGraph(
-    path="<DATASET_PATH>"
+    path= cwd / "tutorials/tutorial_dataset"
 )
 ```
 
@@ -52,14 +72,14 @@ print(f"{'Object property ranges':<35} | {kg.obj_props_range.shape}")
 ```text
 Dataset Component                   | Shape
 --------------------------------------------------
-Training triples                    | torch.Size([65401, 3])
-Test triples                        | torch.Size([7695, 3])
-Validation triples                  | torch.Size([3847, 3])
-Class assertions                    | torch.Size([35915, 2])
-Taxonomy (TBox)                     | torch.Size([54, 2])
-Object property hierarchy           | torch.Size([11, 2])
-Object property domains             | torch.Size([71, 2])
-Object property ranges              | torch.Size([69, 2])
+Training triples                    | torch.Size([22812, 3])
+Test triples                        | torch.Size([2852, 3])
+Validation triples                  | torch.Size([2852, 3])
+Class assertions                    | torch.Size([171347, 2])
+Taxonomy (TBox)                     | torch.Size([1942, 2])
+Object property hierarchy           | torch.Size([9, 2])
+Object property domains             | torch.Size([504, 2])
+Object property ranges              | torch.Size([665, 2])
 ```
 
 ### Exploring Individuals Classes and Object Properties
@@ -78,9 +98,9 @@ print(f"Testing on object property: {op_uri_test}")
 ```
 
 ```text
-Testing on individual: https://w3id.org/italia/onto/CLV/StreetToponym/31148_Castello_street_toponym
-Testing on class: https://apuliatravel.org/td/HistoricPalace
-Testing on object property: https://w3id.org/italia/onto/CLV/hasDirectHigherRank
+Testing on individual: http://dbpedia.org/resource/Eduard_Zorn
+Testing on class: http://dbpedia.org/ontology/Publisher
+Testing on object property: http://dbpedia.org/ontology/frazioni
 ```
 
 ### Inspecting Class Assertions
@@ -94,9 +114,19 @@ for c in cls:
     print(f"\t[{c}] {kg.id_to_class(c)}")
 ```
 ```text
-Testing the Class Assertions of [7157] https://w3id.org/italia/onto/CLV/StreetToponym/31148_Castello_street_toponym
-	 Tensor [58]
-	 [58] https://w3id.org/italia/onto/CLV/StreetToponym
+Testing the Class Assertions of [5779] http://dbpedia.org/resource/Eduard_Zorn
+	 Tensor [193, 297, 67, 119, 346, 251, 360, 372, 293, 140, 13]
+	 [193] http://dbpedia.org/ontology/Species
+	 [297] http://www.wikidata.org/entity/Q215627
+	 [67] http://dbpedia.org/ontology/Eukaryote
+	 [119] http://dbpedia.org/ontology/MilitaryPerson
+	 [346] http://www.wikidata.org/entity/Q5
+	 [251] http://schema.org/Person
+	 [360] http://www.wikidata.org/entity/Q729
+	 [372] http://xmlns.com/foaf/0.1/Person
+	 [293] http://www.wikidata.org/entity/Q19088
+	 [140] http://dbpedia.org/ontology/Person
+	 [13] http://dbpedia.org/ontology/Animal
 ```
 
 ### Exploring Class Hierarchies
@@ -117,10 +147,16 @@ for c in sub_cls:
 ```
 
 ```text
-Testing the Hierarchy of [84] https://w3id.org/italia/onto/TI/Year. Leaf class? True
+Testing the Hierarchy of [158] http://dbpedia.org/ontology/Publisher. Leaf class? True
 	 Superclasses
-		 Tensor: [81]
-		 [81] https://w3id.org/italia/onto/TI/TemporalEntity
+		 Tensor: [51, 4, 305, 341, 332, 250, 137]
+		 [51] http://dbpedia.org/ontology/Company
+		 [4] http://dbpedia.org/ontology/Agent
+		 [305] http://www.wikidata.org/entity/Q24229398
+		 [341] http://www.wikidata.org/entity/Q4830453
+		 [332] http://www.wikidata.org/entity/Q43229
+		 [250] http://schema.org/Organization
+		 [137] http://dbpedia.org/ontology/Organisation
 	 Subclasses
 		 Tensor: []
 ```
@@ -159,29 +195,27 @@ for c in range:
 ```
 
 ```text
-Testing the Role Hierarhcy of [41] https://w3id.org/italia/onto/SM/hasEmailType
+Testing the Role Hierarhcy of [102] http://dbpedia.org/ontology/genre
 	 Super Obj Prop
 		 Tensor: []
 	 Sub Obj Prop
-		 Tensor: []
+		 Tensor: [138]
+		 [138] http://dbpedia.org/ontology/literaryGenre
 
-Testing the Role Hierarhcy of [41] https://w3id.org/italia/onto/SM/hasEmailType
+Testing the Role Hierarhcy of [102] http://dbpedia.org/ontology/genre
 	 Domain
-		 Tensor: [66]
-		 [66] https://w3id.org/italia/onto/SM/Email
+		 Tensor: [-1]
+		 [-1] http://schema.org/Thing
 	 Range
-		 Tensor: [67]
-		 [67] https://w3id.org/italia/onto/SM/EmailType
+		 Tensor: [79]
+		 [79] http://dbpedia.org/ontology/Genre
 ```
 
 ## Running TransE on KG-SaF Datasets
 
 This tutorial demonstrates how to train and evaluate **TransE** KGR model
-on a dataset prepared with the `kgsaf_jdex` loaders.  You can find a full executable Notebook in `tutorial/kge_pykeen.ipynb`. The example will use the `APULIATRAVEL` dataset.
+on a dataset prepared with the `jdex` loaders.  You can find a full executable Notebook in `tutorial/pykeen_training.ipynb`. The example will use the tutorial dataset.
 
-```{note}
-Make sure the dataset is unpacked and the paths in `pc` (paths conventions) point to the correct files.
-```
 
 **Imports**
 
@@ -209,7 +243,8 @@ Here we load entity and relation mappings from JSON files, and then build Triple
 for training, validation, and testing. PyKEEN uses these to manage KG data efficiently.
 
 ```python
-dataset_path = Path("/home/navis/dev/kg-saf/kgsaf_data/datasets/base/unpack/APULIATRAVEL-BASE")
+cwd = Path.cwd().parent
+dataset_path = cwd / "tutorials/tutorial_dataset"
 
 # Load entity and relation mappings
 with open(dataset_path / pc.INDIVIDUAL_MAPPINGS, "r") as f:
@@ -292,61 +327,3 @@ results.to_dict()
 Evaluating on cpu: 100% 7.70k/7.70k [01:19<00:00, 86.9triple/s]
 INFO:pykeen.evaluation.evaluator:Evaluation took 79.32s seconds
 ```
-
-
-
-## Using KG-SaF-JDeX on Custom Knowledge Graphs
-
-```{warning}
-Please follow the **Quick Start Guide** before going forward.
-```
-
-```{note}
-This guide is also available as a Notebook in `tutorial/general.ipynb`, a Python shell executable script in `tutorial/general.py` and shell script `tutorial/general.sh`.  For easier customization, we suggest following the Notebook.
-```
-
-This guide show how to use the provided **KG-SaF-JDeX Workflow** Functionalities to generate a new Schema and Data Dataset from your custom Knowledge Graph.  This guide provides an example dataset in the INPUT folder to test the functionalities. All the produces files will be created in the OUTPUT folder.  
-
-This notebook expectes the following inputs:
-
-- Any Knowledge Graph with both Schema and Data in a unique file (any format supported by the ROBOT Utility, the file will be converted to an intermediate OWL File)
-- The KG need to contain ABox assertions (object property assertions) in order to safely run the machine learning splitting and necessary checks
-- This module is specifically designed for generating dataset from Knowledge graphs that contain rich schema and large scale ABox (object property assertions)
-
-And applies the following procedures following the KG-SaF-JDeX workflow:
-
-- Conversion to OWL Format
-- Consistency Check
-- Removal of Unsatisfiable Classes
-- Materialization and Realization
-- Filtering of ABox Individuals and Object Properties
-- Object Propety Assertion splitting using Coverage Criterion in Training, Test and Validatin Split
-- Inversion Leakage check and filtering
-- Class Assertions subset computation
-- Schema Modularization based on ABox Signature
-- Schema Decomposition in TBox and RBox (with subsequent division in Schema and Taxonomy)
-- Full cleaned Ontology and Knowledge Graph Reconstruction
-- Conversion and serialization of object property assertion to TSV format
-- Conversion and serialization of schema axioms to JSON format
-
-
-#### Executable Script
-
-**Usage example:**
-
-```bash
-python3 general.py \
-    --kg_file /path/to/input_kg.owl \
-    --output_path /path/to/output/folder \
-    --dataset_name MY_DATASET \
-    --robot_jar /path/to/robot.jar \
-    [--reasoner]
-```
-
-| Argument         | Description                                                                         |
-| ---------------- | ----------------------------------------------------------------------------------- |
-| `--kg_file`      | Path to your input KG (OWL/RDF file).                                               |
-| `--output_path`  | Folder where the processed dataset and splits will be saved.                        |
-| `--dataset_name` | Base name for the dataset. Reasoned datasets will append `_reasoned` otherwise `_base`.               |
-| `--robot_jar`    | Path to the ROBOT JAR file (used for merging and reasoning).                        |
-| `--reasoner`     | Optional flag. If set, reasoning and unsatisfiable class removal will be performed. |

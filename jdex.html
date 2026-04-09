@@ -43,11 +43,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="quick.html">Quick Start Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials and Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">KGSaF <strong>JDeX</strong>: Modular Suite</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#jdex-suite">JDeX Suite</a></li>
@@ -132,6 +135,21 @@
 <li class="toctree-l2"><a class="reference internal" href="#naive-inconsistencies-filtering">Naive Inconsistencies Filtering</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#jdex.utils.consistency.InconsistenciesFilterer"><code class="docutils literal notranslate"><span class="pre">InconsistenciesFilterer</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#jdex.utils.consistency.InconsistenciesFilterer.filter_inconsistencies"><code class="docutils literal notranslate"><span class="pre">InconsistenciesFilterer.filter_inconsistencies()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#naive-description-logic-profile-filtering">Naive Description Logic Profile Filtering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jdex.owl.modularization.BaseDLProfileFilter"><code class="docutils literal notranslate"><span class="pre">BaseDLProfileFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#jdex.owl.modularization.BaseDLProfileFilter.onto_graph"><code class="docutils literal notranslate"><span class="pre">BaseDLProfileFilter.onto_graph</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jdex.owl.modularization.BaseDLProfileFilter.CARDINALITY_PREDICATES"><code class="docutils literal notranslate"><span class="pre">BaseDLProfileFilter.CARDINALITY_PREDICATES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jdex.owl.modularization.BaseDLProfileFilter.DISALLOWED_COMMON"><code class="docutils literal notranslate"><span class="pre">BaseDLProfileFilter.DISALLOWED_COMMON</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jdex.owl.modularization.BaseDLProfileFilter.filter_graph"><code class="docutils literal notranslate"><span class="pre">BaseDLProfileFilter.filter_graph()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#jdex.owl.modularization.ELProfileFilter"><code class="docutils literal notranslate"><span class="pre">ELProfileFilter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jdex.owl.modularization.ALCProfileFilter"><code class="docutils literal notranslate"><span class="pre">ALCProfileFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#jdex.owl.modularization.ALCProfileFilter.DISALLOWED_ALC_ROLE_AXIOMS"><code class="docutils literal notranslate"><span class="pre">ALCProfileFilter.DISALLOWED_ALC_ROLE_AXIOMS</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -232,7 +250,10 @@ pipeline accessible through an interactive interface and JSON-based configuratio
 This allows users to run complex workflows with minimal setup while maintaining
 full control over each processing step.</p>
 <p>The following sections document each component in detail, with emphasis on their
-individual usage and configuration options.</p>
+individual usage and configuration options. A schematization of the full pipeline (with all reasoing services active) can be found below</p>
+<figure class="align-default">
+<img alt="_images/full_schema.png" src="_images/full_schema.png" />
+</figure>
 </section>
 <section id="reasoning-utility">
 <h2>Reasoning Utility<a class="headerlink" href="#reasoning-utility" title="Link to this heading"></a></h2>
@@ -1225,6 +1246,159 @@ ontology but preserves the original input file.</p>
 </dd></dl>
 
 </section>
+<section id="naive-description-logic-profile-filtering">
+<h2>Naive Description Logic Profile Filtering<a class="headerlink" href="#naive-description-logic-profile-filtering" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jdex.owl.modularization.BaseDLProfileFilter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">jdex.owl.modularization.</span></span><span class="sig-name descname"><span class="pre">BaseDLProfileFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdex/owl/modularization.html#BaseDLProfileFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdex.owl.modularization.BaseDLProfileFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class for Description Logic profile filtering.</p>
+<p>This class defines the common infrastructure for syntactically filtering an
+OWL ontology represented as an RDFLib graph into a restricted Description
+Logic (DL) profile.</p>
+<p>Subclasses implement the profile-specific admissibility test for OWL class
+expressions, while this base class provides:</p>
+<ul class="simple">
+<li><p>ontology graph initialization,</p></li>
+<li><p>namespace preservation,</p></li>
+<li><p>common axiom traversal,</p></li>
+<li><p>recursive copying of accepted class expressions,</p></li>
+<li><p>RDF list copying,</p></li>
+<li><p>common declaration preservation.</p></li>
+</ul>
+<p>The filtering is purely syntactic: unsupported axioms are discarded rather
+than rewritten, normalized, or approximated.</p>
+<dl class="simple">
+<dt>Typical subclass responsibilities:</dt><dd><ul class="simple">
+<li><p>decide whether a class expression is valid in the target profile,</p></li>
+<li><p>decide whether profile-specific axioms (e.g. disjointness) are kept,</p></li>
+<li><p>optionally retain additional role/property axioms.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdex.owl.modularization.BaseDLProfileFilter.onto_graph">
+<span class="sig-name descname"><span class="pre">onto_graph</span></span><a class="headerlink" href="#jdex.owl.modularization.BaseDLProfileFilter.onto_graph" title="Link to this definition"></a></dt>
+<dd><p>The source ontology graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdex.owl.modularization.BaseDLProfileFilter.CARDINALITY_PREDICATES">
+<span class="sig-name descname"><span class="pre">CARDINALITY_PREDICATES</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{rdflib.term.URIRef('http://www.w3.org/2002/07/owl#cardinality'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#maxCardinality'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#maxQualifiedCardinality'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#minCardinality'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#minQualifiedCardinality'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#qualifiedCardinality')}</span></span><a class="headerlink" href="#jdex.owl.modularization.BaseDLProfileFilter.CARDINALITY_PREDICATES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdex.owl.modularization.BaseDLProfileFilter.DISALLOWED_COMMON">
+<span class="sig-name descname"><span class="pre">DISALLOWED_COMMON</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{rdflib.term.URIRef('http://www.w3.org/2002/07/owl#hasSelf'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#hasValue'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#oneOf')}</span></span><a class="headerlink" href="#jdex.owl.modularization.BaseDLProfileFilter.DISALLOWED_COMMON" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jdex.owl.modularization.BaseDLProfileFilter.filter_graph">
+<span class="sig-name descname"><span class="pre">filter_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="_modules/jdex/owl/modularization.html#BaseDLProfileFilter.filter_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdex.owl.modularization.BaseDLProfileFilter.filter_graph" title="Link to this definition"></a></dt>
+<dd><p>Filter the ontology graph according to the concrete DL profile.</p>
+<p>This method scans the ontology graph and builds a new graph containing
+only the axioms and structures accepted by the current profile.</p>
+<dl class="simple">
+<dt>The following common elements are handled here:</dt><dd><ul class="simple">
+<li><p>namespace bindings,</p></li>
+<li><p>ontology declaration,</p></li>
+<li><p>named class declarations,</p></li>
+<li><p>object property declarations,</p></li>
+<li><p><cite>rdfs:subClassOf</cite> axioms,</p></li>
+<li><p><cite>owl:equivalentClass</cite> axioms.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Additional profile-specific axioms may be added by subclasses through
+<cite>_copy_profile_specific_axioms()</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>verbose</strong> – Whether to emit debug/progress messages through
+<cite>verbose_print</cite>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new RDFLib graph containing only axioms compatible with the
+selected Description Logic fragment.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jdex.owl.modularization.ELProfileFilter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">jdex.owl.modularization.</span></span><span class="sig-name descname"><span class="pre">ELProfileFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdex/owl/modularization.html#ELProfileFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdex.owl.modularization.ELProfileFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jdex.owl.modularization.BaseDLProfileFilter" title="jdex.owl.modularization.BaseDLProfileFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDLProfileFilter</span></code></a></p>
+<p>Filter an ontology graph to the Description Logic profile EL.</p>
+<p>This class retains only OWL axioms whose class expressions belong to the
+lightweight EL fragment.</p>
+<dl class="simple">
+<dt>Supported EL constructs:</dt><dd><ul class="simple">
+<li><p>named classes,</p></li>
+<li><p><cite>owl:Thing</cite>,</p></li>
+<li><p>conjunction (<cite>owl:intersectionOf</cite>),</p></li>
+<li><p>existential restrictions (<cite>owl:someValuesFrom</cite>) on object properties.</p></li>
+</ul>
+</dd>
+<dt>Rejected constructs include:</dt><dd><ul class="simple">
+<li><p>disjunction,</p></li>
+<li><p>negation,</p></li>
+<li><p>universal restrictions,</p></li>
+<li><p>cardinality restrictions,</p></li>
+<li><p>nominals,</p></li>
+<li><p>value/self restrictions.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Additionally, this implementation preserves simple object property inclusion
+axioms of the form:</p>
+<blockquote>
+<div><p><cite>R rdfs:subPropertyOf S</cite></p>
+</div></blockquote>
+<p>when both sides are declared object properties.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jdex.owl.modularization.ALCProfileFilter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">jdex.owl.modularization.</span></span><span class="sig-name descname"><span class="pre">ALCProfileFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdex/owl/modularization.html#ALCProfileFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdex.owl.modularization.ALCProfileFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jdex.owl.modularization.BaseDLProfileFilter" title="jdex.owl.modularization.BaseDLProfileFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDLProfileFilter</span></code></a></p>
+<p>Filter an ontology graph to the Description Logic profile ALC.</p>
+<p>This class retains OWL axioms whose class expressions belong to the ALC
+fragment, which is strictly more expressive than EL.</p>
+<dl class="simple">
+<dt>Supported ALC constructs:</dt><dd><ul class="simple">
+<li><p>named classes,</p></li>
+<li><p><cite>owl:Thing</cite>,</p></li>
+<li><p><cite>owl:Nothing</cite>,</p></li>
+<li><p>conjunction (<cite>owl:intersectionOf</cite>),</p></li>
+<li><p>disjunction (<cite>owl:unionOf</cite>),</p></li>
+<li><p>negation (<cite>owl:complementOf</cite>),</p></li>
+<li><p>existential restrictions (<cite>owl:someValuesFrom</cite>),</p></li>
+<li><p>universal restrictions (<cite>owl:allValuesFrom</cite>),</p></li>
+<li><p>disjointness axioms (<cite>owl:disjointWith</cite>).</p></li>
+</ul>
+</dd>
+<dt>Rejected constructs include:</dt><dd><ul class="simple">
+<li><p>cardinality restrictions,</p></li>
+<li><p>nominals,</p></li>
+<li><p>value/self restrictions,</p></li>
+<li><p>advanced role axioms outside plain ALC.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jdex.owl.modularization.ALCProfileFilter.DISALLOWED_ALC_ROLE_AXIOMS">
+<span class="sig-name descname"><span class="pre">DISALLOWED_ALC_ROLE_AXIOMS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{rdflib.term.URIRef('http://www.w3.org/2002/07/owl#AsymmetricProperty'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#FunctionalProperty'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#InverseFunctionalProperty'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#IrreflexiveProperty'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#ReflexiveProperty'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#SymmetricProperty'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#TransitiveProperty'),</span> <span class="pre">rdflib.term.URIRef('http://www.w3.org/2002/07/owl#inverseOf')}</span></span><a class="headerlink" href="#jdex.owl.modularization.ALCProfileFilter.DISALLOWED_ALC_ROLE_AXIOMS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="configuration-utility">
 <h2>Configuration Utility<a class="headerlink" href="#configuration-utility" title="Link to this heading"></a></h2>
 <p>This section describes the general configuration structure used by JDEX.</p>
@@ -1391,7 +1565,7 @@ setting up a configuration file.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="jdex.config.JDEXConfig">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">jdex.config.</span></span><span class="sig-name descname"><span class="pre">JDEXConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PathsConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interactive_shell</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reasoning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#jdex.config.ReasoningConfig" title="jdex.config.ReasoningConfig"><span class="pre">ReasoningConfig</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_leakage_filtering</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TestLeakageFilteringConfig</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SplitConfig</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description_logic_profile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal['EL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'ALC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'SROIQ'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">None]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_processing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PostProcessingConfig</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdex/config.html#JDEXConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdex.config.JDEXConfig" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">jdex.config.</span></span><span class="sig-name descname"><span class="pre">JDEXConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PathsConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interactive_shell</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reasoning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#jdex.config.ReasoningConfig" title="jdex.config.ReasoningConfig"><span class="pre">ReasoningConfig</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_leakage_filtering</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TestLeakageFilteringConfig</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SplitConfig</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description_logic_profile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal['EL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'ALC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">None]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_processing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PostProcessingConfig</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jdex/config.html#JDEXConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jdex.config.JDEXConfig" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Top-level configuration for JDEX pipeline.</p>
 <dl class="py attribute">
@@ -1505,7 +1679,7 @@ setting up a configuration file.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id10">
-<span class="sig-name descname"><span class="pre">description_logic_profile</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'EL'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ALC'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'SROIQ'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">description_logic_profile</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'EL'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ALC'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

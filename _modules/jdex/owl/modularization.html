@@ -79,7 +79,7 @@
              
   <h1>Source code for jdex.owl.modularization</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
-
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
@@ -88,6 +88,23 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">jdex.utils.conventions.paths</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jdex.utils.conventions.builtins</span><span class="w"> </span><span class="kn">import</span> <span class="n">BUILTIN_URIS</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib</span><span class="w"> </span><span class="kn">import</span> <span class="n">OWL</span><span class="p">,</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">RDFS</span><span class="p">,</span> <span class="n">BNode</span><span class="p">,</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">URIRef</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib.collection</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collection</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">jdex.utils.conventions.builtins</span><span class="w"> </span><span class="kn">import</span> <span class="n">BUILTIN_URIS</span>
+
+
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib</span><span class="w"> </span><span class="kn">import</span> <span class="n">BNode</span><span class="p">,</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">URIRef</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib.collection</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rdflib.namespace</span><span class="w"> </span><span class="kn">import</span> <span class="n">OWL</span><span class="p">,</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">RDFS</span>
+
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">verbose_print</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
@@ -180,6 +197,583 @@
         <span class="k">return</span> <span class="n">extracted_graph</span></div>
 </div>
 
+    
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseDLProfileFilter</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract base class for Description Logic profile filtering.</span>
+
+<span class="sd">    This class defines the common infrastructure for syntactically filtering an</span>
+<span class="sd">    OWL ontology represented as an RDFLib graph into a restricted Description</span>
+<span class="sd">    Logic (DL) profile.</span>
+
+<span class="sd">    Subclasses implement the profile-specific admissibility test for OWL class</span>
+<span class="sd">    expressions, while this base class provides:</span>
+
+<span class="sd">    - ontology graph initialization,</span>
+<span class="sd">    - namespace preservation,</span>
+<span class="sd">    - common axiom traversal,</span>
+<span class="sd">    - recursive copying of accepted class expressions,</span>
+<span class="sd">    - RDF list copying,</span>
+<span class="sd">    - common declaration preservation.</span>
+
+<span class="sd">    The filtering is purely syntactic: unsupported axioms are discarded rather</span>
+<span class="sd">    than rewritten, normalized, or approximated.</span>
+
+<span class="sd">    Typical subclass responsibilities:</span>
+<span class="sd">        - decide whether a class expression is valid in the target profile,</span>
+<span class="sd">        - decide whether profile-specific axioms (e.g. disjointness) are kept,</span>
+<span class="sd">        - optionally retain additional role/property axioms.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        onto_graph (Graph): The source ontology graph.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CARDINALITY_PREDICATES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">minCardinality</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">maxCardinality</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">cardinality</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">minQualifiedCardinality</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">maxQualifiedCardinality</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">qualifiedCardinality</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">DISALLOWED_COMMON</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">hasValue</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">hasSelf</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">oneOf</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_graph</span><span class="p">:</span> <span class="n">Graph</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the filter with an ontology graph.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input_graph: RDFLib graph containing the ontology to be filtered.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The input graph is never modified. Filtering always produces a new</span>
+<span class="sd">            RDFLib graph.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span> <span class="o">=</span> <span class="n">input_graph</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filter the ontology graph according to the concrete DL profile.</span>
+
+<span class="sd">        This method scans the ontology graph and builds a new graph containing</span>
+<span class="sd">        only the axioms and structures accepted by the current profile.</span>
+
+<span class="sd">        The following common elements are handled here:</span>
+<span class="sd">            - namespace bindings,</span>
+<span class="sd">            - ontology declaration,</span>
+<span class="sd">            - named class declarations,</span>
+<span class="sd">            - object property declarations,</span>
+<span class="sd">            - `rdfs:subClassOf` axioms,</span>
+<span class="sd">            - `owl:equivalentClass` axioms.</span>
+
+<span class="sd">        Additional profile-specific axioms may be added by subclasses through</span>
+<span class="sd">        `_copy_profile_specific_axioms()`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            verbose: Whether to emit debug/progress messages through</span>
+<span class="sd">                `verbose_print`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new RDFLib graph containing only axioms compatible with the</span>
+<span class="sd">            selected Description Logic fragment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_copy_namespaces</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_copy_ontology_declaration</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_copy_named_class_declarations</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_copy_object_property_declarations</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_copy_common_tbox_axioms</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_copy_profile_specific_axioms</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_namespaces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy namespace bindings from the input graph.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            out: Output graph receiving the namespace bindings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">ns</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">namespaces</span><span class="p">():</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">ns</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_ontology_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy ontology declaration triples, if present.</span>
+
+<span class="sd">        This preserves triples of the form:</span>
+<span class="sd">            `?ontology rdf:type owl:Ontology`</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            out: Output graph receiving ontology declaration triples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">triple</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Ontology</span><span class="p">)):</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_named_class_declarations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy named OWL class declarations.</span>
+
+<span class="sd">        Only URI-based class declarations are preserved. Built-in OWL/RDF</span>
+<span class="sd">        vocabulary URIs are excluded through `BUILTIN_URIS`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            out: Output graph receiving class declarations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">subjects</span><span class="p">(</span><span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span> <span class="o">-</span> <span class="n">BUILTIN_URIS</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">):</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">c</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_object_property_declarations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy object property declarations.</span>
+
+<span class="sd">        Only simple declarations are copied here:</span>
+<span class="sd">            `?p rdf:type owl:ObjectProperty`</span>
+
+<span class="sd">        More expressive role/property axioms are left to subclasses if needed.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            out: Output graph receiving object property declarations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">subjects</span><span class="p">(</span><span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span> <span class="o">-</span> <span class="n">BUILTIN_URIS</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_common_tbox_axioms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy common TBox axioms accepted by the profile.</span>
+
+<span class="sd">        This method preserves:</span>
+<span class="sd">            - subclass axioms (`rdfs:subClassOf`)</span>
+<span class="sd">            - equivalence axioms (`owl:equivalentClass`)</span>
+
+<span class="sd">        An axiom is copied only if both participating class expressions are</span>
+<span class="sd">        accepted by `_is_allowed_class_expr()`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            out: Output graph receiving accepted axioms.</span>
+<span class="sd">            verbose: Whether to emit debug/progress messages.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subClassOf</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_class_expr</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_class_expr</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+                <span class="n">verbose_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;KEEP subclass: </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2"> ⊑ </span><span class="si">{</span><span class="n">o</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_copy_class_expr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_copy_class_expr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">equivalentClass</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_class_expr</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_class_expr</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+                <span class="n">verbose_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;KEEP equiv: </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2"> ≡ </span><span class="si">{</span><span class="n">o</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_copy_class_expr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_copy_class_expr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_profile_specific_axioms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy axioms specific to the concrete DL profile.</span>
+
+<span class="sd">        Subclasses implement this method to preserve profile-dependent axioms,</span>
+<span class="sd">        such as:</span>
+<span class="sd">            - disjointness axioms in ALC,</span>
+<span class="sd">            - simple role inclusion axioms in EL.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            out: Output graph receiving accepted axioms.</span>
+<span class="sd">            verbose: Whether to emit debug/progress messages.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_allowed_class_expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">visited</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether a node encodes an allowed class expression.</span>
+
+<span class="sd">        Subclasses implement the admissibility test according to the target</span>
+<span class="sd">        Description Logic fragment.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node: RDF node representing a named class or anonymous class</span>
+<span class="sd">                expression.</span>
+<span class="sd">            visited: Set of already visited nodes used to avoid infinite</span>
+<span class="sd">                recursion on cyclic graph structures.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if the node encodes a class expression allowed in the target</span>
+<span class="sd">            profile, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_named_or_builtin_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">allow_nothing</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether a node is an allowed named or built-in class.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node: RDF node to inspect.</span>
+<span class="sd">            allow_nothing: Whether `owl:Nothing` is allowed in the current</span>
+<span class="sd">                profile.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if the node is:</span>
+<span class="sd">                - a named OWL class URI,</span>
+<span class="sd">                - `owl:Thing`,</span>
+<span class="sd">                - or `owl:Nothing` when allowed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Thing</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">node</span> <span class="o">==</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Nothing</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">allow_nothing</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_allowed_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_head</span><span class="p">:</span> <span class="n">BNode</span><span class="p">,</span> <span class="n">visited</span><span class="p">:</span> <span class="n">Set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether every element of an RDF collection is allowed.</span>
+
+<span class="sd">        This helper is used for OWL constructs encoded as RDF lists, such as</span>
+<span class="sd">        `owl:intersectionOf` and `owl:unionOf`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            list_head: Head node of the RDF list.</span>
+<span class="sd">            visited: Set of already visited nodes to avoid recursive loops.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if the list is well-formed, non-empty, and all members are</span>
+<span class="sd">            allowed class expressions in the current profile.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">members</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Collection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">,</span> <span class="n">list_head</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">members</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_class_expr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">visited</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">members</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_class_expr</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">,</span>
+        <span class="n">out</span><span class="p">:</span> <span class="n">Graph</span><span class="p">,</span>
+        <span class="n">visited</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy the RDF structure defining an accepted class expression.</span>
+
+<span class="sd">        This method recursively copies the triples needed to preserve the meaning</span>
+<span class="sd">        of a class expression already known to be allowed. It handles:</span>
+<span class="sd">            - named class typing,</span>
+<span class="sd">            - anonymous expression blank nodes,</span>
+<span class="sd">            - restriction fillers,</span>
+<span class="sd">            - boolean constructor operands,</span>
+<span class="sd">            - referenced object property declarations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node: RDF node representing the class expression to copy.</span>
+<span class="sd">            out: Output graph receiving the copied triples.</span>
+<span class="sd">            visited: Set of already visited nodes used to avoid duplicate work</span>
+<span class="sd">                and infinite recursion.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            This method assumes that `node` has already passed the profile</span>
+<span class="sd">            admissibility check.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">node</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Class</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">node</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="n">OWL</span><span class="o">.</span><span class="n">onProperty</span> <span class="ow">and</span> <span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">o</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">{</span><span class="n">OWL</span><span class="o">.</span><span class="n">someValuesFrom</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">allValuesFrom</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">complementOf</span><span class="p">}:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_copy_class_expr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">{</span><span class="n">OWL</span><span class="o">.</span><span class="n">intersectionOf</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">unionOf</span><span class="p">}:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_copy_rdf_list</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_rdf_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">visited</span><span class="p">:</span> <span class="n">Set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy an RDF list and recursively copy its members.</span>
+
+<span class="sd">        This preserves both the raw RDF collection structure and the class</span>
+<span class="sd">        expressions referenced by its elements.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            head: Head of the RDF list.</span>
+<span class="sd">            out: Output graph receiving the copied triples.</span>
+<span class="sd">            visited: Set of already visited expression nodes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">members</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Collection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">,</span> <span class="n">head</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">current</span> <span class="o">=</span> <span class="n">head</span>
+        <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="n">current</span> <span class="ow">and</span> <span class="n">current</span> <span class="o">!=</span> <span class="n">RDF</span><span class="o">.</span><span class="n">nil</span> <span class="ow">and</span> <span class="n">current</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">triple</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">current</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">rest</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_copy_class_expr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ELProfileFilter</span><span class="p">(</span><span class="n">BaseDLProfileFilter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter an ontology graph to the Description Logic profile EL.</span>
+
+<span class="sd">    This class retains only OWL axioms whose class expressions belong to the</span>
+<span class="sd">    lightweight EL fragment.</span>
+
+<span class="sd">    Supported EL constructs:</span>
+<span class="sd">        - named classes,</span>
+<span class="sd">        - `owl:Thing`,</span>
+<span class="sd">        - conjunction (`owl:intersectionOf`),</span>
+<span class="sd">        - existential restrictions (`owl:someValuesFrom`) on object properties.</span>
+
+<span class="sd">    Rejected constructs include:</span>
+<span class="sd">        - disjunction,</span>
+<span class="sd">        - negation,</span>
+<span class="sd">        - universal restrictions,</span>
+<span class="sd">        - cardinality restrictions,</span>
+<span class="sd">        - nominals,</span>
+<span class="sd">        - value/self restrictions.</span>
+
+<span class="sd">    Additionally, this implementation preserves simple object property inclusion</span>
+<span class="sd">    axioms of the form:</span>
+<span class="sd">        `R rdfs:subPropertyOf S`</span>
+<span class="sd">    when both sides are declared object properties.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_profile_specific_axioms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy EL-specific axioms.</span>
+
+<span class="sd">        In this implementation, EL preserves simple role inclusion axioms:</span>
+<span class="sd">            `R rdfs:subPropertyOf S`</span>
+<span class="sd">        provided that both `R` and `S` are declared as object properties.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            out: Output graph receiving accepted axioms.</span>
+<span class="sd">            verbose: Whether to emit debug/progress messages.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="n">RDFS</span><span class="o">.</span><span class="n">subPropertyOf</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span>
+            <span class="p">):</span>
+                <span class="n">verbose_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;KEEP subProperty: </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2"> ⊑ </span><span class="si">{</span><span class="n">o</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">o</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_allowed_class_expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">visited</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether a node encodes an EL-compatible class expression.</span>
+
+<span class="sd">        EL accepts:</span>
+<span class="sd">            - named classes,</span>
+<span class="sd">            - `owl:Thing`,</span>
+<span class="sd">            - conjunctions,</span>
+<span class="sd">            - existential restrictions over object properties.</span>
+
+<span class="sd">        EL rejects:</span>
+<span class="sd">            - `owl:Nothing`,</span>
+<span class="sd">            - disjunctions,</span>
+<span class="sd">            - complements,</span>
+<span class="sd">            - universal restrictions,</span>
+<span class="sd">            - cardinalities,</span>
+<span class="sd">            - nominals and value/self restrictions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node: RDF node representing the class expression.</span>
+<span class="sd">            visited: Set of already visited nodes to avoid recursive loops.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if the node encodes an EL-compatible class expression,</span>
+<span class="sd">            False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_named_or_builtin_class</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">allow_nothing</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">BNode</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">pred</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">DISALLOWED_COMMON</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">CARDINALITY_PREDICATES</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">intersectionOf</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+            <span class="n">lst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">intersectionOf</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_list</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">unionOf</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">complementOf</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Restriction</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+            <span class="n">on_prop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">onProperty</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">on_prop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">on_prop</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">someValuesFrom</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+                <span class="n">filler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">someValuesFrom</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_class_expr</span><span class="p">(</span><span class="n">filler</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ALCProfileFilter</span><span class="p">(</span><span class="n">BaseDLProfileFilter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter an ontology graph to the Description Logic profile ALC.</span>
+
+<span class="sd">    This class retains OWL axioms whose class expressions belong to the ALC</span>
+<span class="sd">    fragment, which is strictly more expressive than EL.</span>
+
+<span class="sd">    Supported ALC constructs:</span>
+<span class="sd">        - named classes,</span>
+<span class="sd">        - `owl:Thing`,</span>
+<span class="sd">        - `owl:Nothing`,</span>
+<span class="sd">        - conjunction (`owl:intersectionOf`),</span>
+<span class="sd">        - disjunction (`owl:unionOf`),</span>
+<span class="sd">        - negation (`owl:complementOf`),</span>
+<span class="sd">        - existential restrictions (`owl:someValuesFrom`),</span>
+<span class="sd">        - universal restrictions (`owl:allValuesFrom`),</span>
+<span class="sd">        - disjointness axioms (`owl:disjointWith`).</span>
+
+<span class="sd">    Rejected constructs include:</span>
+<span class="sd">        - cardinality restrictions,</span>
+<span class="sd">        - nominals,</span>
+<span class="sd">        - value/self restrictions,</span>
+<span class="sd">        - advanced role axioms outside plain ALC.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DISALLOWED_ALC_ROLE_AXIOMS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">inverseOf</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">TransitiveProperty</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">FunctionalProperty</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">InverseFunctionalProperty</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">SymmetricProperty</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">AsymmetricProperty</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">ReflexiveProperty</span><span class="p">,</span>
+        <span class="n">OWL</span><span class="o">.</span><span class="n">IrreflexiveProperty</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_profile_specific_axioms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy ALC-specific axioms.</span>
+
+<span class="sd">        In this implementation, ALC preserves class disjointness axioms:</span>
+<span class="sd">            `C owl:disjointWith D`</span>
+<span class="sd">        when both participating class expressions are ALC-compatible.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            out: Output graph receiving accepted axioms.</span>
+<span class="sd">            verbose: Whether to emit debug/progress messages.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">disjointWith</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_class_expr</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_class_expr</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+                <span class="n">verbose_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;KEEP disjoint: </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2"> ⊓ </span><span class="si">{</span><span class="n">o</span><span class="si">}</span><span class="s2"> ⊑ ⊥&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_copy_class_expr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_copy_class_expr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_allowed_class_expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">visited</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether a node encodes an ALC-compatible class expression.</span>
+
+<span class="sd">        ALC accepts:</span>
+<span class="sd">            - named classes,</span>
+<span class="sd">            - `owl:Thing`,</span>
+<span class="sd">            - `owl:Nothing`,</span>
+<span class="sd">            - conjunctions,</span>
+<span class="sd">            - disjunctions,</span>
+<span class="sd">            - complements,</span>
+<span class="sd">            - existential restrictions over object properties,</span>
+<span class="sd">            - universal restrictions over object properties.</span>
+
+<span class="sd">        ALC rejects:</span>
+<span class="sd">            - cardinality restrictions,</span>
+<span class="sd">            - nominals,</span>
+<span class="sd">            - value/self restrictions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node: RDF node representing the class expression.</span>
+<span class="sd">            visited: Set of already visited nodes to avoid recursive loops.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if the node encodes an ALC-compatible class expression,</span>
+<span class="sd">            False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">visited</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_named_or_builtin_class</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">allow_nothing</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">BNode</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">pred</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">DISALLOWED_COMMON</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">CARDINALITY_PREDICATES</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">intersectionOf</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+            <span class="n">lst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">intersectionOf</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_list</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">unionOf</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+            <span class="n">lst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">unionOf</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_list</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">complementOf</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+            <span class="n">filler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">complementOf</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_class_expr</span><span class="p">(</span><span class="n">filler</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">Restriction</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+            <span class="n">on_prop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">onProperty</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">on_prop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">on_prop</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">ObjectProperty</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">someValuesFrom</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+                <span class="n">filler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">someValuesFrom</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_class_expr</span><span class="p">(</span><span class="n">filler</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">allValuesFrom</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="p">:</span>
+                <span class="n">filler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">OWL</span><span class="o">.</span><span class="n">allValuesFrom</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_allowed_class_expr</span><span class="p">(</span><span class="n">filler</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
 </pre></div>
 
            </div>

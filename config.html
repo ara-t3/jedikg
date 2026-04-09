@@ -17,6 +17,8 @@
       <script src="_static/documentation_options.js?v=72d88caf"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -43,7 +45,7 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quick.html">Quick Start Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">JDEX Configuration Guide</a><ul>
@@ -54,6 +56,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#reasoning-configuration">Reasoning Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dataset-splitting">Dataset Splitting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#post-processing">Post-processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dl-profile-configuration">DL Profile Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#full-example">Full Example</a></li>
@@ -62,6 +65,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials and Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
 </ul>
@@ -94,7 +100,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="jdex-configuration-guide">
+  <section class="tex2jax_ignore mathjax_ignore" id="jdex-configuration-guide">
 <h1>JDEX Configuration Guide<a class="headerlink" href="#jdex-configuration-guide" title="Link to this heading"></a></h1>
 <p>JDEX is fully configurable through a JSON configuration file. This allows you to control every stage of the pipeline, from reasoning services to dataset splitting and post-processing.
 This tutorial walks you through the structure of the configuration file and provides practical examples.</p>
@@ -129,6 +135,7 @@ This tutorial walks you through the structure of the configuration file and prov
 <li><p><strong>Reasoning</strong>: Logic-based inference and validation settings.</p></li>
 <li><p><strong>Split</strong>: Parameters for Machine Learning dataset partitioning.</p></li>
 <li><p><strong>Post-processing</strong>: Export formats and mapping utilities.</p></li>
+<li><p><strong>DL Profile Configuration</strong>: Filter axioms based on description logics profiles.</p></li>
 </ul>
 <section id="general-settings">
 <h3>General Settings<a class="headerlink" href="#general-settings" title="Link to this heading"></a></h3>
@@ -341,6 +348,47 @@ This tutorial walks you through the structure of the configuration file and prov
 <p><strong>JSON</strong>: Best for web apps or document databases.<br />
 <strong>ID Mapping</strong>: Creates a dictionary mapping URI strings to integer IDs.<br />
 <strong>TSV</strong>: Ideal for knowledge graph embedding frameworks like Pykeen or GraphVite.</p>
+</div>
+</section>
+<section id="dl-profile-configuration">
+<h3>DL Profile Configuration<a class="headerlink" href="#dl-profile-configuration" title="Link to this heading"></a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="nt">&quot;description_logic_profile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ALC&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This section controls how the ontology is syntactically filtered into a specific Description Logic (DL) profile before any downstream processing. If not specified will not do ANY filtering on the ontology. The only supported profiles are <span class="math notranslate nohighlight">\(\mathcal{ALC}\)</span> and <span class="math notranslate nohighlight">\(\mathcal{EL}\)</span></p>
+<ul class="simple">
+<li><p>EL</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(C \sqcap D\)</span> <code class="docutils literal notranslate"><span class="pre">owl:intersectionOf</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(\exists R.C\)</span> <code class="docutils literal notranslate"><span class="pre">owl:someValuesFrom</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(\top\)</span> <code class="docutils literal notranslate"><span class="pre">owl:Thing</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(C \sqsubseteq D\)</span> <code class="docutils literal notranslate"><span class="pre">rdfs:subClassOf</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(C \equiv D\)</span> <code class="docutils literal notranslate"><span class="pre">owl:equivalentClass</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(A(a)\)</span> <code class="docutils literal notranslate"><span class="pre">rdf:type</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(R \sqsubseteq S\)</span> <code class="docutils literal notranslate"><span class="pre">rdfs:subPropertyOf</span></code></p></li>
+</ul>
+</li>
+<li><p>ALC</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(C \sqcap D\)</span> <code class="docutils literal notranslate"><span class="pre">owl:intersectionOf</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(C \sqcup D\)</span> <code class="docutils literal notranslate"><span class="pre">owl:unionOf</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(\neg C\)</span> <code class="docutils literal notranslate"><span class="pre">owl:complementOf</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(\exists R.C\)</span> <code class="docutils literal notranslate"><span class="pre">owl:someValuesFrom</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(\forall R.C\)</span> <code class="docutils literal notranslate"><span class="pre">owl:allValuesFrom</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(\top\)</span> <code class="docutils literal notranslate"><span class="pre">owl:Thing</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(\bot\)</span> <code class="docutils literal notranslate"><span class="pre">owl:Nothing</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(C \sqsubseteq D\)</span> <code class="docutils literal notranslate"><span class="pre">rdfs:subClassOf</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(C \equiv D\)</span> <code class="docutils literal notranslate"><span class="pre">owl:equivalentClass</span></code></p></li>
+<li><p><span class="math notranslate nohighlight">\(A(a)\)</span> <code class="docutils literal notranslate"><span class="pre">rdf:type</span></code></p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The selected DL profile determines which OWL constructs are retained in the output ontology.<br />
+Unsupported axioms are <strong>removed</strong>, not rewritten or approximated.</p>
 </div>
 </section>
 </section>

@@ -649,7 +649,7 @@
             <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">),</span>
         <span class="p">]</span>
 
-        <span class="n">result</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_process</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_env</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;JUSTIFICATION (Pellet)&quot;</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
         <span class="c1"># If PROCESS Successful =&gt;</span>

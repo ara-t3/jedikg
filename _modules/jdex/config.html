@@ -86,7 +86,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">jdex.owl.reasoning</span><span class="w"> </span><span class="kn">import</span> <span class="n">PresetAxioms</span>
 
 
-<span class="n">DLProfile</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;EL&quot;</span><span class="p">,</span> <span class="s2">&quot;ALC&quot;</span><span class="p">,</span> <span class="s2">&quot;SROIQ&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="n">DLProfile</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;EL&quot;</span><span class="p">,</span> <span class="s2">&quot;ALC&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">PathsConfig</span><span class="p">:</span>
@@ -474,12 +474,13 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate description logic profile.&quot;&quot;&quot;</span>
-        <span class="n">allowed_profiles</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;EL&quot;</span><span class="p">,</span> <span class="s2">&quot;ALC&quot;</span><span class="p">,</span> <span class="s2">&quot;SROIQ&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">}</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description_logic_profile</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_profiles</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;description_logic_profile must be one of: &quot;</span>
-                <span class="s2">&quot;&#39;EL&#39;, &#39;ALC&#39;, &#39;SROIQ&#39;, or None.&quot;</span>
-            <span class="p">)</span>
+        <span class="n">allowed_profiles</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;EL&quot;</span><span class="p">,</span> <span class="s2">&quot;ALC&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description_logic_profile</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description_logic_profile</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_profiles</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;description_logic_profile must be one of: &quot;</span>
+                    <span class="s2">&quot;&#39;EL&#39;, &#39;ALC&#39;, &#39;SROIQ&#39;, or None.&quot;</span>
+                <span class="p">)</span>
 
 <div class="viewcode-block" id="JDEXConfig.from_dict">
 <a class="viewcode-back" href="../../jdex.html#jdex.config.JDEXConfig.from_dict">[docs]</a>

@@ -20,8 +20,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="KG-SaF-Data: Complete KGR Datasets" href="data.html" />
-    <link rel="prev" title="Quick Start Guide" href="quick.html" /> 
+    <link rel="next" title="KGSaF Data: Complete KGR Datasets" href="data.html" />
+    <link rel="prev" title="JDEX Configuration Guide" href="config.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,10 +43,15 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quick.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials and Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-jdex-on-example-files">Running JDEX on Example Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#instructions">Instructions</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#loading-and-analyzing-a-kg-saf-datasets-in-pytorch">Loading and Analyzing a KG-SaF Datasets in PyTorch</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#loading-the-dataset">Loading the Dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#inspect-dataset-components">Inspect Dataset Components</a></li>
@@ -62,14 +67,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#using-kg-saf-jdex-on-custom-knowledge-graphs">Using KG-SaF-JDeX on Custom Knowledge Graphs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#executable-script">Executable Script</a></li>
 </ul>
 </li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="data.html"><strong>KG-SaF-Data</strong>: Complete KGR Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jdex.html"><strong>KG-SaF-JDeX</strong>: Modular Dataset Generation Workflow</a></li>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
@@ -100,11 +104,28 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="tutorials-and-guides">
+  <section class="tex2jax_ignore mathjax_ignore" id="tutorials-and-guides">
 <h1>Tutorials and Guides<a class="headerlink" href="#tutorials-and-guides" title="Link to this heading"></a></h1>
+<section id="running-jdex-on-example-files">
+<h2>Running JDEX on Example Files<a class="headerlink" href="#running-jdex-on-example-files" title="Link to this heading"></a></h2>
+<p>We provided in the <code class="docutils literal notranslate"><span class="pre">tutorial_input</span></code> folder a set of ontology schema <code class="docutils literal notranslate"><span class="pre">schema.owl</span></code>, and facts <code class="docutils literal notranslate"><span class="pre">facts.owl</span></code> (class and object property assertions) derived from DbPedia to show of our JDEX Suite. Be aware that we added an artificial unsatisfiable class to this schema, in order to show you how the tool can automatically recognize these and prompt you with the possibility of automatically filtering them form the knowledge base. A ready-to-use example configuration is available as <code class="docutils literal notranslate"><span class="pre">configuration.json</span></code>, in this all reaosning step are enabled, feel free to play around with configuration to understand all the possible JDEX generation possibilities!</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Be aware that <code class="docutils literal notranslate"><span class="pre">configuration.json</span></code> need to be modified with your JAVA_8_HOME and JAVA_11_HOME paths! For this tutorial, Java 8 is not needed, since the ontology is consistent and no justification tool (Pellet) is needed!</p>
+</div>
+<section id="instructions">
+<h3>Instructions<a class="headerlink" href="#instructions" title="Link to this heading"></a></h3>
+<p>After installation, from the base folder run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./run_jdex<span class="w"> </span>--config<span class="w"> </span>./tutorials/tutorial_input/configuration.json
+</pre></div>
+</div>
+<p>The JDEX banner will show, follow the CLI instruction to go forward!</p>
+<p><img alt="" src="_images/jdex.png" /></p>
+</section>
+</section>
 <section id="loading-and-analyzing-a-kg-saf-datasets-in-pytorch">
 <h2>Loading and Analyzing a KG-SaF Datasets in PyTorch<a class="headerlink" href="#loading-and-analyzing-a-kg-saf-datasets-in-pytorch" title="Link to this heading"></a></h2>
-<p>This tutorial demonstrates how to load a Knowledge Graph dataset using kgsaf_jdex and inspect its components, classes, and object property hierarchies. You can find a full executable Notebook in <code class="docutils literal notranslate"><span class="pre">tutorial/dataset_loader.ipynb</span></code>. For this example the <code class="docutils literal notranslate"><span class="pre">APULIATRAVEL</span></code> dataset will be used.</p>
+<p>This tutorial demonstrates how to load a Knowledge Graph dataset using kgsaf_jdex and inspect its components, classes, and object property hierarchies. You can find a full executable Notebook in <code class="docutils literal notranslate"><span class="pre">tutorials/torch_loader.ipynb</span></code>. This example will be run on the tutorial dataset generated in previous phase (an already generated dataset is available)</p>
 <p><strong>Setup and Imports</strong></p>
 <p>Before loading the dataset, make sure your Python environment can access the library and required modules:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
@@ -116,15 +137,13 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">kgsaf_jdex.loaders.pytorch.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">KnowledgeGraph</span>
 </pre></div>
 </div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Adding the parent directory to <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> allows Python to locate your <code class="docutils literal notranslate"><span class="pre">kgsaf_jdex</span></code> package if it is not installed system-wide.</p>
-</div>
 <section id="loading-the-dataset">
 <h3>Loading the Dataset<a class="headerlink" href="#loading-the-dataset" title="Link to this heading"></a></h3>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">KnowledgeGraph</span></code> class to load a dataset from the folder created by the unpacking utility:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kg</span> <span class="o">=</span> <span class="n">KnowledgeGraph</span><span class="p">(</span>
-    <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&lt;DATASET_PATH&gt;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cwd</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span>
+
+<span class="n">kg</span> <span class="o">=</span> <span class="n">KnowledgeGraph</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span> <span class="n">cwd</span> <span class="o">/</span> <span class="s2">&quot;tutorials/tutorial_dataset&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -146,14 +165,14 @@
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Dataset Component                   | Shape
 --------------------------------------------------
-Training triples                    | torch.Size([65401, 3])
-Test triples                        | torch.Size([7695, 3])
-Validation triples                  | torch.Size([3847, 3])
-Class assertions                    | torch.Size([35915, 2])
-Taxonomy (TBox)                     | torch.Size([54, 2])
-Object property hierarchy           | torch.Size([11, 2])
-Object property domains             | torch.Size([71, 2])
-Object property ranges              | torch.Size([69, 2])
+Training triples                    | torch.Size([22812, 3])
+Test triples                        | torch.Size([2852, 3])
+Validation triples                  | torch.Size([2852, 3])
+Class assertions                    | torch.Size([171347, 2])
+Taxonomy (TBox)                     | torch.Size([1942, 2])
+Object property hierarchy           | torch.Size([9, 2])
+Object property domains             | torch.Size([504, 2])
+Object property ranges              | torch.Size([665, 2])
 </pre></div>
 </div>
 </section>
@@ -170,9 +189,9 @@ Object property ranges              | torch.Size([69, 2])
 
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing on individual: https://w3id.org/italia/onto/CLV/StreetToponym/31148_Castello_street_toponym
-Testing on class: https://apuliatravel.org/td/HistoricPalace
-Testing on object property: https://w3id.org/italia/onto/CLV/hasDirectHigherRank
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing on individual: http://dbpedia.org/resource/Eduard_Zorn
+Testing on class: http://dbpedia.org/ontology/Publisher
+Testing on object property: http://dbpedia.org/ontology/frazioni
 </pre></div>
 </div>
 </section>
@@ -185,9 +204,19 @@ Testing on object property: https://w3id.org/italia/onto/CLV/hasDirectHigherRank
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">id_to_class</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing the Class Assertions of [7157] https://w3id.org/italia/onto/CLV/StreetToponym/31148_Castello_street_toponym
-	 Tensor [58]
-	 [58] https://w3id.org/italia/onto/CLV/StreetToponym
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing the Class Assertions of [5779] http://dbpedia.org/resource/Eduard_Zorn
+	 Tensor [193, 297, 67, 119, 346, 251, 360, 372, 293, 140, 13]
+	 [193] http://dbpedia.org/ontology/Species
+	 [297] http://www.wikidata.org/entity/Q215627
+	 [67] http://dbpedia.org/ontology/Eukaryote
+	 [119] http://dbpedia.org/ontology/MilitaryPerson
+	 [346] http://www.wikidata.org/entity/Q5
+	 [251] http://schema.org/Person
+	 [360] http://www.wikidata.org/entity/Q729
+	 [372] http://xmlns.com/foaf/0.1/Person
+	 [293] http://www.wikidata.org/entity/Q19088
+	 [140] http://dbpedia.org/ontology/Person
+	 [13] http://dbpedia.org/ontology/Animal
 </pre></div>
 </div>
 </section>
@@ -206,10 +235,16 @@ Testing on object property: https://w3id.org/italia/onto/CLV/hasDirectHigherRank
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">[</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">kg</span><span class="o">.</span><span class="n">id_to_class</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing the Hierarchy of [84] https://w3id.org/italia/onto/TI/Year. Leaf class? True
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing the Hierarchy of [158] http://dbpedia.org/ontology/Publisher. Leaf class? True
 	 Superclasses
-		 Tensor: [81]
-		 [81] https://w3id.org/italia/onto/TI/TemporalEntity
+		 Tensor: [51, 4, 305, 341, 332, 250, 137]
+		 [51] http://dbpedia.org/ontology/Company
+		 [4] http://dbpedia.org/ontology/Agent
+		 [305] http://www.wikidata.org/entity/Q24229398
+		 [341] http://www.wikidata.org/entity/Q4830453
+		 [332] http://www.wikidata.org/entity/Q43229
+		 [250] http://schema.org/Organization
+		 [137] http://dbpedia.org/ontology/Organisation
 	 Subclasses
 		 Tensor: []
 </pre></div>
@@ -246,19 +281,20 @@ Testing on object property: https://w3id.org/italia/onto/CLV/hasDirectHigherRank
 
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing the Role Hierarhcy of [41] https://w3id.org/italia/onto/SM/hasEmailType
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Testing the Role Hierarhcy of [102] http://dbpedia.org/ontology/genre
 	 Super Obj Prop
 		 Tensor: []
 	 Sub Obj Prop
-		 Tensor: []
+		 Tensor: [138]
+		 [138] http://dbpedia.org/ontology/literaryGenre
 
-Testing the Role Hierarhcy of [41] https://w3id.org/italia/onto/SM/hasEmailType
+Testing the Role Hierarhcy of [102] http://dbpedia.org/ontology/genre
 	 Domain
-		 Tensor: [66]
-		 [66] https://w3id.org/italia/onto/SM/Email
+		 Tensor: [-1]
+		 [-1] http://schema.org/Thing
 	 Range
-		 Tensor: [67]
-		 [67] https://w3id.org/italia/onto/SM/EmailType
+		 Tensor: [79]
+		 [79] http://dbpedia.org/ontology/Genre
 </pre></div>
 </div>
 </section>
@@ -266,11 +302,7 @@ Testing the Role Hierarhcy of [41] https://w3id.org/italia/onto/SM/hasEmailType
 <section id="running-transe-on-kg-saf-datasets">
 <h2>Running TransE on KG-SaF Datasets<a class="headerlink" href="#running-transe-on-kg-saf-datasets" title="Link to this heading"></a></h2>
 <p>This tutorial demonstrates how to train and evaluate <strong>TransE</strong> KGR model
-on a dataset prepared with the <code class="docutils literal notranslate"><span class="pre">kgsaf_jdex</span></code> loaders.  You can find a full executable Notebook in <code class="docutils literal notranslate"><span class="pre">tutorial/kge_pykeen.ipynb</span></code>. The example will use the <code class="docutils literal notranslate"><span class="pre">APULIATRAVEL</span></code> dataset.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Make sure the dataset is unpacked and the paths in <code class="docutils literal notranslate"><span class="pre">pc</span></code> (paths conventions) point to the correct files.</p>
-</div>
+on a dataset prepared with the <code class="docutils literal notranslate"><span class="pre">jdex</span></code> loaders.  You can find a full executable Notebook in <code class="docutils literal notranslate"><span class="pre">tutorial/pykeen_training.ipynb</span></code>. The example will use the tutorial dataset.</p>
 <p><strong>Imports</strong></p>
 <p>This code imports all necessary packages, including PyKEEN for knowledge graph embeddings and
 your kgsaf_jdex dataset utilities.</p>
@@ -292,7 +324,8 @@ your kgsaf_jdex dataset utilities.</p>
 <h3>Loading and Mapping Triples<a class="headerlink" href="#loading-and-mapping-triples" title="Link to this heading"></a></h3>
 <p>Here we load entity and relation mappings from JSON files, and then build TriplesFactory objects
 for training, validation, and testing. PyKEEN uses these to manage KG data efficiently.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dataset_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/home/navis/dev/kg-saf/kgsaf_data/datasets/base/unpack/APULIATRAVEL-BASE&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cwd</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span>
+<span class="n">dataset_path</span> <span class="o">=</span> <span class="n">cwd</span> <span class="o">/</span> <span class="s2">&quot;tutorials/tutorial_dataset&quot;</span>
 
 <span class="c1"># Load entity and relation mappings</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dataset_path</span> <span class="o">/</span> <span class="n">pc</span><span class="o">.</span><span class="n">INDIVIDUAL_MAPPINGS</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -374,84 +407,14 @@ INFO:pykeen.evaluation.evaluator:Evaluation took 79.32s seconds
 </div>
 </section>
 </section>
-<section id="using-kg-saf-jdex-on-custom-knowledge-graphs">
-<h2>Using KG-SaF-JDeX on Custom Knowledge Graphs<a class="headerlink" href="#using-kg-saf-jdex-on-custom-knowledge-graphs" title="Link to this heading"></a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Please follow the <strong>Quick Start Guide</strong> before going forward.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This guide is also available as a Notebook in <code class="docutils literal notranslate"><span class="pre">tutorial/general.ipynb</span></code>, a Python shell executable script in <code class="docutils literal notranslate"><span class="pre">tutorial/general.py</span></code> and shell script <code class="docutils literal notranslate"><span class="pre">tutorial/general.sh</span></code>.  For easier customization, we suggest following the Notebook.</p>
-</div>
-<p>This guide show how to use the provided <strong>KG-SaF-JDeX Workflow</strong> Functionalities to generate a new Schema and Data Dataset from your custom Knowledge Graph.  This guide provides an example dataset in the INPUT folder to test the functionalities. All the produces files will be created in the OUTPUT folder.</p>
-<p>This notebook expectes the following inputs:</p>
-<ul class="simple">
-<li><p>Any Knowledge Graph with both Schema and Data in a unique file (any format supported by the ROBOT Utility, the file will be converted to an intermediate OWL File)</p></li>
-<li><p>The KG need to contain ABox assertions (object property assertions) in order to safely run the machine learning splitting and necessary checks</p></li>
-<li><p>This module is specifically designed for generating dataset from Knowledge graphs that contain rich schema and large scale ABox (object property assertions)</p></li>
-</ul>
-<p>And applies the following procedures following the KG-SaF-JDeX workflow:</p>
-<ul class="simple">
-<li><p>Conversion to OWL Format</p></li>
-<li><p>Consistency Check</p></li>
-<li><p>Removal of Unsatisfiable Classes</p></li>
-<li><p>Materialization and Realization</p></li>
-<li><p>Filtering of ABox Individuals and Object Properties</p></li>
-<li><p>Object Propety Assertion splitting using Coverage Criterion in Training, Test and Validatin Split</p></li>
-<li><p>Inversion Leakage check and filtering</p></li>
-<li><p>Class Assertions subset computation</p></li>
-<li><p>Schema Modularization based on ABox Signature</p></li>
-<li><p>Schema Decomposition in TBox and RBox (with subsequent division in Schema and Taxonomy)</p></li>
-<li><p>Full cleaned Ontology and Knowledge Graph Reconstruction</p></li>
-<li><p>Conversion and serialization of object property assertion to TSV format</p></li>
-<li><p>Conversion and serialization of schema axioms to JSON format</p></li>
-</ul>
-<section id="executable-script">
-<h3>Executable Script<a class="headerlink" href="#executable-script" title="Link to this heading"></a></h3>
-<p><strong>Usage example:</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>general.py<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--kg_file<span class="w"> </span>/path/to/input_kg.owl<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--output_path<span class="w"> </span>/path/to/output/folder<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--dataset_name<span class="w"> </span>MY_DATASET<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--robot_jar<span class="w"> </span>/path/to/robot.jar<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="o">[</span>--reasoner<span class="o">]</span>
-</pre></div>
-</div>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Argument</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--kg_file</span></code></p></td>
-<td><p>Path to your input KG (OWL/RDF file).</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--output_path</span></code></p></td>
-<td><p>Folder where the processed dataset and splits will be saved.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dataset_name</span></code></p></td>
-<td><p>Base name for the dataset. Reasoned datasets will append <code class="docutils literal notranslate"><span class="pre">_reasoned</span></code> otherwise <code class="docutils literal notranslate"><span class="pre">_base</span></code>.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--robot_jar</span></code></p></td>
-<td><p>Path to the ROBOT JAR file (used for merging and reasoning).</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--reasoner</span></code></p></td>
-<td><p>Optional flag. If set, reasoning and unsatisfiable class removal will be performed.</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="quick.html" class="btn btn-neutral float-left" title="Quick Start Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="data.html" class="btn btn-neutral float-right" title="KG-SaF-Data: Complete KGR Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="config.html" class="btn btn-neutral float-left" title="JDEX Configuration Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data.html" class="btn btn-neutral float-right" title="KGSaF Data: Complete KGR Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
