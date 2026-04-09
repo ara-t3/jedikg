@@ -6,7 +6,7 @@ from typing import Any, Literal
 from jdex.owl.reasoning import PresetAxioms
 
 
-DLProfile = Literal["EL", "ALC", "SROIQ", None]
+DLProfile = Literal["EL", "ALC", None]
 
 @dataclass
 class PathsConfig:
@@ -386,12 +386,13 @@ class JDEXConfig:
 
     def __post_init__(self) -> None:
         """Validate description logic profile."""
-        allowed_profiles = {"EL", "ALC", "SROIQ", None}
-        if self.description_logic_profile not in allowed_profiles:
-            raise ValueError(
-                "description_logic_profile must be one of: "
-                "'EL', 'ALC', 'SROIQ', or None."
-            )
+        allowed_profiles = {"EL", "ALC", None}
+        if self.description_logic_profile:
+            if self.description_logic_profile not in allowed_profiles:
+                raise ValueError(
+                    "description_logic_profile must be one of: "
+                    "'EL', 'ALC', 'SROIQ', or None."
+                )
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "JDEXConfig":

@@ -39,11 +39,17 @@ Usability & Complete Customization
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Introduction:
 
    quick
    config
    tutorial
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Documentation:
+
    data
    jdex
 

@@ -30,6 +30,7 @@ The configuration is logically divided into five primary sections:
 - **Reasoning**: Logic-based inference and validation settings.
 - **Split**: Parameters for Machine Learning dataset partitioning.
 - **Post-processing**: Export formats and mapping utilities.
+- **DL Profile Configuration**: Filter axioms based on description logics profiles.
 
 ### General Settings
 These parameters control the environment and the Description Logic (DL) complexity handled by the engine.
@@ -168,6 +169,45 @@ Control the final output formats for downstream consumption.
 **TSV**: Ideal for knowledge graph embedding frameworks like Pykeen or GraphVite.
 ```
 
+### DL Profile Configuration
+
+```json
+{
+"description_logic_profile": "ALC"
+}
+```
+
+This section controls how the ontology is syntactically filtered into a specific Description Logic (DL) profile before any downstream processing. If not specified will not do ANY filtering on the ontology. The only supported profiles are $\mathcal{ALC}$ and $\mathcal{EL}$
+
+- EL
+  - $C \sqcap D$ ``owl:intersectionOf``
+  - $\exists R.C$ ``owl:someValuesFrom``
+  - $\top$ ``owl:Thing``
+  - $C \sqsubseteq D$ ``rdfs:subClassOf``
+  - $C \equiv D$ ``owl:equivalentClass``
+  - $A(a)$ ``rdf:type``
+  - $R \sqsubseteq S$ ``rdfs:subPropertyOf``
+
+- ALC
+  - $C \sqcap D$ ``owl:intersectionOf``
+  - $C \sqcup D$ ``owl:unionOf``
+  - $\neg C$ ``owl:complementOf``
+  - $\exists R.C$ ``owl:someValuesFrom``
+  - $\forall R.C$ ``owl:allValuesFrom``
+  - $\top$ ``owl:Thing``
+  - $\bot$ ``owl:Nothing``
+  - $C \sqsubseteq D$ ``rdfs:subClassOf``
+  - $C \equiv D$ ``owl:equivalentClass``
+  - $A(a)$ ``rdf:type``
+
+```{warning}
+The selected DL profile determines which OWL constructs are retained in the output ontology.  
+Unsupported axioms are **removed**, not rewritten or approximated.
+```
+
+
+
+
 
 ## Full Example
 A complete configuration for a standard reasoning and splitting pipeline.
@@ -222,6 +262,8 @@ config = JDEXConfig.from_dict(data)
 # Verify parameters
 print(config.pretty_print())
 ```
+
+
 
 ## Additional Notes
 

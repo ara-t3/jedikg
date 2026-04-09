@@ -8,7 +8,7 @@ import subprocess
 import json
 sys.path.append(str(Path.cwd().parent))
 from jdex.utils.conventions.builtins import BUILTIN_URIS
-from jdex.owl.modularization import SignatureModularizer
+from jdex.owl.modularization import SignatureModularizer, ELProfileFilter, ALCProfileFilter
 from jdex.owl.decomposition import SchemaDecomposer 
 from pykeen.triples import TriplesFactory
 from pykeen.triples.splitting import CoverageSplitter
@@ -166,6 +166,39 @@ class JDEX:
         self.ui.info(f"Converthing Assertions File {self.config.paths.data.absolute()} to OWL format")
         self.reasoner.conversion(self.config.paths.data, self.cwd / pc.ASSERTIONS, format="owl", verbose=self.config.verbose)
         self.ui.success(f"Temporary Conversion saved as {(self.cwd / pc.ASSERTIONS).absolute()}")
+
+        # -----------------------------------
+        # CHECK APPLICABILITY OF REASONING SERVICES
+        # ----------------------------------
+        if self.config.description_logic_profile:
+            if self.config.description_logic_profile.lower() in {"alc", "el"}:
+                profile = self.config.description_logic_profile.lower()
+                self.ui.subrule(f"Descripton Logic Profile Filtering: {profile.upper()}")
+
+                g = Graph()
+                g.parse(self.cwd / pc.ONTOLOGY)
+
+                match profile:
+                    case "el":
+                        utility = ELProfileFilter(g)
+                    case "alc":
+                        utility = ALCProfileFilter(g)
+
+                pg = utility.filter_graph()
+
+                self.ui.panel(f"{profile.upper()} Profile Ontology", data=[
+                    ("Original Profile Axioms", len(g)),
+                    (f"{profile.upper()} Profile Axioms", len(pg))
+                ])
+
+                pg.serialize(self.cwd / pc.ONTOLOGY, format="xml")
+
+                self.reasoner.conversion(
+                    self.cwd / pc.ONTOLOGY,
+                    self.cwd / pc.ONTOLOGY
+                )
+
+                self.ui.success("Profile Filtering Successful")
 
 
         # -----------------------------------

@@ -550,7 +550,7 @@ class Reasoner:
             str(input),
         ]
 
-        result, elapsed = self._run_process(cmd)
+        result, elapsed = self._run_process(cmd, env=self._get_env(8))
         self._check_result(result, f"JUSTIFICATION (Pellet)", elapsed, verbose=verbose)
 
         # If PROCESS Successful =>

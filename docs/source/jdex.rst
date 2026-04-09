@@ -19,7 +19,10 @@ This allows users to run complex workflows with minimal setup while maintaining
 full control over each processing step.
 
 The following sections document each component in detail, with emphasis on their
-individual usage and configuration options.
+individual usage and configuration options. A schematization of the full pipeline (with all reasoing services active) can be found below
+
+.. figure:: full_schema.png
+
 
 Reasoning Utility
 --------------------
@@ -87,6 +90,26 @@ Naive Inconsistencies Filtering
    :members:
    :show-inheritance:
    :undoc-members:
+
+Naive Description Logic Profile Filtering
+--------------------
+
+
+.. autoclass:: jdex.owl.modularization.BaseDLProfileFilter
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+.. autoclass:: jdex.owl.modularization.ELProfileFilter
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+.. autoclass:: jdex.owl.modularization.ALCProfileFilter
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 
 Configuration Utility
 --------------------

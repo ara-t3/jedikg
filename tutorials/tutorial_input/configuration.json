@@ -1,0 +1,56 @@
+{
+    "dataset_name": "tutorial_dataset",
+    "verbose": 1,
+    "interactive_shell": true,
+    "paths": {
+        "schema": "./tutorials/tutorial_input/schema.owl",
+        "data": "./tutorials/tutorial_input/facts.owl",
+        "output": "./tutorials/"
+    },
+    "reasoning": {
+        "java_8_home": "/Library/Java/JavaVirtualMachines/temurin-8.jdk/Contents/Home",
+        "java_11_home": "/opt/homebrew/opt/openjdk@11/",
+        "java_max_ram": 8,
+        "materialization": {
+            "enabled": true,
+            "axioms": [
+                "SubClass",
+                "EquivalentClass",
+                "SubObjectProperty",
+                "SubObjectProperty",
+                "ObjectPropertyRange",
+                "ObjectPropertyDomain"
+            ],
+            "reasoner": "hermit"
+        },
+        "realization": {
+            "enabled": true
+        },
+        "modularization": {
+            "enabled": true
+        },
+        "decomposition": {
+            "tbox": true,
+            "rbox": true
+        },
+        "consistency": {
+            "convert_ntriples": false
+        }
+    },
+    "split": {
+        "enabled": true,
+        "train_percent": 80,
+        "validation_percent": 10,
+        "test_percent": 10,
+        "transductive": true,
+        "test_leakage_filtering": {
+            "enabled": true,
+            "minimum_frequency": 0.97
+        }
+    },
+    "post_processing": {
+        "json_conversion": true,
+        "id_mapping": true,
+        "tsv_conversion": true
+    }
+}
