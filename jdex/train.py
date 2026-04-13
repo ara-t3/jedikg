@@ -207,6 +207,7 @@ def main() -> None:
             "filtered": True,
         },
         evaluation_kwargs={
+            "batch_size": args.batch_size,
             "targets": ["tail"],
         },
         stopper="early",

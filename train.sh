@@ -6,5 +6,6 @@ python3 -m jdex.train \
   --dataset-dir ./data/datasets/unpack/YAGO3_39K_C_ROFF \
   --output-dir ./experiments/ \
   --model TransE \
-  --num-epochs 2 \
-  --batch-size 2048
+  --num-epochs 200 \
+  --embedding-dim 128 \
+  --batch-size 10000
