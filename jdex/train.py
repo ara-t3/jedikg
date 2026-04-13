@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from __future__ import annotations
-
 import argparse
 import json
 import os
@@ -59,6 +58,12 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=128,
         help="Embedding dimension",
+    )
+    parser.add_argument(
+        "--lr",
+        type=float,
+        default=0.001,
+        help="Learning Rate",
     )
     parser.add_argument(
         "--batch-size",
@@ -206,6 +211,9 @@ def main() -> None:
             device=device,
 
             optimizer="Adam",
+            optimizer_kwargs={
+             "lr":args.lr,
+             },
             lr_scheduler="ExponentialLR",
             lr_scheduler_kwargs={
                 "gamma": 0.99,
@@ -232,7 +240,7 @@ def main() -> None:
 
         ui.subrule("Results Serialization")
         
-        model_path = owd / "trained_model.pt"
+        model_path = owd / f"{owd.name}.pt"
         torch.save(result.model.state_dict(), model_path)
 
         save_id_mappings(training, owd)
@@ -260,6 +268,9 @@ def main() -> None:
                 "name": "ExponentialLR",
                 "gamma": 0.99,
             },
+            "optimizer_kwargs" : {
+                "lr" : args.lr
+            }
         }
         with open(owd / "run_config.json", "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2, ensure_ascii=False)

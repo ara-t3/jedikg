@@ -1,0 +1,18 @@
+{
+  "dataset_dir": "data/datasets/unpack/WHOW_5_ROFF",
+  "output_dir": "experiments/WHOW_5_ROFF_ComplEx_E65_D128",
+  "model": "ComplEx",
+  "embedding_dim": 128,
+  "batch_size": 8192,
+  "num_epochs": 65,
+  "random_seed": 42,
+  "device": "cuda",
+  "inverse_triples_only_for_gnn": true,
+  "filtered_evaluation": true,
+  "prediction_target": "tail",
+  "negative_sampling": "random_head_tail_only",
+  "lr_scheduler": {
+    "name": "ExponentialLR",
+    "gamma": 0.99
+  }
+}
