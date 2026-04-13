@@ -14,6 +14,21 @@ from pykeen.pipeline import pipeline
 from pykeen.triples import TriplesFactory
 from jdex.cli import CLI
 
+import gc
+
+def cleanup_torch_objects(*objs):
+    for obj in objs:
+        try:
+            del obj
+        except Exception:
+            pass
+
+    gc.collect()
+
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        torch.cuda.ipc_collect()
+
 
 SUPPORTED_MODELS = {"TransE", "RotatE", "ComplEx", "CompGCN"}
 
@@ -175,82 +190,97 @@ def main() -> None:
         ("Inverse Triples", "Yes" if args.model == "CompGCN" else "No"),
     ])
 
-
+    
     ui.subrule("Start Training")
 
-    # Run training
-    result = pipeline(
-        training=training,
-        validation=validation,
-        testing=testing,
-        model=args.model,
-        model_kwargs=model_kwargs,
-        random_seed=args.random_seed,
-        device=device,
+    try:
 
-        optimizer="Adam",
-        lr_scheduler="ExponentialLR",
-        lr_scheduler_kwargs={
-            "gamma": 0.99,
-        },
-        training_loop="sLCWA",
-        training_kwargs={
+        # Run training
+        result = pipeline(
+            training=training,
+            validation=validation,
+            testing=testing,
+            model=args.model,
+            model_kwargs=model_kwargs,
+            random_seed=args.random_seed,
+            device=device,
+
+            optimizer="Adam",
+            lr_scheduler="ExponentialLR",
+            lr_scheduler_kwargs={
+                "gamma": 0.99,
+            },
+            training_loop="sLCWA",
+            training_kwargs={
+                "num_epochs": args.num_epochs,
+                "batch_size": args.batch_size,
+            },
+            negative_sampler="basic",
+            negative_sampler_kwargs={
+                "corruption_scheme": ["head", "tail"],
+            },
+            evaluator="RankBasedEvaluator",
+            evaluator_kwargs={
+                "filtered": True,
+            },
+            evaluation_kwargs={
+                "batch_size": args.batch_size,
+                "targets": ["tail"],
+            },
+            stopper="early",
+        )
+
+        ui.subrule("Results Serialization")
+        
+        model_path = owd / "trained_model.pt"
+        torch.save(result.model.state_dict(), model_path)
+
+        save_id_mappings(training, owd)
+
+        # Save a lightweight metrics summary
+        metrics = result.metric_results.to_dict()
+        with open(owd / "metrics.json", "w", encoding="utf-8") as f:
+            json.dump(metrics, f, indent=2, ensure_ascii=False)
+
+        # Save config used for reproducibility
+        config = {
+            "dataset_dir": str(args.dataset_dir),
+            "output_dir": str(owd),
+            "model": args.model,
+            "embedding_dim": args.embedding_dim,
+            "batch_size": args.batch_size,
             "num_epochs": args.num_epochs,
-            "batch_size": args.batch_size,
-        },
-        negative_sampler="basic",
-        negative_sampler_kwargs={
-            "corruption_scheme": ["head", "tail"],
-        },
-        evaluator="RankBasedEvaluator",
-        evaluator_kwargs={
-            "filtered": True,
-        },
-        evaluation_kwargs={
-            "batch_size": args.batch_size,
-            "targets": ["tail"],
-        },
-        stopper="early",
-    )
+            "random_seed": args.random_seed,
+            "device": device,
+            "inverse_triples_only_for_gnn": True,
+            "filtered_evaluation": True,
+            "prediction_target": "tail",
+            "negative_sampling": "random_head_tail_only",
+            "lr_scheduler": {
+                "name": "ExponentialLR",
+                "gamma": 0.99,
+            },
+        }
+        with open(owd / "run_config.json", "w", encoding="utf-8") as f:
+            json.dump(config, f, indent=2, ensure_ascii=False)
 
-    ui.subrule("Results Serialization")
+        print("\nTraining complete.")
+        print(f"Saved full results to: {owd}")
+        print(f"Saved model checkpoint to: {model_path}")
+        print(f"Saved metrics to: {args.output_dir / 'metrics.json'}")
     
-    model_path = owd / "trained_model.pt"
-    torch.save(result.model.state_dict(), model_path)
+    finally:
+        try:
+            if result is not None and getattr(result, "model", None) is not None:
+                result.model.cpu()
+        except Exception:
+            pass
 
-    save_id_mappings(training, owd)
+        del result
+        del training
+        del validation
+        del testing
 
-    # Save a lightweight metrics summary
-    metrics = result.metric_results.to_dict()
-    with open(owd / "metrics.json", "w", encoding="utf-8") as f:
-        json.dump(metrics, f, indent=2, ensure_ascii=False)
-
-    # Save config used for reproducibility
-    config = {
-        "dataset_dir": str(args.dataset_dir),
-        "output_dir": str(owd),
-        "model": args.model,
-        "embedding_dim": args.embedding_dim,
-        "batch_size": args.batch_size,
-        "num_epochs": args.num_epochs,
-        "random_seed": args.random_seed,
-        "device": device,
-        "inverse_triples_only_for_gnn": True,
-        "filtered_evaluation": True,
-        "prediction_target": "tail",
-        "negative_sampling": "random_head_tail_only",
-        "lr_scheduler": {
-            "name": "ExponentialLR",
-            "gamma": 0.99,
-        },
-    }
-    with open(owd / "run_config.json", "w", encoding="utf-8") as f:
-        json.dump(config, f, indent=2, ensure_ascii=False)
-
-    print("\nTraining complete.")
-    print(f"Saved full results to: {owd}")
-    print(f"Saved model checkpoint to: {model_path}")
-    print(f"Saved metrics to: {args.output_dir / 'metrics.json'}")
 
 
 if __name__ == "__main__":
