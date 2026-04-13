@@ -193,6 +193,7 @@ def main() -> None:
         ("Negative Sampling", "Random (h, t only)"),
         ("Evaluation", "Filtered, Tail Only"),
         ("Inverse Triples", "Yes" if args.model == "CompGCN" else "No"),
+        ("Learning Rate", args.lr)
     ])
 
     

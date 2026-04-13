@@ -8,4 +8,5 @@ python3 -m jdex.train \
   --model ComplEx \
   --num-epochs 65 \
   --embedding-dim 128 \
-  --batch-size  8192
+  --batch-size  8192 \
+  --lr 0.001
