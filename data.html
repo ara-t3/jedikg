@@ -60,6 +60,14 @@
 <li class="toctree-l3"><a class="reference internal" href="#table-available-datasets-statistics">Table: Available datasets statistics</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#knowledge-graph-embedding-benchmarks">Knowledge Graph Embedding Benchmarks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#datasets-from-yago3">Datasets from <code class="docutils literal notranslate"><span class="pre">YAGO3</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets-from-yago4">Datasets from <code class="docutils literal notranslate"><span class="pre">YAGO4</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets-from-whow">Datasets from <code class="docutils literal notranslate"><span class="pre">WHOW</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets-from-arco">Datasets from <code class="docutils literal notranslate"><span class="pre">ARCO</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets-from-dbpedia">Datasets from <code class="docutils literal notranslate"><span class="pre">DBPedia</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
@@ -631,6 +639,259 @@ Domain-specific KG for tourism in Apulia, Italy. Models attractions, accommodati
 <td class="text-center"><p>551</p></td>
 <td class="text-center"><p>450</p></td>
 <td class="text-center"><p>84</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="knowledge-graph-embedding-benchmarks">
+<h2>Knowledge Graph Embedding Benchmarks<a class="headerlink" href="#knowledge-graph-embedding-benchmarks" title="Link to this heading"></a></h2>
+<p>This section will be updated as new ontologies or dataset are supported by our suite!</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The following results are proof-of-concept experiments. They are intended to showcase preliminary performance trends across models rather than provide a fully optimized or exhaustive benchmark.</p>
+</div>
+<section id="datasets-from-yago3">
+<h3>Datasets from <code class="docutils literal notranslate"><span class="pre">YAGO3</span></code><a class="headerlink" href="#datasets-from-yago3" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Model</p></th>
+<th class="head"><p>MR</p></th>
+<th class="head"><p>MRR</p></th>
+<th class="head"><p>Hits&#64;1</p></th>
+<th class="head"><p>Hits&#64;5</p></th>
+<th class="head"><p>Hits&#64;10</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>YAGO3-39K</p></td>
+<td><p>TransE</p></td>
+<td><p>1908.55</p></td>
+<td><p>0.127</p></td>
+<td><p>0.048</p></td>
+<td><p>0.201</p></td>
+<td><p>0.289</p></td>
+</tr>
+<tr class="row-odd"><td><p>YAGO3-39K</p></td>
+<td><p>RotatE</p></td>
+<td><p>483.47</p></td>
+<td><p>0.225</p></td>
+<td><p>0.140</p></td>
+<td><p>0.298</p></td>
+<td><p>0.391</p></td>
+</tr>
+<tr class="row-even"><td><p>YAGO3-39K</p></td>
+<td><p>ComplEx</p></td>
+<td><p>6885.38</p></td>
+<td><p>0.053</p></td>
+<td><p>0.022</p></td>
+<td><p>0.073</p></td>
+<td><p>0.112</p></td>
+</tr>
+<tr class="row-odd"><td><p>YAGO3-39K</p></td>
+<td><p>CompGCN</p></td>
+<td><p>1810.08</p></td>
+<td><p>0.138</p></td>
+<td><p>0.078</p></td>
+<td><p>0.183</p></td>
+<td><p>0.252</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="datasets-from-yago4">
+<h3>Datasets from <code class="docutils literal notranslate"><span class="pre">YAGO4</span></code><a class="headerlink" href="#datasets-from-yago4" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Model</p></th>
+<th class="head"><p>MR</p></th>
+<th class="head"><p>MRR</p></th>
+<th class="head"><p>Hits&#64;1</p></th>
+<th class="head"><p>Hits&#64;5</p></th>
+<th class="head"><p>Hits&#64;10</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>YAGO4-20</p></td>
+<td><p>TransE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>YAGO4-20</p></td>
+<td><p>RotatE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>YAGO4-20</p></td>
+<td><p>ComplEx</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>YAGO4-20</p></td>
+<td><p>CompGCN</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="datasets-from-whow">
+<h3>Datasets from <code class="docutils literal notranslate"><span class="pre">WHOW</span></code><a class="headerlink" href="#datasets-from-whow" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Model</p></th>
+<th class="head"><p>MR</p></th>
+<th class="head"><p>MRR</p></th>
+<th class="head"><p>Hits&#64;1</p></th>
+<th class="head"><p>Hits&#64;5</p></th>
+<th class="head"><p>Hits&#64;10</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>WHOW-5</p></td>
+<td><p>TransE</p></td>
+<td><p>4482.41</p></td>
+<td><p>0.123</p></td>
+<td><p>0.003</p></td>
+<td><p>0.251</p></td>
+<td><p>0.349</p></td>
+</tr>
+<tr class="row-odd"><td><p>WHOW-5</p></td>
+<td><p>RotatE</p></td>
+<td><p>1314.55</p></td>
+<td><p>0.529</p></td>
+<td><p>0.417</p></td>
+<td><p>0.673</p></td>
+<td><p>0.766</p></td>
+</tr>
+<tr class="row-even"><td><p>WHOW-5</p></td>
+<td><p>ComplEx</p></td>
+<td><p>9235.94</p></td>
+<td><p>0.055</p></td>
+<td><p>0.040</p></td>
+<td><p>0.070</p></td>
+<td><p>0.084</p></td>
+</tr>
+<tr class="row-odd"><td><p>WHOW-5</p></td>
+<td><p>CompGCN</p></td>
+<td><p>733.29</p></td>
+<td><p>0.422</p></td>
+<td><p>0.304</p></td>
+<td><p>0.566</p></td>
+<td><p>0.625</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="datasets-from-arco">
+<h3>Datasets from <code class="docutils literal notranslate"><span class="pre">ARCO</span></code><a class="headerlink" href="#datasets-from-arco" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Model</p></th>
+<th class="head"><p>MR</p></th>
+<th class="head"><p>MRR</p></th>
+<th class="head"><p>Hits&#64;1</p></th>
+<th class="head"><p>Hits&#64;5</p></th>
+<th class="head"><p>Hits&#64;10</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ARCO-10</p></td>
+<td><p>TransE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>ARCO-10</p></td>
+<td><p>RotatE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>ARCO-10</p></td>
+<td><p>ComplEx</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>ARCO-10</p></td>
+<td><p>CompGCN</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="datasets-from-dbpedia">
+<h3>Datasets from <code class="docutils literal notranslate"><span class="pre">DBPedia</span></code><a class="headerlink" href="#datasets-from-dbpedia" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Model</p></th>
+<th class="head"><p>MR</p></th>
+<th class="head"><p>MRR</p></th>
+<th class="head"><p>Hits&#64;1</p></th>
+<th class="head"><p>Hits&#64;5</p></th>
+<th class="head"><p>Hits&#64;10</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DBPEDIA-100K</p></td>
+<td><p>TransE</p></td>
+<td><p>3005.94</p></td>
+<td><p>0.114</p></td>
+<td><p>0.012</p></td>
+<td><p>0.219</p></td>
+<td><p>0.294</p></td>
+</tr>
+<tr class="row-odd"><td><p>DBPEDIA-100K</p></td>
+<td><p>RotatE</p></td>
+<td><p>2693.98</p></td>
+<td><p>0.371</p></td>
+<td><p>0.282</p></td>
+<td><p>0.468</p></td>
+<td><p>0.541</p></td>
+</tr>
+<tr class="row-even"><td><p>DBPEDIA-100K</p></td>
+<td><p>ComplEx</p></td>
+<td><p>7243.17</p></td>
+<td><p>0.116</p></td>
+<td><p>0.056</p></td>
+<td><p>0.176</p></td>
+<td><p>0.223</p></td>
+</tr>
+<tr class="row-odd"><td><p>DBPEDIA-100K</p></td>
+<td><p>CompGCN</p></td>
+<td><p>1659.33</p></td>
+<td><p>0.198</p></td>
+<td><p>0.099</p></td>
+<td><p>0.299</p></td>
+<td><p>0.396</p></td>
 </tr>
 </tbody>
 </table>

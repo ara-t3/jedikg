@@ -40,11 +40,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../quick.html">Quick Start Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorials and Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
 </ul>
@@ -90,6 +93,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">rdflib</span><span class="w"> </span><span class="kn">import</span> <span class="n">OWL</span><span class="p">,</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">RDFS</span><span class="p">,</span> <span class="n">BNode</span><span class="p">,</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Namespace</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">rdflib.namespace</span><span class="w"> </span><span class="kn">import</span> <span class="n">split_uri</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">rdflib.term</span><span class="w"> </span><span class="kn">import</span> <span class="n">URIRef</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jdex.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">CLI</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">split_top_level</span><span class="p">(</span><span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -209,6 +213,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">java11_path</span> <span class="o">=</span> <span class="n">java11_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">jram</span> <span class="o">=</span> <span class="n">java_max_ram</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">supported_reasoners</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hermit&quot;</span><span class="p">,</span> <span class="s2">&quot;elk&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">CLI</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_run_process</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span>
@@ -254,17 +259,17 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="ow">in</span> <span class="n">succesful_returns</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Reasoning: </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> - completed successfully in </span><span class="si">{</span><span class="n">elapsed_time</span><span class="si">:</span><span class="s2">4.3f</span><span class="si">}</span><span class="s2">s!&quot;</span>
                 <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Reasoning: </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> -  failed after </span><span class="si">{</span><span class="n">elapsed_time</span><span class="si">:</span><span class="s2">4.3f</span><span class="si">}</span><span class="s2">s - Stack Trace Available Below:&quot;</span>
                 <span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;===== STACK TRACE START =====&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;===== STACK TRACE END =====&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;===== STACK TRACE START =====&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;===== STACK TRACE END =====&quot;</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Command failed with returncode </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">returncode</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_env</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">java_version</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
