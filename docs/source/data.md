@@ -153,3 +153,58 @@ Dataset statistics including **ABox** (instance-level) and **Schema/TBox** (clas
 | ARCO-10      | 202,492   | 45,400   | 111   | 117     | 0.06  | 0.06  | **0.44** | **0.44** | 1,824.25  | 119,304       | 378          | 24        | 1,033    | 211  | 431  | 593   | 462    | 465   | 369  | 71          |
 | ARCO-5       | 655,089   | 198,674  | 196   | 192     | 0.10  | 0.10  | **0.40** | **0.40** | 3,342.29 | 471,031       | 438          | 26        | 1,153    | 228  | 474  | 683   | 546    | 551   | 450  | 84          |
 
+## Knowledge Graph Embedding Benchmarks
+
+This section will be updated as new ontologies or dataset are supported by our suite!
+
+```{warning}
+The following results are proof-of-concept experiments. They are intended to showcase preliminary performance trends across models rather than provide a fully optimized or exhaustive benchmark.
+```
+
+
+
+
+### Datasets from `YAGO3`
+
+| Dataset        | Model    | MR      | MRR   | Hits@1 | Hits@5 | Hits@10 |
+|----------------|----------|----------|--------|--------|--------|---------|
+| YAGO3-39K      | TransE   | 1908.55 | 0.127 | 0.048 | 0.201 | 0.289 |
+| YAGO3-39K      | RotatE   | 483.47  | 0.225 | 0.140 | 0.298 | 0.391 |
+| YAGO3-39K      | ComplEx  | 6885.38 | 0.053 | 0.022 | 0.073 | 0.112 |
+| YAGO3-39K      | CompGCN  | 1810.08 | 0.138 | 0.078 | 0.183 | 0.252 |
+
+### Datasets from `YAGO4`
+
+| Dataset        | Model    | MR      | MRR   | Hits@1 | Hits@5 | Hits@10 |
+|----------------|----------|----------|--------|--------|--------|---------|
+| YAGO4-20       | TransE   | —       | —     | —     | —     | —     |
+| YAGO4-20       | RotatE   | —       | —     | —     | —     | —     |
+| YAGO4-20       | ComplEx  | —       | —     | —     | —     | —     |
+| YAGO4-20       | CompGCN  | —       | —     | —     | —     | —     |
+
+### Datasets from `WHOW`
+
+| Dataset        | Model    | MR      | MRR   | Hits@1 | Hits@5 | Hits@10 |
+|----------------|----------|----------|--------|--------|--------|---------|
+| WHOW-5         | TransE   | 4482.41 | 0.123 | 0.003 | 0.251 | 0.349 |
+| WHOW-5         | RotatE   | 1314.55 | 0.529 | 0.417 | 0.673 | 0.766 |
+| WHOW-5         | ComplEx  | 9235.94 | 0.055 | 0.040 | 0.070 | 0.084 |
+| WHOW-5         | CompGCN  | 733.29  | 0.422 | 0.304 | 0.566 | 0.625 |
+
+### Datasets from `ARCO`
+
+| Dataset        | Model    | MR      | MRR   | Hits@1 | Hits@5 | Hits@10 |
+|----------------|----------|----------|--------|--------|--------|---------|
+| ARCO-10        | TransE   | —       | —     | —     | —     | —     |
+| ARCO-10        | RotatE   | —       | —     | —     | —     | —     |
+| ARCO-10        | ComplEx  | —       | —     | —     | —     | —     |
+| ARCO-10        | CompGCN  | —       | —     | —     | —     | —     |
+
+### Datasets from `DBPedia`
+
+| Dataset        | Model    | MR      | MRR   | Hits@1 | Hits@5 | Hits@10 |
+|----------------|----------|----------|--------|--------|--------|---------|
+| DBPEDIA-100K   | TransE   | 3005.94 | 0.114 | 0.012 | 0.219 | 0.294 |
+| DBPEDIA-100K   | RotatE   | 2693.98 | 0.371 | 0.282 | 0.468 | 0.541 |
+| DBPEDIA-100K   | ComplEx  | 7243.17 | 0.116 | 0.056 | 0.176 | 0.223 |
+| DBPEDIA-100K   | CompGCN  | 1659.33 | 0.198 | 0.099 | 0.299 | 0.396 |

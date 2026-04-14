@@ -11,7 +11,7 @@ It is highly recommended to use [pyenv](https://github.com/pyenv/pyenv) to manag
 
 1. **Ubuntu 20** or later. The project has been developed on Linux Ubuntu System. Compatibility with other systems has not been tested.
 
-1. **Python 3.9** or later. If you already have Python 3.9+ installed system-wide, pyenv is optional but recommended.
+1. **Python >=3.11** or later. If you already have Python >=3.11 installed system-wide, pyenv is optional but recommended.
 
 2. **Java 8** or later. This is needed only if you plan to use Justification tools, due to *Pellet* dependecies.
 
