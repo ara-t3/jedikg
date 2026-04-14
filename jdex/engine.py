@@ -1,44 +1,36 @@
 #!/usr/bin/env python3
 
-from rdflib import Graph, RDF, OWL, BNode
-from rdflib.term import URIRef
-from pathlib import Path
-import sys
-import subprocess
-import json
-sys.path.append(str(Path.cwd().parent))
-from jdex.utils.conventions.builtins import BUILTIN_URIS
-from jdex.owl.modularization import SignatureModularizer, ELProfileFilter, ALCProfileFilter
-from jdex.owl.decomposition import SchemaDecomposer 
-from pykeen.triples import TriplesFactory
-from pykeen.triples.splitting import CoverageSplitter
-from jdex.utils.postprocessing import OWLConverter, TSVConverter, IDMapper
-from pykeen.triples.leakage import unleak
-from jdex.owl.reasoning import Reasoner, PresetAxioms
-import jdex.utils.conventions.paths as pc
-from jdex.utils.postprocessing import TSVConverter, IDMapper, OWLConverter
-import numpy as np
-import argparse
-import logging
-import time
 import gc
-import psutil
+import json
 import os
+import shutil
+import subprocess
+import sys
+import time
+from pathlib import Path
+from typing import Any
+
+import numpy as np
+import psutil
+from pykeen.triples import TriplesFactory
+from pykeen.triples.leakage import unleak
+from pykeen.triples.splitting import CoverageSplitter
+from rdflib import OWL, RDF, Graph
+from rdflib.term import URIRef
+
+import jdex.utils.conventions.paths as pc
+from jdex.cli import CLI
+from jdex.config import JDEXConfig
+from jdex.owl.decomposition import SchemaDecomposer
+from jdex.owl.modularization import (ALCProfileFilter, ELProfileFilter,
+                                     SignatureModularizer)
+from jdex.owl.reasoning import Reasoner
+from jdex.utils.postprocessing import IDMapper, OWLConverter, TSVConverter
 
 process = psutil.Process(os.getpid())
 
 def mem_mb():
     return process.memory_info().rss / (1024 ** 2)
-
-
-from jdex.config import JDEXConfig
-from typing import Any, Literal
-from pathlib import Path
-import shutil
-import json
-from jdex.cli import CLI
-
-
 
 class JDEX:
 
@@ -55,11 +47,19 @@ class JDEX:
         ) 
         
     def kill(self, code: int = 1):
-        self.ui.rule("JDEX Suite Terminated")
+        self.ui.rule("JDEX Execution Stopped")
         sys.exit(code)
 
     def startup_screen(self):
         self.ui.logo()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        self.ui.error("Forcing Shut Down. Closing Process")
+        gc.collect()
+
         
     @classmethod
     def from_json(cls, json_path: str | Path) -> "JDEX":
@@ -75,7 +75,7 @@ class JDEX:
     
     def interactive_menu(self) -> str:
         return self.ui.choose(
-            "What do you want to do?",
+            "Select an action:",
             [
                 "Run dataset generation",
                 "Show configuration summary",
@@ -94,38 +94,43 @@ class JDEX:
     def filter_unsatisfiable(self):
         sc_it_number = 1
         tot_removed = 0
-        self.ui.info(f"Starting Removal of Unsatisfiable Classes / Roles using {self.config.reasoning.satisfiability.reasoner.upper()}")
+        self.ui.info(f"Starting unsatisfiable class and role removal using {self.config.reasoning.satisfiability.reasoner.upper()}")
         while True:
             unsatifiable_classes = self.reasoner.satisfiability(
                 input_ontology=self.cwd / pc.ONTOLOGY,
                 verbose=self.config.verbose,
                 reasoner=self.config.reasoning.satisfiability.reasoner,
             )
-            self.ui.info(f"Unsatisfiability Removel Step {sc_it_number}. Found {len(unsatifiable_classes)} Unsatisfiable URI")
+            self.ui.info(f"Unsatisfiability cleanup step {sc_it_number}: found {len(unsatifiable_classes)} unsatisfiable URI(s)")
             if unsatifiable_classes:
-                self.ui.info(f"Unsatisfiable Uris Found: {unsatifiable_classes}")
+                self.ui.info(f"Unsatisfiable URIs detected: {unsatifiable_classes}")
                 self.reasoner.filtering(self.cwd / pc.ONTOLOGY, self.cwd / pc.ONTOLOGY, uris=unsatifiable_classes, verbose=self.config.verbose)
                 sc_it_number +=1
                 tot_removed += len(unsatifiable_classes)
             else:
-                self.ui.success(f"Filtered {tot_removed} unsatisfiable URIs in {sc_it_number} steps")
+                self.ui.success(f"Unsatisfiability cleanup completed: removed {tot_removed} URI(s) across {sc_it_number} step(s)")
                 return sc_it_number, tot_removed
             
     def consistency_check(self):
         if self.config.reasoning.consistency.convert_ntriples:
-            self.ui.info(f"Converting Knowledge Graph to NTriples Format")
+            self.ui.info("Converting the knowledge graph to N-Triples format for consistency checking")
             fg = Graph()
             fg.parse(self.cwd / pc.KNOWLEDGE_GRAPH)
             fg.serialize(self.cwd / "knowledge_graph.nt", format="ntriples", encoding="UTF-8")
-            self.ui.info(f"NTriples Knowledge Graph saved at {self.cwd / "knowledge_graph.nt"}")
+            self.ui.info(f"N-Triples knowledge graph saved to {self.cwd / 'knowledge_graph.nt'}")
             return self.reasoner.consistency(self.cwd / "knowledge_graph.nt", verbose=self.config.verbose)
         else:
             return self.reasoner.consistency(self.cwd / pc.KNOWLEDGE_GRAPH, verbose=self.config.verbose)
     
     
-
-
     def run(self):
+        try:
+            self._run()
+        except KeyboardInterrupt:
+            self.ui.error("Forcing Shut Down. Closing Process")
+            gc.collect()
+
+    def _run(self):
 
         self.startup_screen()
 
@@ -142,8 +147,8 @@ class JDEX:
         
         start = time.perf_counter()
         self.ui.rule("JDEX Pipeline")
-        self.ui.subrule("Initial Configuration and Safety Checks")
-        self.ui.info("Starting JDEX Dataset Generation Suite")
+        self.ui.subrule("Initial Setup and Validation")
+        self.ui.info("Starting the JDEX dataset generation pipeline")
 
         # ----------------------------------
         # MAKE BASE WORKING FOLDER 
@@ -153,19 +158,19 @@ class JDEX:
             shutil.rmtree(self.cwd)
         self.cwd.mkdir(parents=True, exist_ok=True)
 
-        self.ui.success(f"Base Folder Created at {self.cwd.absolute()}")
+        self.ui.success(f"Working directory created at {self.cwd.absolute()}")
 
         # ----------------------------------
         # CONVERT SCHEMA TO BASE FORMAT
         # ----------------------------------
 
-        self.ui.info(f"Converthing Schema File {self.config.paths.schema.absolute()} to OWL format")
+        self.ui.info(f"Converting schema file {self.config.paths.schema.absolute()} to OWL format")
         self.reasoner.conversion(self.config.paths.schema, self.cwd / pc.ONTOLOGY, format="owl", verbose=self.config.verbose)
-        self.ui.success(f"Temporary Conversion saved as {(self.cwd / pc.ONTOLOGY).absolute()}")
+        self.ui.success(f"Temporary schema conversion saved to {(self.cwd / pc.ONTOLOGY).absolute()}")
 
-        self.ui.info(f"Converthing Assertions File {self.config.paths.data.absolute()} to OWL format")
+        self.ui.info(f"Converting assertions file {self.config.paths.data.absolute()} to OWL format")
         self.reasoner.conversion(self.config.paths.data, self.cwd / pc.ASSERTIONS, format="owl", verbose=self.config.verbose)
-        self.ui.success(f"Temporary Conversion saved as {(self.cwd / pc.ASSERTIONS).absolute()}")
+        self.ui.success(f"Temporary assertions conversion saved to {(self.cwd / pc.ASSERTIONS).absolute()}")
 
         # -----------------------------------
         # CHECK APPLICABILITY OF REASONING SERVICES
@@ -173,7 +178,7 @@ class JDEX:
         if self.config.description_logic_profile:
             if self.config.description_logic_profile.lower() in {"alc", "el"}:
                 profile = self.config.description_logic_profile.lower()
-                self.ui.subrule(f"Descripton Logic Profile Filtering: {profile.upper()}")
+                self.ui.subrule(f"Description Logic Profile Filtering: {profile.upper()}")
 
                 g = Graph()
                 g.parse(self.cwd / pc.ONTOLOGY)
@@ -187,8 +192,8 @@ class JDEX:
                 pg = utility.filter_graph()
 
                 self.ui.panel(f"{profile.upper()} Profile Ontology", data=[
-                    ("Original Profile Axioms", len(g)),
-                    (f"{profile.upper()} Profile Axioms", len(pg))
+                    ("Original axioms", len(g)),
+                    (f"{profile.upper()}-compatible axioms", len(pg))
                 ])
 
                 pg.serialize(self.cwd / pc.ONTOLOGY, format="xml")
@@ -198,7 +203,7 @@ class JDEX:
                     self.cwd / pc.ONTOLOGY
                 )
 
-                self.ui.success("Profile Filtering Successful")
+                self.ui.success("Description logic profile filtering completed successfully")
 
 
         # -----------------------------------
@@ -208,19 +213,19 @@ class JDEX:
         if (not self.config.reasoning.satisfiability.filter_unsatisfiable):
             if  (self.config.reasoning.materialization or self.config.reasoning.realization):
                 if self.config.interactive_shell:
-                    confirm = self.ui.confirm("Reasoning Services Active but Not Filtering of Unsatisfiable Classes / Roles. Do you want to check satisfiability?")
+                    confirm = self.ui.confirm("Reasoning services are enabled, but unsatisfiable classes and roles are not being filtered. Would you like to run a satisfiability check?")
                     if confirm:
-                        self.ui.info(f"Running Satisfiability Using {self.config.reasoning.satisfiability.reasoner.upper()} (Robot)")
+                        self.ui.info(f"Running satisfiability analysis with {self.config.reasoning.satisfiability.reasoner.upper()} (ROBOT)")
                         unsatifiable_classes = self.reasoner.satisfiability(
                             input_ontology=self.config.paths.schema, 
                             reasoner=self.config.reasoning.satisfiability.reasoner,
                             verbose=self.config.verbose
                         )
                         if not(unsatifiable_classes):
-                            self.ui.success("No Unsatisfiable Classes / Object Properties Found")
+                            self.ui.success("No unsatisfiable classes or object properties were found")
                         else:
-                            self.ui.warning(f"Reasoning services cannot be activated on ontologies with unsatisfiable classes / roles. Unsatisfiable classes found: [{unsatifiable_classes}]. Please run with 'filter_unsatisfiable':true. """)
-                            confirm = self.ui.confirm("Want to run Unsatisfiable URIs Removal Now?")
+                            self.ui.warning(f"Reasoning services cannot run safely on ontologies with unsatisfiable classes or roles. Detected unsatisfiable entities: [{unsatifiable_classes}]. Please run with 'filter_unsatisfiable': true.")
+                            confirm = self.ui.confirm("Would you like to remove unsatisfiable URIs now?")
                             if confirm:
                                 self.filter_unsatisfiable()
                             else:
@@ -235,19 +240,19 @@ class JDEX:
 
 
         (self.cwd / "abox").mkdir(parents=True, exist_ok=True)
-        self.ui.success("TBox Subfolder created")
+        self.ui.success("ABox subfolder created")
 
         if self.config.reasoning.decomposition.tbox:
             (self.cwd / "tbox").mkdir(parents=True, exist_ok=True)
-            self.ui.success("TBox Subfolder created")
+            self.ui.success("TBox subfolder created")
 
         if self.config.reasoning.decomposition.rbox:
             (self.cwd / "rbox").mkdir(parents=True, exist_ok=True)
-            self.ui.success("RBox Subfolder created")
+            self.ui.success("RBox subfolder created")
 
         if self.config.split.enabled:
             (self.cwd / "abox" / "splits").mkdir(parents=True, exist_ok=True)
-            self.ui.success("Split Subfolder created")
+            self.ui.success("Split subfolder created")
 
         """
         if self.config.post_processing.id_mapping:
@@ -261,11 +266,11 @@ class JDEX:
         # ----------------------------------
 
         if self.config.reasoning.materialization.enabled:
-            self.ui.subrule("Materialization of Schema Axioms")
-            self.ui.info(f"Running Materialization Using {self.config.reasoning.materialization.reasoner} (Robot)")
-            self.ui.info(f"Using Axiom Generators: {self.config.reasoning.materialization.axioms}")
+            self.ui.subrule("Schema Axiom Materialization")
+            self.ui.info(f"Running materialization with {self.config.reasoning.materialization.reasoner} (ROBOT)")
+            self.ui.info(f"Using axiom generators: {self.config.reasoning.materialization.axioms}")
             self.reasoner.materialization(self.cwd / pc.ONTOLOGY, self.cwd / pc.ONTOLOGY, axioms=self.config.reasoning.materialization.axioms, verbose=self.config.verbose, safety_check=False, reasoner=self.config.reasoning.satisfiability.reasoner)
-            self.ui.success("Materialization Completed")
+            self.ui.success("Schema materialization completed successfully")
 
 
         # -----------------------------------
@@ -273,23 +278,23 @@ class JDEX:
         # ----------------------------------
 
 
-        self.ui.subrule("Assertions Checks and Filtering")
+        self.ui.subrule("Assertion Validation and Filtering")
 
-        self.ui.info("Loading Assertions in Memory")
+        self.ui.info("Loading assertions into memory")
         assertions = Graph()
         assertions.parse(self.cwd / pc.ASSERTIONS)
-        self.ui.success(f"Loaded {len(assertions)} triples in memory")
+        self.ui.success(f"Loaded {len(assertions)} assertion triple(s)")
 
-        self.ui.info("Loading Schema in Memory")
+        self.ui.info("Loading schema into memory")
         schema = Graph()
         schema.parse(self.cwd / pc.ONTOLOGY)
-        self.ui.success(f"Loaded {len(schema)} schema triples in memory")
+        self.ui.success(f"Loaded {len(schema)} schema triple(s)")
 
         
 
-        self.ui.info("Filtering Object Property Assertions and Class Assertions")
-        self.ui.info("NamedIndividuals also defined as Classes will be removed")
-        self.ui.info("ObjectProperties also defined as DatatypeProperties will be removed")
+        self.ui.info("Filtering object property assertions and class assertions")
+        self.ui.info("Named individuals that are also declared as classes will be removed")
+        self.ui.info("Object properties that are also declared as datatype properties will be removed")
 
         op_triples = Graph()
         ca_triples = Graph()
@@ -303,23 +308,23 @@ class JDEX:
         null_individuals = set()
         null_object_properties = set()
 
-        for s,p,o in self.ui.progress(assertions, "Filtering Assertions", total=len(assertions)):
+        for s,p,o in self.ui.progress(assertions, "Filtering assertions", total=len(assertions)):
             if (s, RDF.type, OWL.NamedIndividual) in assertions and (p, RDF.type, OWL.ObjectProperty) in schema and (o, RDF.type, OWL.NamedIndividual) in assertions:
             
                 if s not in individuals and (s, RDF.type, OWL.Class) in schema:
-                    null_individuals.add((s, "Also Defined as Class"))
+                    null_individuals.add((s, "Also declared as Class"))
                     continue
                 else:
                     individuals.add(s)
                 
                 if o not in individuals and (o, RDF.type, OWL.Class) in schema:
-                    null_individuals.add((s, "Also Defined as Class"))
+                    null_individuals.add((s, "Also declared as Class"))
                     continue
                 else:
                     individuals.add(o)
 
                 if p not in object_properties and (p, RDF.type, OWL.DatatypeProperty) in schema:
-                    null_object_properties.add((p, "Also Defined as DatatypeProperty"))
+                    null_object_properties.add((p, "Also declared as DatatypeProperty"))
                     continue
                 else:
                     object_properties.add(p)
@@ -330,7 +335,7 @@ class JDEX:
             elif (s, RDF.type, OWL.NamedIndividual) in assertions and (p == RDF.type) and (o, RDF.type, OWL.Class) in schema:
 
                 if s not in individuals and (s, RDF.type, OWL.Class) in schema:
-                    null_individuals.add((s, "Also Defined as Class"))
+                    null_individuals.add((s, "Also declared as Class"))
                     continue
                 else:
                     individuals.add(s)
@@ -343,24 +348,24 @@ class JDEX:
         self.ui.panel(
             title="Assertions Overview",
             data=[
-                ("Individuals Found", len(individuals)),
-                ("Object Properties Found", len(object_properties)),
-                ("Classes Found", len(classes)),
-                ("Object Property Assertions", len(op_triples)),
-                ("Class Assertions", len(ca_triples)),
+                ("Individuals found", len(individuals)),
+                ("Object properties found", len(object_properties)),
+                ("Classes found", len(classes)),
+                ("Object property assertions", len(op_triples)),
+                ("Class assertions", len(ca_triples)),
             ]
         )
 
-        self.ui.panel(title="Removed Overview", data=[
-            ("Individuals Removed", len(null_individuals) ),
-            ("Object Properties Removed", len(null_object_properties))
+        self.ui.panel(title="Removed Entities Overview", data=[
+            ("Individuals removed", len(null_individuals) ),
+            ("Object properties removed", len(null_object_properties))
         ])
 
-        self.ui.success("Assertions Filtered Successfully")
+        self.ui.success("Assertion filtering completed successfully")
 
         if null_individuals or null_object_properties:
             if self.config.interactive_shell:
-                confirm = self.ui.confirm("Do you want to visualize the removed URIs?")
+                confirm = self.ui.confirm("Would you like to inspect the removed URIs?")
                 if confirm:
                     if null_individuals:
                         self.ui.list("Removed Individuals", [f"{a} -> {b}" for a,b in null_individuals])
@@ -369,13 +374,13 @@ class JDEX:
 
         
         start_usage = mem_mb()
-        self.ui.info("Memory Optimization: Deleting Unused Files from Memory")
+        self.ui.info("Memory cleanup: removing temporary assertion data from memory")
         del assertions
         del null_individuals
         del null_object_properties
         gc.collect()
         end_usage = mem_mb()
-        self.ui.success(f"Memory Optimization: {start_usage - end_usage} MB Freed")
+        self.ui.success(f"Memory cleanup completed: freed {start_usage - end_usage} MB")
 
 
         # -----------------------------------
@@ -383,18 +388,18 @@ class JDEX:
         # ----------------------------------
 
         
-        self.ui.subrule("Machine Learning Pre-Processing")
+        self.ui.subrule("Machine Learning Preprocessing")
 
         if self.config.split.enabled:
 
-            self.ui.info("Splitting Object Property Assertions in Train/Test/Val")
+            self.ui.info("Splitting object property assertions into train, validation, and test sets")
 
             triples = TriplesFactory.from_labeled_triples(np.array(op_triples))
 
             if self.config.split.transductive:
 
-                self.ui.info(f"Splitting with Transductive Setting using {CoverageSplitter}")
-                self.ui.info(f"Using Ratio {self.config.split.train_percent}/{self.config.split.validation_percent}/{self.config.split.test_percent}")
+                self.ui.info(f"Using transductive splitting with {CoverageSplitter}")
+                self.ui.info(f"Configured ratios: {self.config.split.train_percent}/{self.config.split.validation_percent}/{self.config.split.test_percent}")
 
                 train_ratio = self.config.split.train_percent / 100
                 valid_ratio = self.config.split.validation_percent / 100
@@ -406,21 +411,21 @@ class JDEX:
                     method=CoverageSplitter(),
                 )
 
-                self.ui.panel(f"Splitting Overview", data=[
-                    ("Train Triples", train.num_triples),
-                    ("Validation Triples", valid.num_triples),
-                    ("Test Triples" , test.num_triples)
+                self.ui.panel(f"Split Overview", data=[
+                    ("Train triples", train.num_triples),
+                    ("Validation triples", valid.num_triples),
+                    ("Test triples" , test.num_triples)
                 ])
 
-                self.ui.success("Machine Learning Splits Created Successfully")
+                self.ui.success("Dataset splits created successfully")
 
             else:
-                self.ui.error("Inductive Splits are not supported yet, process will be terminated")
+                self.ui.error("Inductive splits are not supported yet. The process will now stop")
                 self.kill(1)
             
             if self.config.split.test_leakage_filtering.enabled:
 
-                self.ui.info("Checking and Filtering Test Leakage")
+                self.ui.info("Checking for and filtering test leakage")
                 train, valid, test = unleak(
                     train,
                     valid,
@@ -429,16 +434,16 @@ class JDEX:
                     minimum_frequency=self.config.split.test_leakage_filtering.minimum_frequency,
                 )
 
-                self.ui.panel(f"Leakage Filtered Splitting Overview", data=[
-                    ("Train Triples", train.num_triples),
-                    ("Validation Triples", valid.num_triples),
-                    ("Test Triples" , test.num_triples)
+                self.ui.panel(f"Leakage-Filtered Split Overview", data=[
+                    ("Train triples", train.num_triples),
+                    ("Validation triples", valid.num_triples),
+                    ("Test triples" , test.num_triples)
                 ])
                 
-                self.ui.success("Leakage Filtering Successfull")
+                self.ui.success("Leakage filtering completed successfully")
 
 
-                self.ui.info(f"Serializing Split in {(self.cwd / pc.SPLITS).absolute()}")
+                self.ui.info(f"Serializing splits to {(self.cwd / pc.SPLITS).absolute()}")
 
                 targets = [
                     (self.cwd / pc.RDF_TRAIN, train.triples),
@@ -452,49 +457,49 @@ class JDEX:
                             outstr = f"<{URIRef(triple[0])}> <{URIRef(triple[1])}> <{URIRef(triple[2])}> .\n"
                             split_file.write(outstr)
 
-                    self.ui.success(f"{path.name.split(".")[0].capitalize()} split serialized at {(path).absolute()}")
+                    self.ui.success(f"{path.name.split('.')[0].capitalize()} split saved to {(path).absolute()}")
 
             start_usage = mem_mb()
-            self.ui.info("Memory Optimization: Deleting PyKEEN Temporary Structures from Memory")
+            self.ui.info("Memory cleanup: removing temporary PyKEEN structures from memory")
             del train, valid, test, triples, targets
             gc.collect()
             end_usage = mem_mb()
-            self.ui.success(f"Memory Optimization: {start_usage - end_usage:8.2f} MB Freed")
+            self.ui.success(f"Memory cleanup completed: freed {start_usage - end_usage:8.2f} MB")
 
 
 
-        self.ui.info("Serialization of Object Property Assertions Started")
-        self.ui.info(f"Object Property Assertions will be saved at {self.cwd / pc.RDF_TRIPLES}") 
+        self.ui.info("Starting serialization of object property assertions")
+        self.ui.info(f"Object property assertions will be written to {self.cwd / pc.RDF_TRIPLES}") 
 
         if self.config.split.enabled:
             cmd = ["cat"] + [str(f) for f in list((self.cwd / pc.SPLITS).glob("*.nt"))]
             with open(self.cwd / pc.RDF_TRIPLES, "w") as f_out:
                 result = subprocess.run(cmd, stdout=f_out)
                 if result.returncode != 0:
-                    self.ui.error("Unexpected Error during split file concatenation")
+                    self.ui.error("Unexpected error while concatenating split files")
                     self.kill(1)
 
         else:    
             op_triples.serialize(self.cwd / pc.RDF_TRIPLES, format="ntriples")
 
         start_usage = mem_mb()
-        self.ui.info("Memory Optimization: ObjectPropertyAssertions no more required, Deleting from Memory")
+        self.ui.info("Memory cleanup: object property assertions are no longer needed in memory")
         del op_triples
         gc.collect()
         end_usage = mem_mb()
-        self.ui.success(f"Memory Optimization: {start_usage - end_usage:8.2f} MB Freed")
+        self.ui.success(f"Memory cleanup completed: freed {start_usage - end_usage:8.2f} MB")
 
 
-        self.ui.success("Object Property Assertions Saved")
+        self.ui.success("Object property assertions saved successfully")
 
         # -----------------------------------
         # Individuals Serialization
         # ----------------------------------
 
 
-        self.ui.subrule("Individuals Serialization")
+        self.ui.subrule("Individual Serialization")
 
-        self.ui.info("Serializing Individual Informations")
+        self.ui.info("Serializing individual declarations")
 
         out_graph = Graph()
         out_graph.add((self.ontology_node, RDF.type, OWL.Ontology))
@@ -504,35 +509,35 @@ class JDEX:
         out_graph.serialize(self.cwd / pc.INDIVIDUALS, format="xml")
         self.reasoner.conversion(self.cwd / pc.INDIVIDUALS, self.cwd / pc.INDIVIDUALS, format="owl")
 
-        self.ui.success(f"Individuals serialized at {self.cwd / pc.INDIVIDUALS}")
+        self.ui.success(f"Individuals serialized to {self.cwd / pc.INDIVIDUALS}")
 
         start_usage = mem_mb()
-        self.ui.info("Memory Optimization: Individual Lists no more required, Deleting from Memory")
+        self.ui.info("Memory cleanup: temporary individual graph is no longer needed")
         del out_graph
         gc.collect()
         end_usage = mem_mb()
-        self.ui.success(f"Memory Optimization: {start_usage - end_usage:8.2f} MB Freed")
+        self.ui.success(f"Memory cleanup completed: freed {start_usage - end_usage:8.2f} MB")
 
         # -----------------------------------
         # Class Assertions Serialization
         # ----------------------------------
 
 
-        self.ui.subrule("Class Assertions Serialization")
+        self.ui.subrule("Class Assertion Serialization")
 
-        self.ui.info("Serializing Class Assertions")
+        self.ui.info("Serializing class assertions")
 
         ca_triples.serialize(self.cwd / pc.RDF_CLASS_ASSERTIONS, format="xml")
         self.reasoner.conversion(self.cwd / pc.RDF_CLASS_ASSERTIONS, self.cwd / pc.RDF_CLASS_ASSERTIONS, format="owl")
 
-        self.ui.success(f"Class Assertions serialized at {self.cwd / pc.RDF_CLASS_ASSERTIONS}")
+        self.ui.success(f"Class assertions serialized to {self.cwd / pc.RDF_CLASS_ASSERTIONS}")
 
         start_usage = mem_mb()
-        self.ui.info("Memory Optimization: Individual Lists no more required, Deleting from Memory")
+        self.ui.info("Memory cleanup: class assertion graph is no longer needed")
         del ca_triples
         gc.collect()
         end_usage = mem_mb()
-        self.ui.success(f"Memory Optimization: {start_usage - end_usage:8.2f} MB Freed")
+        self.ui.success(f"Memory cleanup completed: freed {start_usage - end_usage:8.2f} MB")
 
         # -----------------------------------
         # Temporary Files removal
@@ -546,9 +551,9 @@ class JDEX:
 
         if self.config.reasoning.realization.enabled:
 
-            self.ui.subrule("Consistency Check and Justification of Inconsistencies")
-            self.ui.info("Realization Enabled, Checking KB Consistency")
-            self.ui.info(f"Merging Assertions with Schema at {self.cwd / pc.KNOWLEDGE_GRAPH}")
+            self.ui.subrule("Consistency Check and Inconsistency Justification")
+            self.ui.info("Realization is enabled, so the knowledge graph consistency will be checked first")
+            self.ui.info(f"Merging schema and assertions into {self.cwd / pc.KNOWLEDGE_GRAPH}")
 
             self.reasoner.merging(input_ontologies=[\
                 self.cwd / pc.ONTOLOGY,
@@ -563,16 +568,16 @@ class JDEX:
             consistent = self.consistency_check()
 
             if consistent:
-                self.ui.success("Knowledge Graph Consistent")
+                self.ui.success("Knowledge graph is consistent")
             else:
-                self.ui.warning("Knowledge Graph is Inconsistent, cannot run realization services")
+                self.ui.warning("Knowledge graph is inconsistent; realization cannot proceed")
                 if self.config.interactive_shell:
-                    confirm = self.ui.confirm("Want to run justification using Pellet?")
+                    confirm = self.ui.confirm("Would you like to generate an inconsistency justification using Pellet?")
                     if confirm:
-                        self.ui.info("Running Justification on Target Knowledge Graph")
+                        self.ui.info("Running justification on the target knowledge graph")
                         justification = self.reasoner.justification(input=self.cwd / pc.KNOWLEDGE_GRAPH, output=self.cwd / "justification.owl", verbose=self.config.verbose)
                         self.ui.list("Inconsistency Justification", justification)
-                        self.ui.success(f"Justification saved at {self.cwd / "justification.ttl"}")
+                        self.ui.success(f"Justification saved to {self.cwd / 'justification.ttl'}")
                         self.kill(0)
 
 
@@ -582,8 +587,8 @@ class JDEX:
         # ----------------------------------
 
         if self.config.reasoning.realization.enabled:
-            self.ui.subrule("Realization Reasoning Services")
-            self.ui.info(f"Running Realization ({self.config.reasoning.realization.reasoner}) on target Knowledge Base")
+            self.ui.subrule("Class Assertion Realization")
+            self.ui.info(f"Running realization with {self.config.reasoning.realization.reasoner} on the target knowledge base")
    
             self.reasoner.realization(
                     input=self.cwd / pc.KNOWLEDGE_GRAPH,
@@ -594,17 +599,17 @@ class JDEX:
                
             if self.config.reasoning.realization.reasoner in ["hermit", "elk"]:
 
-                self.ui.info(f"Filtering Out Class Assertion from Full File")
+                self.ui.info("Filtering class assertions from the full realization output")
                 in_graph = Graph()
                 in_graph.parse(self.cwd / pc.RDF_CLASS_ASSERTIONS)
                 out_graph = Graph()
 
-                for s,p,o in self.ui.progress(in_graph, "Filtering Class Assertions", total=len(in_graph)):
+                for s,p,o in self.ui.progress(in_graph, "Filtering class assertions", total=len(in_graph)):
                     if s in individuals and p == RDF.type:
                         out_graph.add((s,p,o))
 
                 out_graph.serialize(self.cwd / pc.RDF_CLASS_ASSERTIONS, format="xml")
-                self.ui.success("Filtering Completed")
+                self.ui.success("Class assertion filtering completed")
                 del in_graph
                 del out_graph
                 del individuals
@@ -612,7 +617,7 @@ class JDEX:
 
             
             self.reasoner.conversion(self.cwd / pc.RDF_CLASS_ASSERTIONS, self.cwd / pc.RDF_CLASS_ASSERTIONS, format="owl", verbose=self.config.verbose)
-            self.ui.success(f"Realiation Output stored at {self.cwd / pc.RDF_CLASS_ASSERTIONS}")
+            self.ui.success(f"Realization output saved to {self.cwd / pc.RDF_CLASS_ASSERTIONS}")
 
 
         # -----------------------------------
@@ -621,10 +626,10 @@ class JDEX:
 
         if self.config.reasoning.modularization.enabled:
             self.ui.subrule("Schema Modularization")
-            self.ui.info("Running Signature-Based Schema Modularization (PROMPTFACTOR) on target Knowledge Base")
+            self.ui.info("Running signature-based schema modularization (PROMPTFACTOR) on the target knowledge base")
 
             if self.config.reasoning.realization.enabled:
-                self.ui.info("Re-Loading Class Assertions in Memory after Realization")
+                self.ui.info("Reloading class assertions after realization")
                 ca_triples = Graph()
                 ca_triples.parse(self.cwd / pc.RDF_CLASS_ASSERTIONS)
                 self.ui.success("Realized class assertions loaded")
@@ -634,10 +639,10 @@ class JDEX:
 
 
             if self.config.split.enabled:
-                self.ui.info("Re-Loading Object Property Assertions in Memory after Machine Learning Processing")
+                self.ui.info("Reloading object property assertions after machine learning preprocessing")
                 op_triples = Graph()
                 op_triples.parse(self.cwd / pc.RDF_TRIPLES)
-                self.ui.success("Object Property Assertions loaded")
+                self.ui.success("Object property assertions loaded")
                 object_properties = set(op_triples.predicates(None, None))
                 del op_triples
                 gc.collect()
@@ -646,8 +651,8 @@ class JDEX:
             seed_classes = classes
 
             self.ui.panel("Modularization Signature", data=[
-                ("Seed Classes", len(seed_classes)),
-                ("Seed Object Properties", len(seed_obj_props))
+                ("Seed classes", len(seed_classes)),
+                ("Seed object properties", len(seed_obj_props))
             ])
 
             modularizer = SignatureModularizer(schema, seed_classes | seed_obj_props)
@@ -657,18 +662,18 @@ class JDEX:
             self.reasoner.conversion(self.cwd / pc.ONTOLOGY, self.cwd / pc.ONTOLOGY, format="owl", verbose=self.config.verbose)
 
             self.ui.panel("Modularization Statistics", data=[
-                ("Schema Axioms", len(schema)),
-                ("Modularized Schema Axioms", len(modularized_schema))
+                ("Schema axioms", len(schema)),
+                ("Modularized schema axioms", len(modularized_schema))
             ])
 
-            self.ui.success(f"Modularization successfull, stored at {self.cwd / pc.ONTOLOGY}")
+            self.ui.success(f"Schema modularization completed successfully and saved to {self.cwd / pc.ONTOLOGY}")
             
             start_usage = mem_mb()
-            self.ui.info("Memory Optimization: Deleting Old Non-Modularized Schema from Memory")
+            self.ui.info("Memory cleanup: removing the original non-modularized schema from memory")
             del schema
             gc.collect()
             end_usage = mem_mb()
-            self.ui.success(f"Memory Optimization: {start_usage - end_usage:8.2f} MB Freed")
+            self.ui.success(f"Memory cleanup completed: freed {start_usage - end_usage:8.2f} MB")
 
 
             schema = modularized_schema
@@ -683,33 +688,33 @@ class JDEX:
 
             self.ui.subrule("TBox Decomposition")
 
-            self.ui.info("Running Decomposition of Schema Axioms / Class Definition")
+            self.ui.info("Decomposing schema axioms and class definitions")
             d_schema = decomposer._schema_decompose(verbose=False)
             d_schema.add((self.ontology_node, RDF.type, OWL.Ontology))
             d_schema.serialize(self.cwd / pc.RDF_SCHEMA, format="xml")
             self.reasoner.conversion(self.cwd / pc.RDF_SCHEMA, self.cwd / pc.RDF_SCHEMA, format="owl", verbose=self.config.verbose)
-            self.ui.success(f"Schema Decomposition stored at {self.cwd / pc.RDF_SCHEMA}")
+            self.ui.success(f"Schema decomposition saved to {self.cwd / pc.RDF_SCHEMA}")
             del d_schema
             gc.collect()
            
-            self.ui.info("Running Decomposition of Schema Taxonomy")
+            self.ui.info("Decomposing schema taxonomy")
             d_taxonomy = decomposer._taxonomy_decompose(verbose=False)
             d_taxonomy.add((self.ontology_node, RDF.type, OWL.Ontology))
             d_taxonomy.serialize(self.cwd / pc.RDF_TAXONOMY, format="xml")
             self.reasoner.conversion(self.cwd / pc.RDF_TAXONOMY, self.cwd / pc.RDF_TAXONOMY, format="owl", verbose=self.config.verbose)
-            self.ui.success(f"Taxonomy Decomposition stored at {self.cwd / pc.RDF_TAXONOMY}")
+            self.ui.success(f"Taxonomy decomposition saved to {self.cwd / pc.RDF_TAXONOMY}")
             del d_taxonomy
             gc.collect()
 
         
         if self.config.reasoning.decomposition.rbox:
             self.ui.subrule("RBox Decomposition")
-            self.ui.info("Running Decomposition on Roles Definitions and Axioms")
+            self.ui.info("Decomposing role definitions and role axioms")
             d_roles = decomposer._rbox_decompose(verbose=False)
             d_roles.add((self.ontology_node, RDF.type, OWL.Ontology))
             d_roles.serialize(self.cwd / pc.RDF_OBJ_PROP, format="xml")
             self.reasoner.conversion(self.cwd / pc.RDF_OBJ_PROP, self.cwd / pc.RDF_OBJ_PROP, format="owl", verbose=self.config.verbose)
-            self.ui.success(f"Roles Decomposition stored at {self.cwd / pc.RDF_OBJ_PROP}")
+            self.ui.success(f"Role decomposition saved to {self.cwd / pc.RDF_OBJ_PROP}")
             del d_roles
             gc.collect()
 
@@ -717,8 +722,8 @@ class JDEX:
         # Full KG Reconstruction and Safety Checks
         # ----------------------------------
 
-        self.ui.subrule("Compolete Knowledge Graph Reconstruction and Safety Checks")
-        self.ui.info(f"Merging full KG at {self.cwd / pc.KNOWLEDGE_GRAPH}")
+        self.ui.subrule("Complete Knowledge Graph Merging and Consistency Checks")
+        self.ui.info(f"Merging the full knowledge graph into {self.cwd / pc.KNOWLEDGE_GRAPH}")
 
         self.reasoner.merging(input_ontologies=[\
                 self.cwd / pc.ONTOLOGY,
@@ -730,8 +735,8 @@ class JDEX:
                 verbose=self.config.verbose
         )
 
-        self.ui.success(f"Mergin successful")
-        self.ui.info(F"Constistency check on full KG")
+        self.ui.success("Knowledge graph merge completed successfully")
+        self.ui.info("Running consistency check on the full knowledge graph")
 
 
         consistent = self.consistency_check()
@@ -739,16 +744,16 @@ class JDEX:
 
 
         if consistent:
-            self.ui.success("Knowledge Graph Consistent")
+            self.ui.success("Knowledge graph is consistent")
         else:
-            self.ui.warning("Knowledge Graph is Inconsistent")
+            self.ui.warning("Knowledge graph is inconsistent")
             if self.config.interactive_shell:
-                confirm = self.ui.confirm("Want to run justification using Pellet?")
+                confirm = self.ui.confirm("Would you like to generate an inconsistency justification using Pellet?")
                 if confirm:
-                    self.ui.info("Running Justification on Target Knowledge Graph")
+                    self.ui.info("Running justification on the target knowledge graph")
                     justification = self.reasoner.justification(input=self.cwd / pc.KNOWLEDGE_GRAPH, output=self.cwd / "justification.ttl", verbose=self.config.verbose)
                     self.ui.list("Inconsistency Justification", justification)
-                    self.ui.success(f"Justification saved at {self.cwd / "justification.ttl"}")
+                    self.ui.success(f"Justification saved to {self.cwd / 'justification.ttl'}")
                     self.kill(1)
 
 
@@ -757,32 +762,32 @@ class JDEX:
         # ----------------------------------
 
         if self.config.post_processing.id_mapping or self.config.post_processing.json_conversion or self.config.post_processing.tsv_conversion:
-            self.ui.subrule("Machine Learning Post Processing")
+            self.ui.subrule("Machine Learning Postprocessing")
 
         if self.config.post_processing.id_mapping:
-            self.ui.info("Computing Mapping to IDs")
+            self.ui.info("Computing ID mappings")
             utility = IDMapper(self.cwd)
             utility.map_to_id()
             utility.serialize()
-            self.ui.success("ID Mapping Successful")
+            self.ui.success("ID mapping completed successfully")
 
         if self.config.post_processing.json_conversion:
-            self.ui.info("Computing JSON Conversion")
+            self.ui.info("Computing JSON conversion")
             utility = OWLConverter(self.cwd)
             utility.preprocess(verbose=False)
             utility.serialize()
-            self.ui.success("JSON Conversion Successful")
+            self.ui.success("JSON conversion completed successfully")
 
         if self.config.post_processing.tsv_conversion:
-            self.ui.info("Computing TSV Conversion")
+            self.ui.info("Computing TSV conversion")
             utility = TSVConverter(self.cwd)
             utility.convert()
             utility.serialize()
-            self.ui.success("TSV Conversion Successful")
+            self.ui.success("TSV conversion completed successfully")
 
         end = time.perf_counter()
         elapsed = end - start
-        self.ui.success(f"JDEX Pipeline Complete in {elapsed:4.2f} seconds. Closing Process.")
+        self.ui.success(f"JDEX pipeline completed in {elapsed:4.2f} seconds. Shutting down cleanly")
         self.ui.rule("Process Terminated")
 
 

@@ -12,7 +12,7 @@ ARCHIVE_EXTENSIONS = {".zip", ".tar", ".gztar", ".bz2", ".xztar", ".tar.gz", ".t
 def unpack(ui, in_path, out_path, label):
     for zipfile in in_path.iterdir():
         if zipfile.is_file() and zipfile.suffix.lower() in ARCHIVE_EXTENSIONS:
-            ui.info(f"Unpacking {label} {zipfile}")
+            ui.info(f"Unarchiving {label} {zipfile}")
 
             shutil.unpack_archive(str(zipfile), str(out_path))
             ui.success(f"{label} saved at {out_path}")
@@ -87,18 +87,18 @@ if __name__ == "__main__":
         os.chmod(file, os.stat(file).st_mode | stat.S_IEXEC)
 
     if ui.confirm("Do you want to also unpack already available datasets?"):
-        ui.subrule("Unpacking Datasets")
+        ui.subrule("Unarchive Datasets")
         unpack(ui, cwd / "data/datasets", cwd / "data/datasets" / "unpack", "Dataset")
-        ui.subrule("Unpacking Facts")
+        ui.subrule("Unarchive Facts")
         unpack(ui, cwd / "data/facts", cwd / "data/facts" / "unpack", "Facts")
-        ui.subrule("Unpacking Schemas")
+        ui.subrule("Unarchive Schemas")
         unpack(ui, cwd / "data/schemas", cwd / "data/schemas" / "unpack", "Schemas")
 
         ui.subrule("Object Property Assertions Triples Reconstruction")
         regenerate_triples(ui, cwd / "data/datasets/unpack")
 
 
-        ui.subrule("Full Knowledge Graph Reconstruction")
+        ui.subrule("Full Knowledge Graph Merging")
         ui.warning("This step will take a lot of time")
         if ui.confirm("Do you want to proceed?"):
             java_11_path = ui.input("Insert JAVA 11 Home Path", default="/opt/homebrew/opt/openjdk@11/")

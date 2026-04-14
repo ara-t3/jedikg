@@ -10,6 +10,7 @@ from pathlib import Path
 from rdflib import OWL, RDF, RDFS, BNode, Graph, Literal, Namespace
 from rdflib.namespace import split_uri
 from rdflib.term import URIRef
+from jdex.cli import CLI
 
 
 def split_top_level(expr: str):
@@ -127,6 +128,7 @@ class Reasoner:
         self.java11_path = java11_path
         self.jram = java_max_ram
         self.supported_reasoners = ["hermit", "elk"]
+        self.ui = CLI(verbose=1)
 
     def _run_process(
         self, command: list, env=None
@@ -172,17 +174,17 @@ class Reasoner:
         """
         if result.returncode in succesful_returns:
             if verbose > 0:
-                print(
+                self.ui.reason(
                     f"Reasoning: {label} - completed successfully in {elapsed_time:4.3f}s!"
                 )
         else:
             if verbose > 0:
-                print(
+                self.ui.reason(
                     f"Reasoning: {label} -  failed after {elapsed_time:4.3f}s - Stack Trace Available Below:"
                 )
-                print(f"===== STACK TRACE START =====")
-                print(f"{result.stderr}")
-                print(f"===== STACK TRACE END =====")
+                self.ui.reason(f"===== STACK TRACE START =====")
+                self.ui.reason(f"{result.stderr}")
+                self.ui.reason(f"===== STACK TRACE END =====")
             raise RuntimeError(f"Command failed with returncode {result.returncode}.")
 
     def _get_env(self, java_version: int):

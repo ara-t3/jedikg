@@ -143,6 +143,10 @@ class CLI:
     def warning(self, message: str):
         self.console.print(f"[bold yellow][WARN][/bold yellow] {message}")
 
+    def reason(self, message: str):
+        self.console.print(f"[bold cyan][REAS][/bold cyan] {message}")
+
+
     def error(self, message: str):
         self.console.print(f"[bold red][ERR ][/bold red] {message}")
     
