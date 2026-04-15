@@ -180,7 +180,7 @@ The following results are proof-of-concept experiments. They are intended to sho
 | YAGO4-20  | TransE   | 2454.366 | 0.112 | 0.026 | 0.199 | 0.260  |
 | YAGO4-20  | RotatE   | 1675.701 | 0.365 | 0.297 | 0.438 | 0.494  |
 | YAGO4-20  | ComplEx  | 5422.310 | 0.070 | 0.045 | 0.090 | 0.115  |
-| YAGO4-20  | CompGCN  | 1711.996 | 0.194 | 0.124 | 0.257 | —      |
+| YAGO4-20  | CompGCN  | 1711.996 | 0.194 | 0.124 | 0.257 | 0.332      |
 
 ### Datasets from `WHOW`
 
