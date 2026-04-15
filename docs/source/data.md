@@ -175,12 +175,12 @@ The following results are proof-of-concept experiments. They are intended to sho
 
 ### Datasets from `YAGO4`
 
-| Dataset        | Model    | MR      | MRR   | Hits@1 | Hits@5 | Hits@10 |
-|----------------|----------|----------|--------|--------|--------|---------|
-| YAGO4-20       | TransE   | —       | —     | —     | —     | —     |
-| YAGO4-20       | RotatE   | —       | —     | —     | —     | —     |
-| YAGO4-20       | ComplEx  | —       | —     | —     | —     | —     |
-| YAGO4-20       | CompGCN  | —       | —     | —     | —     | —     |
+| Dataset   | Model    | MR       | MRR   | Hits@1 | Hits@5 | Hits@10 |
+|-----------|----------|----------|--------|--------|--------|---------|
+| YAGO4-20  | TransE   | 2454.366 | 0.112 | 0.026 | 0.199 | 0.260  |
+| YAGO4-20  | RotatE   | 1675.701 | 0.365 | 0.297 | 0.438 | 0.494  |
+| YAGO4-20  | ComplEx  | 5422.310 | 0.070 | 0.045 | 0.090 | 0.115  |
+| YAGO4-20  | CompGCN  | 1711.996 | 0.194 | 0.124 | 0.257 | 0.332      |
 
 ### Datasets from `WHOW`
 
@@ -193,12 +193,12 @@ The following results are proof-of-concept experiments. They are intended to sho
 
 ### Datasets from `ARCO`
 
-| Dataset        | Model    | MR      | MRR   | Hits@1 | Hits@5 | Hits@10 |
-|----------------|----------|----------|--------|--------|--------|---------|
-| ARCO-10        | TransE   | —       | —     | —     | —     | —     |
-| ARCO-10        | RotatE   | —       | —     | —     | —     | —     |
-| ARCO-10        | ComplEx  | —       | —     | —     | —     | —     |
-| ARCO-10        | CompGCN  | —       | —     | —     | —     | —     |
+| Dataset  | Model    | MR       | MRR   | Hits@1 | Hits@5 | Hits@10 |
+|----------|----------|----------|--------|--------|--------|---------|
+| ARCO-10  | TransE   | 914.077  | 0.200 | 0.010 | 0.414 | 0.514  |
+| ARCO-10  | RotatE   | 428.235  | 0.759 | 0.680 | 0.845 | 0.867  |
+| ARCO-10  | ComplEx  | 1741.747 | 0.192 | 0.131 | 0.258 | 0.308  |
+| ARCO-10  | CompGCN  | 359.778  | 0.572 | 0.459 | 0.702 | 0.751  |
 
 ### Datasets from `DBPedia`
 
