@@ -53,7 +53,7 @@ if __name__ == "__main__":
     model.load_state_dict(
         torch.load(
             cwd / "model.pt",
-            map_location=torch.device("cpu"),
+            map_location=torch.device("cuda"),
         )
     )
     model.eval()
