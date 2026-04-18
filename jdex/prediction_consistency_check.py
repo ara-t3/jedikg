@@ -80,25 +80,25 @@ def main() -> None:
 
     predictions = Graph()
 
-    with open(Path(args.predictions_dir) / "test.nt") as f:
+    with open(Path(args.predictions_dir) / "global_top_10000.nt") as f:
         for line in f:
             parts = line.strip().rsplit(" ")
             triple = " ".join(parts[:3]) + " ."
             predictions.parse(data=triple, format="nt")
 
-    kg = Graph()
-    kg.parse(Path(args.dataset_dir) / "knowledge_graph.owl")
-
-    kg.addN((s, p, o, kg) for (s, p, o) in predictions.triples((None, None, None)))
+    predictions.serialize("predictions.nt", format="nt")
 
     reasoner = Reasoner(
         reasoners_path=Path("./reasoners/unpack").absolute(),
         java8_path=".",
-        java11_path="."
+        java11_path="/usr/lib/jvm/java-11-openjdk-amd64/"
     )
+
+    reasoner.merging([Path(args.dataset_dir) / "knowledge_graph.owl", "predictions.nt"], "merged.owl")
+
     ui.subrule("Consistency Check")
 
-    ans = reasoner.consistency(kg)
+    ans = reasoner.consistency(Path("merged.owl"))
 
     print(ans)
 
