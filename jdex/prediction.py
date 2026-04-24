@@ -132,10 +132,9 @@ if __name__ == "__main__":
     id_to_relation = {v: k for k, v in relation_to_id.items()}
 
     # Load triples
-    create_inverse_triples = args.model == "CompGCN"
     triples = TriplesFactory.from_path(
-        args.dataset_dir / "abox/triples.tsv",
-        create_inverse_triples=create_inverse_triples,
+        args.dataset_dir / "triples.tsv",
+        create_inverse_triples=False,
         entity_to_id=entity_to_id,
         relation_to_id=relation_to_id,
     )

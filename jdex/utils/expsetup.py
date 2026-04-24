@@ -100,9 +100,13 @@ if __name__ == "__main__":
 
         (d / "abox/experiments_split").mkdir(parents=True, exist_ok=True)
 
-        for outfile, split in targets:
-            with open(outfile, "w") as f:
-                for s, p, o in ui.progress(split, f"Writing {outfile.name}"):
-                    out_str = f"{str(s)}\t{str(p)}\t{str(o)}\n"
-                    f.write(out_str)
+        with open(d / "triples.tsv", "w") as full:
+            for outfile, split in targets:
+                with open(outfile, "w") as f:
+                    for s, p, o in ui.progress(split, f"Writing {outfile.name}"):
+                        out_str = f"{str(s)}\t{str(p)}\t{str(o)}\n"
+                        f.write(out_str)
+                        full.write(out_str)
+
+
         ui.rule("Done")
