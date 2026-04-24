@@ -82,7 +82,7 @@ KG-SaF includes datasets derived from **well-known knowledge graphs** and domain
   Domain-specific KG for tourism in Apulia, Italy. Models attractions, accommodations, and travel routes.
 
 
-## Available Datasets
+## Available SaF Datasets
 
 The table below lists the currently available **ontologies** and their corresponding **datasets** included in this resource.  
 
@@ -104,9 +104,9 @@ This table will be **updated** as new datasets and ontologies become available.
 | ApuliaTravel  | ATRAVEL            | SRIQ        |
 
 
-## Dataset Statistics
 
-### Table: Available datasets schema axiom coverage comparison
+
+### SaF Datasets schema axiom coverage comparison
 
 **Legend:**
 
@@ -136,7 +136,27 @@ This table will be **updated** as new datasets and ontologies become available.
 | ObjPropChain                  | ❌       | ❌         | ✅         | ✅     | ✅     | ✅     |
 
 
-### Table: Available datasets statistics
+### SaF Datasets Reasoning and Filtering Statistics
+
+The table below summarizes the performance and reasoning characteristics of several knowledge graph datasets. 
+It reports execution times with reasoning disabled and enabled. 
+
+It also includes ontology-level statistics such as the number of unsatisfiable classes and object properties, 
+together with removed individuals, object properties, and inconsistent assertions detected during the various processing phases, 
+along with the reasoning engine used.
+
+| Dataset Name     |  Runtime (ROFF) | Runtime (RON) | Realization | Materialization | Unsatisfiable Classes | Unsatisfiable Object Properties | Removed Individuals | Removed Object Properties | Removed Assertions (Inconsistent) | Realization Reasoner |
+|------------------|------------------------------|------------------------------|------------------|-------------------------------|-----------------------|----------------------------------|---------------------|---------------------------|-----------------------------------|----------------------|
+| ARCO-20          | 66.23 s                | 369.12 s               | 4.78 s     | 280.13 s                      | 7                     | 6                                | 2                   | 0                         | 0                                 | Konclude             |
+| ARCO-10          | 77.29 s                | 415.30 s               | 10.15 s    | 280.13 s                      | 7                     | 6                                | 2                   | 0                         | 0                                 | Konclude             |
+| ARCO-5           | 231.09 s               | 435.56 s               | 38.45 s    | 280.13 s                      | 7                     | 6                                | 2                   | 1                         | 0                                 | Konclude             |
+| WHOW-5           | 153.66 s               | 256.47 s               | 19.33 s    | 36.22 s                       | 0                     | 0                                | 0                   | 0                         | 0                                 | Konclude             |
+| YAGO4-20-C       | 200.11 s               | 282.41 s               | 16.00 s    | 18.18 s                       | 45                    | 1                                | 0                   | 0                         | 0                                 | Konclude             |
+| YAGO3-10-C       | 579.32 s               | 2321.29 s              | 202.12 s   | 149.48 s                      | 0                     | 0                                | 0                   | 0                         | 0                                 | ELK                  |
+| YAGO3-39K-C      | 265.51 s               | 1444.88 s              | 169.84 s   | 149.48 s                      | 0                     | 0                                | 0                   | 0                         | 0                                 | ELK                  |
+| DBPEDIA-50K-C    | 30.60 s                | 43.49 s                | 4.40 s     | 14.745 s                      | 0                     | 0                                | 0                   | 0                         | 14                                 | Konclude             |
+| DBPEDIA-100K-C   | 200.43 s               | 114.01 s               | 9.47 s     | 14.745 s                      | 0                     | 0                                | 0                   | 0                         | 417                               | Konclude             |
+### SaF Datasets Analysis
 
 Dataset statistics including **ABox** (instance-level) and **Schema/TBox** (class & property-level) information. For object property structural columns, the **highest values** in each column are highlighted in bold (manually indicated with **…**).  
 
@@ -153,7 +173,7 @@ Dataset statistics including **ABox** (instance-level) and **Schema/TBox** (clas
 | ARCO-10      | 202,492   | 45,400   | 111   | 117     | 0.06  | 0.06  | **0.44** | **0.44** | 1,824.25  | 119,304       | 378          | 24        | 1,033    | 211  | 431  | 593   | 462    | 465   | 369  | 71          |
 | ARCO-5       | 655,089   | 198,674  | 196   | 192     | 0.10  | 0.10  | **0.40** | **0.40** | 3,342.29 | 471,031       | 438          | 26        | 1,153    | 228  | 474  | 683   | 546    | 551   | 450  | 84          |
 
-## Knowledge Graph Embedding Benchmarks
+### Knowledge Graph Embedding Benchmarks
 
 This section will be updated as new ontologies or dataset are supported by our suite!
 
@@ -164,7 +184,7 @@ The following results are proof-of-concept experiments. They are intended to sho
 
 
 
-### Datasets from `YAGO3`
+#### Datasets from `YAGO3`
 
 | Dataset        | Model    | MR      | MRR   | Hits@1 | Hits@5 | Hits@10 |
 |----------------|----------|----------|--------|--------|--------|---------|
@@ -173,7 +193,7 @@ The following results are proof-of-concept experiments. They are intended to sho
 | YAGO3-39K      | ComplEx  | 6885.38 | 0.053 | 0.022 | 0.073 | 0.112 |
 | YAGO3-39K      | CompGCN  | 1810.08 | 0.138 | 0.078 | 0.183 | 0.252 |
 
-### Datasets from `YAGO4`
+#### Datasets from `YAGO4`
 
 | Dataset   | Model    | MR       | MRR   | Hits@1 | Hits@5 | Hits@10 |
 |-----------|----------|----------|--------|--------|--------|---------|
@@ -182,7 +202,7 @@ The following results are proof-of-concept experiments. They are intended to sho
 | YAGO4-20  | ComplEx  | 5422.310 | 0.070 | 0.045 | 0.090 | 0.115  |
 | YAGO4-20  | CompGCN  | 1711.996 | 0.194 | 0.124 | 0.257 | 0.332      |
 
-### Datasets from `WHOW`
+#### Datasets from `WHOW`
 
 | Dataset        | Model    | MR      | MRR   | Hits@1 | Hits@5 | Hits@10 |
 |----------------|----------|----------|--------|--------|--------|---------|
@@ -191,7 +211,7 @@ The following results are proof-of-concept experiments. They are intended to sho
 | WHOW-5         | ComplEx  | 9235.94 | 0.055 | 0.040 | 0.070 | 0.084 |
 | WHOW-5         | CompGCN  | 733.29  | 0.422 | 0.304 | 0.566 | 0.625 |
 
-### Datasets from `ARCO`
+#### Datasets from `ARCO`
 
 | Dataset  | Model    | MR       | MRR   | Hits@1 | Hits@5 | Hits@10 |
 |----------|----------|----------|--------|--------|--------|---------|
@@ -200,7 +220,7 @@ The following results are proof-of-concept experiments. They are intended to sho
 | ARCO-10  | ComplEx  | 1741.747 | 0.192 | 0.131 | 0.258 | 0.308  |
 | ARCO-10  | CompGCN  | 359.778  | 0.572 | 0.459 | 0.702 | 0.751  |
 
-### Datasets from `DBPedia`
+#### Datasets from `DBPedia`
 
 | Dataset        | Model    | MR      | MRR   | Hits@1 | Hits@5 | Hits@10 |
 |----------------|----------|----------|--------|--------|--------|---------|
