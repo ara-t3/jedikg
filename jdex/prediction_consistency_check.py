@@ -78,23 +78,13 @@ def main() -> None:
 
     args = parse_args()
 
-    predictions = Graph()
-
-    with open(Path(args.predictions_dir) / "global_top_10000.nt") as f:
-        for line in f:
-            parts = line.strip().rsplit(" ")
-            triple = " ".join(parts[:3]) + " ."
-            predictions.parse(data=triple, format="nt")
-
-    predictions.serialize("predictions.nt", format="nt")
-
     reasoner = Reasoner(
         reasoners_path=Path("./reasoners/unpack").absolute(),
         java8_path=".",
         java11_path="/usr/lib/jvm/java-11-openjdk-amd64/"
     )
 
-    reasoner.merging([Path(args.dataset_dir) / "knowledge_graph.owl", "predictions.nt"], "merged.owl")
+    reasoner.merging([Path(args.dataset_dir) / "knowledge_graph.owl", "predictions/ARCO_10_ROFF_TransE_E200_D128.nt/global_top_10000.nt"], "merged.owl")
 
     ui.subrule("Consistency Check")
 
