@@ -2,17 +2,14 @@
 from __future__ import annotations
 
 import torch
-
 import argparse
 from pathlib import Path
-
 from jdex.owl.reasoning import Reasoner
-
 from jdex.cli import CLI
-
 from rdflib import Graph
-
 import gc
+from tqdm import tqdm
+import math
 
 
 def cleanup_torch_objects(*objs):
@@ -72,8 +69,7 @@ def resolve_device(requested: str | None) -> str:
 def main() -> None:
     ui = CLI(verbose=True)
 
-    ui.logo("JDEX-PyKEEN Prediction Consistency Check")
-
+    ui.logo("JDEX Prediction Consistency Check")
     ui.rule("Start Prediction Consistency Check")
 
     args = parse_args()
@@ -81,16 +77,65 @@ def main() -> None:
     reasoner = Reasoner(
         reasoners_path=Path("./reasoners/unpack").absolute(),
         java8_path=".",
-        java11_path="/usr/lib/jvm/java-11-openjdk-amd64/"
+        java11_path="/opt/homebrew/opt/openjdk@11/"
     )
 
-    reasoner.merging([Path(args.dataset_dir) / "knowledge_graph.owl", "predictions/ARCO_10_ROFF_TransE_E200_D128.nt/global_top_10000.nt"], "merged.owl")
+    kg = Graph()
+    kg.parse(Path(args.dataset_dir) / "knowledge_graph.owl")
+
+
+    kg.serialize(Path("work_kg.nt"), format="ntriples")
+    base_bytes = Path("work_kg.nt").read_bytes()
+
+    with open(Path(args.predictions_dir) / "ARCO_10_ROFF_TransE_E200_D128.nt", "rb") as f:
+        prediction_lines = [
+            line for line in f
+            if line.strip() and not line.lstrip().startswith(b"#")
+        ]
 
     ui.subrule("Consistency Check")
 
-    ans = reasoner.consistency(Path("merged.owl"))
+    LAST_CONSISTENT = 2677
+    LAST_INCONSISTENT = 2687
+    CHECK_CONSISTENT = int(len(prediction_lines) / 2)
+    CHECK_CONSISTENT = 2682
 
-    print(ans)
+    i = 0
+    while True:
+        i += 1
+        print(f"===== Step {i} =====")
+        print(f"LAST CONSISTENT AT {LAST_CONSISTENT}")
+        print(f"LAST INCONSISTENT AT {LAST_INCONSISTENT}")
+        print(f"Checking Consistency at {CHECK_CONSISTENT}")
+        batch = prediction_lines[: CHECK_CONSISTENT]
+        with open(Path("merged.owl"), "wb") as out:
+            out.write(base_bytes)
+            if not base_bytes.endswith(b"\n"):
+                out.write(b"\n")
+
+            for line in batch:
+                out.write(line)
+
+        ans = reasoner.consistency(Path("merged.owl"), verbose=0)
+        print(ans)
+
+        t = math.ceil((CHECK_CONSISTENT - LAST_CONSISTENT) / 2)
+        print(t)
+
+        if ans:
+            LAST_CONSISTENT = CHECK_CONSISTENT
+            CHECK_CONSISTENT = CHECK_CONSISTENT + t
+        else:
+            LAST_INCONSISTENT = CHECK_CONSISTENT           
+            CHECK_CONSISTENT = CHECK_CONSISTENT - t
+
+
+        if (LAST_INCONSISTENT - LAST_CONSISTENT) == 1:
+            print(f"Inconsistent after {LAST_CONSISTENT}")
+            break
+            
+    
+
 
 
 if __name__ == "__main__":
