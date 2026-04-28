@@ -1,8 +1,0 @@
-curl -X POST  --data-urlencode 'query=SELECT (GROUP_CONCAT(CONCAT("<", STR(?p), ">"); SEPARATOR="\n") AS ?values)
-WHERE {
-  SELECT DISTINCT ?p
-  WHERE {
-    ?s ?p ?o .
-    FILTER(isIRI(?o))
-  }
-}'   'http://127.0.0.1:7019/'

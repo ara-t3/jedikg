@@ -1,0 +1,59 @@
+{
+    "dataset_name": "ERA_95_ROFF",
+    "verbose": 2,
+    "interactive_shell": true,
+
+    "paths": {
+        "schema": "./data/schemas/unpack/ERA/ontology.owl",
+        "data": "./data/facts/unpack/era_95.owl",
+        "output": "./data/datasets/unpack"
+    },
+
+    "reasoning": {
+        "java_8_home": "/usr/lib/jvm/java-1.8.0-openjdk-amd64",
+        "java_11_home": "/usr/lib/jvm/java-1.11.0-openjdk-amd64",
+        "java_max_ram": 20,
+  
+
+        "materialization": {
+            "enabled": false,
+            "axioms": []
+        },
+
+        "realization": {
+            "enabled": false
+        },
+
+        "modularization": {
+            "enabled": true
+        },
+
+        "decomposition" : {
+            "tbox" : true,
+            "rbox" : true
+        },
+
+        "consistency" : {
+            "convert_ntriples" : false
+        }
+    },
+
+    "split": {
+        "enabled": true,
+        "train_percent": 80,
+        "validation_percent": 10,
+        "test_percent": 10,
+        "transductive": true,
+        "test_leakage_filtering": {
+            "enabled": true,
+            "minimum_frequency": 0.97
+
+        }
+    },
+
+    "post_processing": {
+        "tsv_conversion" : false,
+        "json_conversion": false,
+        "id_mapping": false
+    }
+}
