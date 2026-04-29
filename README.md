@@ -34,8 +34,11 @@
    - Choose specific reasoning services (e.g., materialization, consistency check, justification)
    - Customize all parameters for dataset generation
 
+## JDeX Tool Overview
 
-## Dataset Documentation (*KG-SaF Data*)
+![](./docs/source/jdex.jpeg)
+
+## Dataset Overview (*SaF Datasets*)
 
 ### Available Ontologies (Schema) and Datasets
 
@@ -45,12 +48,12 @@ The table below lists the currently available **ontologies** and their correspon
 
 | Ontology | Datasets | DL Fragment |
 |----------|---------|-------------|
-| 📚 [DBpedia](https://www.dbpedia.org/resources/ontology/) | `DBPEDIA-50K-C`, `DBPEDIA-100K-C` | $\mathcal{ALCHF}$ |
-| 📚 [YAGO3](https://yago-knowledge.org/downloads/yago-3) | `YAGO3-39K-C`, `YAGO3-10-C` | $\mathcal{ALHIF+}$ |
-| 📚 [YAGO4](https://yago-knowledge.org/downloads/yago-4ap) | `YAGO4-20-C` | $\mathcal{ALCHIF}$ |
-| 📚 [ArCo](http://wit.istc.cnr.it/arco) | `ARCO-20`, `ARCO-10`, `ARCO-5` | $\mathcal{SROIQ}$ |
-| 📚 [WHOW](https://whowproject.eu/) | `WHOW25-5` | $\mathcal{SROIQ}$ |
-| 📚 [ERA](https://www.era.europa.eu/domains/registers/era-knowlege-graph_en) | `ERA` | $\mathcal{ALCRIQ}$ |
+| 📚 [DBpedia](https://www.dbpedia.org/resources/ontology/) | `DBPEDIA_50K_C`, `DBPEDIA_100K_C` | $\mathcal{ALCHF}$ |
+| 📚 [YAGO3](https://yago-knowledge.org/downloads/yago-3) | `YAGO3_39K_C`, `YAGO3_10_C` | $\mathcal{ALHIF+}$ |
+| 📚 [YAGO4](https://yago-knowledge.org/downloads/yago-4ap) | `YAGO4_20_C` | $\mathcal{ALCHIF}$ |
+| 📚 [ArCo](http://wit.istc.cnr.it/arco) | `ARCO_20`, `ARCO_10`, `ARCO_5` | $\mathcal{SROIQ}$ |
+| 📚 [WHOW](https://whowproject.eu/) | `WHOW_5` | $\mathcal{SROIQ}$ |
+| 📚 [ERA](https://www.era.europa.eu/domains/registers/era-knowlege-graph_en) | `ERA_95`, `ERA_90`| $\mathcal{ALCRIQ}$ |
 
 
 
@@ -97,14 +100,14 @@ All datasets are provided in a **standardized format** following the **Descripti
 
 ## Tutorials
 
-In the `tutorial` folder, we provide example notebooks demonstrating how to use KG-SaF datasets and tools.
+In the `tutorial` folder, we provide example notebooks demonstrating how to use KG-SaF datasets and tools. This folde also contains an example of configuration files and example inputs to test out the JDeX extraction pipeline!
 
 1. **Loading a PyTorch dataset using the custom `KnowledgeGraph` class**  
-   - File: `tutoriala/torch_loader.ipynb`  
+   - File: `tutorial/torch_loader.ipynb`  
    - Description: Shows how to load a dataset from KG-SaF into PyTorch tensors using the `KnowledgeGraph` class, including train/test/validation splits and schema-aware representations.  
 
 2. **Proof of concept: Using PyKEEN for machine learning on KG-SaF datasets**  
-   - File: `tutoriala/pykeen_training.ipynb`  
+   - File: `tutorial/pykeen_training.ipynb`  
    - Description: Demonstrates a basic pipeline for training a Knowledge Graph Embedding (KGE) model using PyKEEN on one of the KG-SaF datasets, including evaluation.  
 
 
