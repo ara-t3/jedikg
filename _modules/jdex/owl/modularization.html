@@ -40,12 +40,17 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../quick.html">Quick Start Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorials and Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
@@ -200,6 +205,8 @@
     
 
 
+<div class="viewcode-block" id="BaseDLProfileFilter">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.modularization.BaseDLProfileFilter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BaseDLProfileFilter</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract base class for Description Logic profile filtering.</span>
 
@@ -256,6 +263,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span> <span class="o">=</span> <span class="n">input_graph</span>
 
+<div class="viewcode-block" id="BaseDLProfileFilter.filter_graph">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.modularization.BaseDLProfileFilter.filter_graph">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">filter_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Graph</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Filter the ontology graph according to the concrete DL profile.</span>
 
@@ -290,7 +299,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_copy_common_tbox_axioms</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_copy_profile_specific_axioms</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">out</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_copy_namespaces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">:</span> <span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy namespace bindings from the input graph.</span>
@@ -528,9 +538,12 @@
             <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">onto_graph</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">RDF</span><span class="o">.</span><span class="n">rest</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_copy_class_expr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_copy_class_expr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span></div>
 
 
+
+<div class="viewcode-block" id="ELProfileFilter">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.modularization.ELProfileFilter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ELProfileFilter</span><span class="p">(</span><span class="n">BaseDLProfileFilter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter an ontology graph to the Description Logic profile EL.</span>
 
@@ -644,9 +657,12 @@
 
             <span class="k">return</span> <span class="kc">False</span>
 
-        <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
 
 
+
+<div class="viewcode-block" id="ALCProfileFilter">
+<a class="viewcode-back" href="../../../jdex.html#jdex.owl.modularization.ALCProfileFilter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ALCProfileFilter</span><span class="p">(</span><span class="n">BaseDLProfileFilter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter an ontology graph to the Description Logic profile ALC.</span>
 
@@ -773,7 +789,8 @@
 
             <span class="k">return</span> <span class="kc">False</span>
 
-        <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
 </pre></div>
 
            </div>

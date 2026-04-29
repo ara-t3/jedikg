@@ -73,10 +73,15 @@ Usability & Complete Customization
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Documentation:
 
    data
+
+
+.. toctree::
+   :maxdepth: 2
+
    jdex
 
 
