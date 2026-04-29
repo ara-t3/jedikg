@@ -50,7 +50,7 @@ The table below lists the currently available **ontologies** and their correspon
 | 📚 [YAGO4](https://yago-knowledge.org/downloads/yago-4ap) | `YAGO4-20-C` | $\mathcal{ALCHIF}$ |
 | 📚 [ArCo](http://wit.istc.cnr.it/arco) | `ARCO-20`, `ARCO-10`, `ARCO-5` | $\mathcal{SROIQ}$ |
 | 📚 [WHOW](https://whowproject.eu/) | `WHOW25-5` | $\mathcal{SROIQ}$ |
-| 📚 [ApuliaTravel](https://github.com/rbarile17/ApuliaTravelKG) | `ATRAVEL` | $\mathcal{SRIQ}$ |
+| 📚 [ERA](https://www.era.europa.eu/domains/registers/era-knowlege-graph_en) | `ERA` | $\mathcal{ALCRIQ}$ |
 
 
 
