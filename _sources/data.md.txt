@@ -34,7 +34,7 @@ KG-SaF includes datasets derived from **well-known knowledge graphs** and domain
 ### Knowledge Graph Schema Expressivity
 
 
-| Axiom Type               | DBPedia | YAGO3 | YAGO4-20 | WHOW-5 | ARCO-5 | ERA |
+| Axiom Type               | DBPedia | YAGO3 | YAGO4 | WHOW | ARCO | ERA |
 | ------------------------ | ------- | ----- | -------- | ------ | ------ | --- |
 | ClassAssertion           | ✅       | ✅     | ✅        | ✅      | ✅      | ✅   |
 | SubClassOf               | ✅       | ✅     | ✅        | ✅      | ✅      | ✅   |
