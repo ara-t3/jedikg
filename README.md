@@ -3,13 +3,13 @@
 [![DOI](https://zenodo.org/badge/1110012490.svg)](https://doi.org/10.5281/zenodo.17817931)
 ![GitHub License](https://img.shields.io/github/license/ivandiliso/sphm4kg)
 ![Python Version](https://img.shields.io/badge/python-3.12.8%2B-blue)
-[![Docs](https://img.shields.io/badge/docs-online-success.svg)](https://ivandiliso.github.io/kg-saf/)
+[![Docs](https://img.shields.io/badge/docs-online-success.svg)](https://ara-t3.github.io/kg-saf/)
 [![arXiv](https://img.shields.io/badge/arXiv-2602.14795-b31b1b.svg)](https://arxiv.org/abs/2602.14795)
 
 
 **KG-SaF** provides a workflow (*JDeX*) and curated datasets  (*Data*) for knowledge graph refinement (KGR) and NeuroSymbolic (NeSY) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** (PyKEEN, PyTorch) and **reasoning services** (Reasoners, Ontology Management Tools like Protege).
 
-> Please read our official documentation at [ReadTheDocs Documentation](https://ivandiliso.github.io/kg-saf/)
+> Please read our official documentation at [ReadTheDocs Documentation](https://ara-t3.github.io/kg-saf/)
 
 ## 🚀 Key Features
 - 🗂️ Extracts datasets from RDF-based KGs with expressive schemas (RDFS/OWL2)  
@@ -17,7 +17,7 @@
 - ⚡ Handles inconsistencies and leverages reasoning to infer implicit knowledge
 - 🤖 Provides ML-ready **tensor representations** compatible with PyTorch and PyKEEN  
 - 🧩 Offers **schema decomposition** into themed partitions (modularization of ontology components)
-- 📄 Fully documented at [ReadTheDocs Documentation](https://ivandiliso.github.io/kg-saf/)
+- 📄 Fully documented at [ReadTheDocs Documentation](https://ara-t3.github.io/kg-saf/)
 
 ### Advanced Python Reasoning Integration
 - 🔌 Provides a Python abstraction layer for reasoners, tightly integrated with RDFLib, enabling seamless use of multiple engines:
