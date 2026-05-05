@@ -34,11 +34,11 @@
    - Choose specific reasoning services (e.g., materialization, consistency check, justification)
    - Customize all parameters for dataset generation
 
-## JDeX Tool Overview
+## **JDeX**: Dataset Extraction Tool Overview
 
 ![](./docs/source/jdex.jpeg)
 
-## Dataset Overview (*SaF Datasets*)
+##  **JDSet**: Dataset Suite Overview
 
 ### Available Ontologies (Schema) and Datasets
 
