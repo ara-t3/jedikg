@@ -88,14 +88,14 @@ if __name__ == "__main__":
 
     if ui.confirm("Do you want to also unpack already available datasets?"):
         ui.subrule("Unarchive Datasets")
-        unpack(ui, cwd / "data/datasets", cwd / "data/datasets" / "unpack", "Dataset")
+        unpack(ui, cwd / "jdset/datasets", cwd / "jdset/datasets" / "unpack", "Dataset")
         ui.subrule("Unarchive Facts")
-        unpack(ui, cwd / "data/facts", cwd / "data/facts" / "unpack", "Facts")
+        unpack(ui, cwd / "jdset/facts", cwd / "jdset/facts" / "unpack", "Facts")
         ui.subrule("Unarchive Schemas")
-        unpack(ui, cwd / "data/schemas", cwd / "data/schemas" / "unpack", "Schemas")
+        unpack(ui, cwd / "jdset/schemas", cwd / "jdset/schemas" / "unpack", "Schemas")
 
         ui.subrule("Object Property Assertions Triples Reconstruction")
-        regenerate_triples(ui, cwd / "data/datasets/unpack")
+        regenerate_triples(ui, cwd / "jdset/datasets/unpack")
 
 
         ui.subrule("Full Knowledge Graph Merging")
@@ -104,7 +104,7 @@ if __name__ == "__main__":
             java_11_path = ui.input("Insert JAVA 11 Home Path", default="/opt/homebrew/opt/openjdk@11/")
             max_ram = int(ui.input("Insert Max RAM Threshold for Reasoner", default="8"))
             reasoner = Reasoner(cwd / "reasoners/unpack", java8_path="", java11_path=java_11_path, java_max_ram=max_ram)
-            regenerate_knowledge_graph(ui, reasoner, cwd / "data/datasets/unpack")
+            regenerate_knowledge_graph(ui, reasoner, cwd / "jdset/datasets/unpack")
 
         ui.success("Installation Terminated")
         if ui.confirm("Do you want to run the Post Processing Utility?"):
@@ -120,20 +120,20 @@ if __name__ == "__main__":
 
                 match c:
                     case "ID Mappings: Object Properties, Individuals and Classes":
-                        for data_folder in (cwd / "data/datasets/unpack").iterdir():
+                        for data_folder in (cwd / "jdset/datasets/unpack").iterdir():
                             ui.info(f"Computing Mapping for {data_folder}")
                             utility = IDMapper(data_folder)
                             utility.map_to_id()
                             utility.serialize()
                             
                     case "TSV Conversion (PyKEEN / PyTorch Compatibility)":
-                        for data_folder in (cwd / "data/datasets/unpack").iterdir():
+                        for data_folder in (cwd / "jdset/datasets/unpack").iterdir():
                             ui.info(f"Computing TSV Conversion for {data_folder}")
                             utility = TSVConverter(data_folder)
                             utility.convert()
                             utility.serialize()
                     case "OWL to JSON Conversion":
-                        for data_folder in (cwd / "data/datasets/unpack").iterdir():
+                        for data_folder in (cwd / "jdset/datasets/unpack").iterdir():
                             ui.info(f"Computing JSON Conversion for {data_folder}")
                             utility = OWLConverter(data_folder)
                             utility.preprocess(verbose=False)

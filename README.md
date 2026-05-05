@@ -1,7 +1,13 @@
-# JediKG: Building Complete and Curated Datasets for Machine Learning and Reasoning on Knowledge Graphs
 
-[![DOI](https://zenodo.org/badge/1110012490.svg)](https://doi.org/10.5281/zenodo.17817931)
-![GitHub License](https://img.shields.io/github/license/ivandiliso/sphm4kg)
+<p align="center">
+<img src="./docs/source/JediKG_Logo2-2.png" alt="drawing" width="400"/>
+</p>
+
+---
+
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20024979.svg)](https://doi.org/10.5281/zenodo.20024979)
+![GitHub License](https://img.shields.io/github/license/ara-t3/jedikg)
 ![Python Version](https://img.shields.io/badge/python-3.12.8%2B-blue)
 [![Docs](https://img.shields.io/badge/docs-online-success.svg)](https://ara-t3.github.io/jedikg/)
 [![arXiv](https://img.shields.io/badge/arXiv-2602.14795-b31b1b.svg)](https://arxiv.org/abs/2602.14795)
@@ -10,6 +16,8 @@
 **JediKG** provides a workflow (*JDeX*) and curated datasets  (*JDSet*) for knowledge graph refinement (KGR) and NeuroSymbolic (NeSY) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** (PyKEEN, PyTorch) and **reasoning services** (Reasoners, Ontology Management Tools like Protege).
 
 > Please read our official documentation at [ReadTheDocs Documentation](https://ara-t3.github.io/jedikg/)
+
+---
 
 ## 🚀 Key Features
 - 🗂️ Extracts datasets from RDF-based KGs with expressive schemas (RDFS/OWL2)  

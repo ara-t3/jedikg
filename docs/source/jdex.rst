@@ -1,4 +1,4 @@
-KGSaF **JDeX**: Modular Suite
+**JDeX**: Modular Extraction Tool
 ===================================================
 
 JDeX Suite
