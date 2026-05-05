@@ -22,9 +22,9 @@ The JDEX banner will show, follow the CLI instruction to go forward!
 
 
 
-## Loading and Analyzing a KG-SaF Datasets in PyTorch 
+## Loading and Analyzing a JDSet Datasets in PyTorch 
 
-This tutorial demonstrates how to load a Knowledge Graph dataset using kgsaf_jdex and inspect its components, classes, and object property hierarchies. You can find a full executable Notebook in `tutorials/torch_loader.ipynb`. This example will be run on the tutorial dataset generated in previous phase (an already generated dataset is available)
+This tutorial demonstrates how to load a Knowledge Graph dataset using JDEX and inspect its components, classes, and object property hierarchies. You can find a full executable Notebook in `tutorials/torch_loader.ipynb`. This example will be run on the tutorial dataset generated in previous phase (an already generated dataset is available)
 
 **Setup and Imports**
 
@@ -36,8 +36,8 @@ sys.path.append(str(Path.cwd().parent))  # Adds the parent folder to the path
 import json
 import random
 from pathlib import Path
-import kgsaf_jdex.utils.conventions.paths as pc
-from kgsaf_jdex.loaders.pytorch.dataset import KnowledgeGraph
+import jdex.utils.conventions.paths as pc
+from jdex.loaders.pytorch.dataset import KnowledgeGraph
 ```
 
 ### Loading the Dataset
@@ -211,7 +211,7 @@ Testing the Role Hierarhcy of [102] http://dbpedia.org/ontology/genre
 		 [79] http://dbpedia.org/ontology/Genre
 ```
 
-## Running TransE on KG-SaF Datasets
+## Running TransE on JDSet Datasets
 
 This tutorial demonstrates how to train and evaluate **TransE** KGR model
 on a dataset prepared with the `jdex` loaders.  You can find a full executable Notebook in `tutorial/pykeen_training.ipynb`. The example will use the tutorial dataset.
@@ -220,7 +220,7 @@ on a dataset prepared with the `jdex` loaders.  You can find a full executable N
 **Imports**
 
 This code imports all necessary packages, including PyKEEN for knowledge graph embeddings and
-your kgsaf_jdex dataset utilities.
+your JDEX dataset utilities.
 
 ```python
 import sys

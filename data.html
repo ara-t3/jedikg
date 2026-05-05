@@ -6,12 +6,12 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KGSaF Data: Complete KGR Datasets &mdash; KG-SaF: Official Documentation</title>
+  <title>JDSet: Complete KGR Datasets &mdash; KG-SaF: Official Documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
-    <link rel="canonical" href="https://ivandiliso.github.io/kg-saf/data.html" />
+    <link rel="canonical" href="https://ara-t3.github.io/jedikg/data.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=72d88caf"></script>
@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="KGSaF JDeX: Modular Suite" href="jdex.html" />
+    <link rel="next" title="JDeX: Modular Extraction Tool" href="jdex.html" />
     <link rel="prev" title="Tutorials and Guides" href="tutorial.html" /> 
 </head>
 
@@ -32,8 +32,9 @@
 
           
           
-          <a href="index.html" class="icon icon-home">
-            KG-SaF: Building Complete and Curated Datasets for Machine Learning
+          <a href="index.html">
+            
+              <img src="_static/JediKG_Logo2-2.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -49,16 +50,16 @@
 <li class="toctree-l1"><a class="reference internal" href="config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials and Guides</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<p class="caption" role="heading"><span class="caption-text">JediKG Documentation :</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">KGSaF <strong>Data</strong>: Complete KGR Datasets</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>JDSet</strong>: Complete KGR Datasets</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#source-knowledge-graphs-and-schema-expressivity">Source Knowledge Graphs and Schema Expressivity</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#available-source-knowledge-graphs">Available Source Knowledge Graphs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#knowledge-graph-schema-expressivity">Knowledge Graph Schema Expressivity</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#saf-dataset-file-structure">SaF Dataset File Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#saf-datasets-statistics">SaF Datasets Statistics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#jdset-data-file-structure">JDSet Data File Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#datasets-statistics">Datasets Statistics</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#basic-informations-entities-roles-and-classes">Basic Informations: Entities, Roles and Classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#assertions-quantity-informations">Assertions Quantity Informations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#relation-cardinality-pattens-distribution">Relation Cardinality Pattens Distribution</a></li>
@@ -70,7 +71,7 @@
 </li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jdex.html"><strong>JDeX</strong>: Modular Extraction Tool</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Future Updates</span></p>
 <ul>
@@ -87,7 +88,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">KG-SaF: Building Complete and Curated Datasets for Machine Learning</a>
+          <a href="index.html">JediKG: Building Complete and Curated Datasets for Machine Learning</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -95,7 +96,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">KGSaF <strong>Data</strong>: Complete KGR Datasets</li>
+      <li class="breadcrumb-item active"><strong>JDSet</strong>: Complete KGR Datasets</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/data.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -105,15 +106,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section class="tex2jax_ignore mathjax_ignore" id="kgsaf-data-complete-kgr-datasets">
-<h1>KGSaF <strong>Data</strong>: Complete KGR Datasets<a class="headerlink" href="#kgsaf-data-complete-kgr-datasets" title="Link to this heading"></a></h1>
-<p>KG-SaF-Data provides <strong>complete and curated knowledge graph datasets</strong> designed for <strong>machine learning</strong> and <strong>reasoning tasks</strong>. Each dataset comes with both a <strong>schema (TBox)</strong> and <strong>instance data (ABox)</strong>, along with <strong>role definitions (RBox)</strong>, making them ready for Knowledge Graph Refinement (KGR) research and embedding-based pipelines.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="jdset-complete-kgr-datasets">
+<h1><strong>JDSet</strong>: Complete KGR Datasets<a class="headerlink" href="#jdset-complete-kgr-datasets" title="Link to this heading"></a></h1>
+<p>JDSet provides <strong>complete and curated knowledge graph datasets</strong> designed for <strong>machine learning</strong> and <strong>reasoning tasks</strong>. Each dataset comes with both a <strong>schema (TBox)</strong> and <strong>instance data (ABox)</strong>, along with <strong>role definitions (RBox)</strong>, making them ready for Knowledge Graph Refinement (KGR) research and embedding-based pipelines.</p>
 <p>These datasets are compatible with <strong>Python</strong>, <strong>PyTorch</strong>, <strong>PyKEEN</strong>, and ontology editors like <strong>Protege</strong>.</p>
 <section id="source-knowledge-graphs-and-schema-expressivity">
 <h2>Source Knowledge Graphs and Schema Expressivity<a class="headerlink" href="#source-knowledge-graphs-and-schema-expressivity" title="Link to this heading"></a></h2>
 <section id="available-source-knowledge-graphs">
 <h3>Available Source Knowledge Graphs<a class="headerlink" href="#available-source-knowledge-graphs" title="Link to this heading"></a></h3>
-<p>KG-SaF includes datasets derived from <strong>well-known knowledge graphs</strong> and domain-specific ontologies. Each ontology is provided as part of the dataset with <strong>modularized TBox, RBox, and ABox components</strong>.</p>
+<p>JDSet includes datasets derived from <strong>well-known knowledge graphs</strong> and domain-specific ontologies. Each ontology is provided as part of the dataset with <strong>modularized TBox, RBox, and ABox components</strong>.</p>
 <ul class="simple">
 <li><p><strong>DBpedia</strong> – <a class="reference external" href="https://www.dbpedia.org/resources/ontology/">Link</a><br />
 Large-scale multilingual knowledge graph extracted from Wikipedia. Contains general-purpose concepts like <code class="docutils literal notranslate"><span class="pre">Person</span></code>, <code class="docutils literal notranslate"><span class="pre">Place</span></code>, <code class="docutils literal notranslate"><span class="pre">Organisation</span></code>, and relationships between them.</p></li>
@@ -283,9 +284,9 @@ Vocabulary/Ontology governed by the European Union Agency for Railways (https://
 </table>
 </section>
 </section>
-<section id="saf-dataset-file-structure">
-<h2>SaF Dataset File Structure<a class="headerlink" href="#saf-dataset-file-structure" title="Link to this heading"></a></h2>
-<p>KG-SaF datasets follow a <strong>Description Logic (DL) formalization</strong>, organizing the knowledge graph into three main components:</p>
+<section id="jdset-data-file-structure">
+<h2>JDSet Data File Structure<a class="headerlink" href="#jdset-data-file-structure" title="Link to this heading"></a></h2>
+<p>JDSet datasets follow a <strong>Description Logic (DL) formalization</strong>, organizing the knowledge graph into three main components:</p>
 <ul class="simple">
 <li><p><strong>ABox (Assertional Box):</strong> Instance-level data (entities, class assertions, object property assertions)</p></li>
 <li><p><strong>TBox (Terminological Box):</strong> Schema-level knowledge, including class hierarchies and axioms</p></li>
@@ -332,8 +333,8 @@ Vocabulary/Ontology governed by the European Union Agency for Railways (https://
 </pre></div>
 </div>
 </section>
-<section id="saf-datasets-statistics">
-<h2>SaF Datasets Statistics<a class="headerlink" href="#saf-datasets-statistics" title="Link to this heading"></a></h2>
+<section id="datasets-statistics">
+<h2>Datasets Statistics<a class="headerlink" href="#datasets-statistics" title="Link to this heading"></a></h2>
 <p>The tables below list the available <strong>ontologies</strong> and their corresponding <strong>datasets</strong> included in this resource.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -930,7 +931,7 @@ Vocabulary/Ontology governed by the European Union Agency for Railways (https://
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="tutorial.html" class="btn btn-neutral float-left" title="Tutorials and Guides" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="jdex.html" class="btn btn-neutral float-right" title="KGSaF JDeX: Modular Suite" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="jdex.html" class="btn btn-neutral float-right" title="JDeX: Modular Extraction Tool" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

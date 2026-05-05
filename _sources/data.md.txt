@@ -1,7 +1,7 @@
-KGSaF **Data**: Complete KGR Datasets
+**JDSet**: Complete KGR Datasets
 =================
 
-KG-SaF-Data provides **complete and curated knowledge graph datasets** designed for **machine learning** and **reasoning tasks**. Each dataset comes with both a **schema (TBox)** and **instance data (ABox)**, along with **role definitions (RBox)**, making them ready for Knowledge Graph Refinement (KGR) research and embedding-based pipelines.
+JDSet provides **complete and curated knowledge graph datasets** designed for **machine learning** and **reasoning tasks**. Each dataset comes with both a **schema (TBox)** and **instance data (ABox)**, along with **role definitions (RBox)**, making them ready for Knowledge Graph Refinement (KGR) research and embedding-based pipelines.
 
 These datasets are compatible with **Python**, **PyTorch**, **PyKEEN**, and ontology editors like **Protege**.
 
@@ -10,7 +10,7 @@ These datasets are compatible with **Python**, **PyTorch**, **PyKEEN**, and onto
 
 ### Available Source Knowledge Graphs
 
-KG-SaF includes datasets derived from **well-known knowledge graphs** and domain-specific ontologies. Each ontology is provided as part of the dataset with **modularized TBox, RBox, and ABox components**.
+JDSet includes datasets derived from **well-known knowledge graphs** and domain-specific ontologies. Each ontology is provided as part of the dataset with **modularized TBox, RBox, and ABox components**.
 
 - **DBpedia** – [Link](https://www.dbpedia.org/resources/ontology/)  
   Large-scale multilingual knowledge graph extracted from Wikipedia. Contains general-purpose concepts like `Person`, `Place`, `Organisation`, and relationships between them.  
@@ -55,9 +55,9 @@ KG-SaF includes datasets derived from **well-known knowledge graphs** and domain
 | ObjPropChain             | -       | -     | ✅        | ✅      | ✅      | -   |
 
 
-## SaF Dataset File Structure
+## JDSet Data File Structure
 
-KG-SaF datasets follow a **Description Logic (DL) formalization**, organizing the knowledge graph into three main components:
+JDSet datasets follow a **Description Logic (DL) formalization**, organizing the knowledge graph into three main components:
 
 - **ABox (Assertional Box):** Instance-level data (entities, class assertions, object property assertions)  
 - **TBox (Terminological Box):** Schema-level knowledge, including class hierarchies and axioms  
@@ -109,7 +109,7 @@ Each dataset folder contains the following structure:
 
 
 
-## SaF Datasets Statistics
+## Datasets Statistics
 
 The tables below list the available **ontologies** and their corresponding **datasets** included in this resource.
 

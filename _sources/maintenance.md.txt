@@ -1,8 +1,8 @@
 # Roadmap and Maintenance Plan
 
-KG SaF is developed and maintained by the **LACAM@ARA Team3 Laboratory** at the Italian **University of Bari Aldo Moro**, within the **Department of Computer Science**.
+JediKG is developed and maintained by the **LACAM@ARA Team3 Laboratory** at the Italian **University of Bari Aldo Moro**, within the **Department of Computer Science**.
 
-The project is one of the principal maintained tools of our laboratory and reflects our ongoing research activity in knowledge graphs, semantic technologies, ontology-based methods, and AI-assisted data enrichment. KG SaF is designed to support reproducible experimentation, flexible knowledge graph construction, and integration with downstream research workflows.
+The project is one of the principal maintained tools of our laboratory and reflects our ongoing research activity in knowledge graphs, semantic technologies, ontology-based methods, and AI-assisted data enrichment. JediKG is designed to support reproducible experimentation, flexible knowledge graph construction, and integration with downstream research workflows.
 
 For more information about the laboratory, the research group, and related projects, see:
 
@@ -11,7 +11,7 @@ For more information about the laboratory, the research group, and related proje
 
 ---
 
-KG SaF is currently maintained by:
+JediKG is currently maintained by:
 
 - **Ivan Diliso** — [Profile / Website](https://ivandiliso.github.io)
 - **Roberto Barile** — [Profile / Website](https://rbarile17.github.io/robertobarile.github.io/)
@@ -19,7 +19,7 @@ KG SaF is currently maintained by:
 ```{note}
 **Long-Term Maintenance**
 
-Long-term maintenance is supported by the use of KG SaF in the ongoing research activities of the LACAM@ARA Team3 Laboratory. The project will remain publicly available through the laboratory GitHub organization, and future development will be guided by laboratory research needs, user feedback, and integration with related knowledge graph workflows.
+Long-term maintenance is supported by the use of JediKG in the ongoing research activities of the LACAM@ARA Team3 Laboratory. The project will remain publicly available through the laboratory GitHub organization, and future development will be guided by laboratory research needs, user feedback, and integration with related knowledge graph workflows.
 ```
 
 ---
@@ -54,7 +54,7 @@ Documentation is updated alongside new features and releases. Examples, configur
 | F3 | Command Line Interface | 🟡 Low | ✅ Done | - |
 | F2 | Reasoner Python Abstraction | 🔴 High | ✅ Done | - |
 | F1 | JSON Configurability for JDEX | 🔴 High | ✅ Done | - |
-| F0 | Core JDEX and SaF Datasets | 🔴 High | ✅ Done | - |
+| F0 | Core JDEX and JDSET Datasets | 🔴 High | ✅ Done | - |
 
 ---
 

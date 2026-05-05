@@ -6,12 +6,12 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KGSaF JDeX: Modular Suite &mdash; KG-SaF: Official Documentation</title>
+  <title>JDeX: Modular Extraction Tool &mdash; KG-SaF: Official Documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
-    <link rel="canonical" href="https://ivandiliso.github.io/kg-saf/jdex.html" />
+    <link rel="canonical" href="https://ara-t3.github.io/jedikg/jdex.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=72d88caf"></script>
@@ -20,8 +20,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="References" href="reference.html" />
-    <link rel="prev" title="KGSaF Data: Complete KGR Datasets" href="data.html" /> 
+    <link rel="next" title="Roadmap and Maintenance Plan" href="maintenance.html" />
+    <link rel="prev" title="JDSet: Complete KGR Datasets" href="data.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -32,8 +32,9 @@
 
           
           
-          <a href="index.html" class="icon icon-home">
-            KG-SaF: Building Complete and Curated Datasets for Machine Learning
+          <a href="index.html">
+            
+              <img src="_static/JediKG_Logo2-2.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -49,10 +50,12 @@
 <li class="toctree-l1"><a class="reference internal" href="config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials and Guides</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<p class="caption" role="heading"><span class="caption-text">JediKG Documentation :</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data.html"><strong>JDSet</strong>: Complete KGR Datasets</a></li>
+</ul>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">KGSaF <strong>JDeX</strong>: Modular Suite</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>JDeX</strong>: Modular Extraction Tool</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#jdex-suite">JDeX Suite</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reasoning-utility">Reasoning Utility</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#jdex.owl.reasoning.Reasoner"><code class="docutils literal notranslate"><span class="pre">Reasoner</span></code></a><ul>
@@ -205,6 +208,10 @@
 </ul>
 </li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Future Updates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Roadmap and Maintenance Plan</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">References</a></li>
@@ -216,7 +223,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">KG-SaF: Building Complete and Curated Datasets for Machine Learning</a>
+          <a href="index.html">JediKG: Building Complete and Curated Datasets for Machine Learning</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -224,7 +231,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">KGSaF <strong>JDeX</strong>: Modular Suite</li>
+      <li class="breadcrumb-item active"><strong>JDeX</strong>: Modular Extraction Tool</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/jdex.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -234,8 +241,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="kgsaf-jdex-modular-suite">
-<h1>KGSaF <strong>JDeX</strong>: Modular Suite<a class="headerlink" href="#kgsaf-jdex-modular-suite" title="Link to this heading"></a></h1>
+  <section id="jdex-modular-extraction-tool">
+<h1><strong>JDeX</strong>: Modular Extraction Tool<a class="headerlink" href="#jdex-modular-extraction-tool" title="Link to this heading"></a></h1>
 <section id="jdex-suite">
 <h2>JDeX Suite<a class="headerlink" href="#jdex-suite" title="Link to this heading"></a></h2>
 <p>The JDEX suite provides a collection of modular tools for ontology processing
@@ -252,7 +259,7 @@ full control over each processing step.</p>
 <p>The following sections document each component in detail, with emphasis on their
 individual usage and configuration options. A schematization of the full pipeline (with all reasoing services active) can be found below</p>
 <figure class="align-default">
-<img alt="_images/full_schema.png" src="_images/full_schema.png" />
+<img alt="_images/jdex.jpeg" src="_images/jdex.jpeg" />
 </figure>
 </section>
 <section id="reasoning-utility">
@@ -1757,8 +1764,8 @@ setting up a configuration file.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="data.html" class="btn btn-neutral float-left" title="KGSaF Data: Complete KGR Datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="reference.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="data.html" class="btn btn-neutral float-left" title="JDSet: Complete KGR Datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="maintenance.html" class="btn btn-neutral float-right" title="Roadmap and Maintenance Plan" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

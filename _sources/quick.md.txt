@@ -32,8 +32,8 @@ Running this project with less than 8 GB of RAM may cause crashes or slow perfor
 1. **Clone** the repository
 
 ```bash
-git clone https://github.com/ivandiliso/kg-saf.git
-cd kg-saf
+git clone https://github.com/ara-t3/jedikg.git
+cd jedikg
 ```
 
 2. Run the **Automatic Interactive Installer**
@@ -46,11 +46,11 @@ chmod +x install
 Follow the instruction provided via terminal to customize you installation.
 
 ```{warning}
-The KG-SaF Dataset are provided in a zipped and stripped down version due to GitHub cloud per file size limitation, do to this, full knowledge graph and full assertions files have been removed, but can be easily reconstructed using the provided installation options. Please refer to the installation instruction and process to automatically unpack all resources and reconstruc all removed files.
+The JediKG Datasets (JDSet) are provided in a zipped and stripped down version due to GitHub cloud per file size limitation, do to this, full knowledge graph and full assertions files have been removed, but can be easily reconstructed using the provided installation options. Please refer to the installation instruction and process to automatically unpack all resources and reconstruc all removed files.
 ```
 
 ```{tip}
-If you just want to use the JDEX utility on your custom dataset and are not interested in the KG-SaF Data Consistent Dataset, choose "No" when prompted about running dataset unpacking. THe JDEX tool can be used also whitout data!
+If you just want to use the JDEX utility on your custom dataset and are not interested in the JDSet Consistent Dataset, choose "No" when prompted about running dataset unpacking. THe JDEX tool can be used also whitout data!
 ```
 
 ## Run JDEX on your Knowledge Graph
@@ -68,5 +68,3 @@ The only requirement is a well-defined configuration file. For guidance, refer t
 ### Minimal Required Inputs
 - **Schema file**: your ontology schema
 - **Facts file**: your triples, including object property assertions and class assertions
-
-

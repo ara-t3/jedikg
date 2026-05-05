@@ -11,7 +11,7 @@
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
-    <link rel="canonical" href="https://ivandiliso.github.io/kg-saf/tutorial.html" />
+    <link rel="canonical" href="https://ara-t3.github.io/jedikg/tutorial.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=72d88caf"></script>
@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="KGSaF Data: Complete KGR Datasets" href="data.html" />
+    <link rel="next" title="JDSet: Complete KGR Datasets" href="data.html" />
     <link rel="prev" title="JDEX Configuration Guide" href="config.html" /> 
 </head>
 
@@ -32,8 +32,9 @@
 
           
           
-          <a href="index.html" class="icon icon-home">
-            KG-SaF: Building Complete and Curated Datasets for Machine Learning
+          <a href="index.html">
+            
+              <img src="_static/JediKG_Logo2-2.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -52,7 +53,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#instructions">Instructions</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#loading-and-analyzing-a-kg-saf-datasets-in-pytorch">Loading and Analyzing a KG-SaF Datasets in PyTorch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#loading-and-analyzing-a-jdset-datasets-in-pytorch">Loading and Analyzing a JDSet Datasets in PyTorch</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#loading-the-dataset">Loading the Dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#inspect-dataset-components">Inspect Dataset Components</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#exploring-individuals-classes-and-object-properties">Exploring Individuals Classes and Object Properties</a></li>
@@ -61,7 +62,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#inspecting-object-properties-hierarchies">Inspecting Object Properties Hierarchies</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#running-transe-on-kg-saf-datasets">Running TransE on KG-SaF Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-transe-on-jdset-datasets">Running TransE on JDSet Datasets</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#loading-and-mapping-triples">Loading and Mapping Triples</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#train-transe-model">Train TransE Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
@@ -70,10 +71,16 @@
 </ul>
 </li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<p class="caption" role="heading"><span class="caption-text">JediKG Documentation :</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html"><strong>JDSet</strong>: Complete KGR Datasets</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="jdex.html"><strong>JDeX</strong>: Modular Extraction Tool</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Future Updates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Roadmap and Maintenance Plan</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
@@ -86,7 +93,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">KG-SaF: Building Complete and Curated Datasets for Machine Learning</a>
+          <a href="index.html">JediKG: Building Complete and Curated Datasets for Machine Learning</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -123,9 +130,9 @@
 <p><img alt="" src="_images/jdex.png" /></p>
 </section>
 </section>
-<section id="loading-and-analyzing-a-kg-saf-datasets-in-pytorch">
-<h2>Loading and Analyzing a KG-SaF Datasets in PyTorch<a class="headerlink" href="#loading-and-analyzing-a-kg-saf-datasets-in-pytorch" title="Link to this heading"></a></h2>
-<p>This tutorial demonstrates how to load a Knowledge Graph dataset using kgsaf_jdex and inspect its components, classes, and object property hierarchies. You can find a full executable Notebook in <code class="docutils literal notranslate"><span class="pre">tutorials/torch_loader.ipynb</span></code>. This example will be run on the tutorial dataset generated in previous phase (an already generated dataset is available)</p>
+<section id="loading-and-analyzing-a-jdset-datasets-in-pytorch">
+<h2>Loading and Analyzing a JDSet Datasets in PyTorch<a class="headerlink" href="#loading-and-analyzing-a-jdset-datasets-in-pytorch" title="Link to this heading"></a></h2>
+<p>This tutorial demonstrates how to load a Knowledge Graph dataset using JDEX and inspect its components, classes, and object property hierarchies. You can find a full executable Notebook in <code class="docutils literal notranslate"><span class="pre">tutorials/torch_loader.ipynb</span></code>. This example will be run on the tutorial dataset generated in previous phase (an already generated dataset is available)</p>
 <p><strong>Setup and Imports</strong></p>
 <p>Before loading the dataset, make sure your Python environment can access the library and required modules:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
@@ -133,8 +140,8 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">kgsaf_jdex.utils.conventions.paths</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">kgsaf_jdex.loaders.pytorch.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">KnowledgeGraph</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jdex.utils.conventions.paths</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jdex.loaders.pytorch.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">KnowledgeGraph</span>
 </pre></div>
 </div>
 <section id="loading-the-dataset">
@@ -299,13 +306,13 @@ Testing the Role Hierarhcy of [102] http://dbpedia.org/ontology/genre
 </div>
 </section>
 </section>
-<section id="running-transe-on-kg-saf-datasets">
-<h2>Running TransE on KG-SaF Datasets<a class="headerlink" href="#running-transe-on-kg-saf-datasets" title="Link to this heading"></a></h2>
+<section id="running-transe-on-jdset-datasets">
+<h2>Running TransE on JDSet Datasets<a class="headerlink" href="#running-transe-on-jdset-datasets" title="Link to this heading"></a></h2>
 <p>This tutorial demonstrates how to train and evaluate <strong>TransE</strong> KGR model
 on a dataset prepared with the <code class="docutils literal notranslate"><span class="pre">jdex</span></code> loaders.  You can find a full executable Notebook in <code class="docutils literal notranslate"><span class="pre">tutorial/pykeen_training.ipynb</span></code>. The example will use the tutorial dataset.</p>
 <p><strong>Imports</strong></p>
 <p>This code imports all necessary packages, including PyKEEN for knowledge graph embeddings and
-your kgsaf_jdex dataset utilities.</p>
+your JDEX dataset utilities.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
@@ -414,7 +421,7 @@ INFO:pykeen.evaluation.evaluator:Evaluation took 79.32s seconds
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="config.html" class="btn btn-neutral float-left" title="JDEX Configuration Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="data.html" class="btn btn-neutral float-right" title="KGSaF Data: Complete KGR Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="data.html" class="btn btn-neutral float-right" title="JDSet: Complete KGR Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,15 +1,14 @@
 
-KG-SaF: Data and Workflow Documentation
+JediKG Suite: Official Documentation
 ================================================
 
-KG-SaF-Data and KG-SaF-JDeX from "Diliso, I., Barile, R., d'Amato, C., & Fanizzi, N. (2025). KG-SaF: Building Complete and Curated Datasets for Machine Learning and Reasoning on Knowledge Graphs (Version 0.0.0.1) [Computer software]. https://doi.org/10.5281/zenodo.17817931"
+
 
 .. image:: https://img.shields.io/badge/GitHub-Repository-black?logo=github
    :target: https://github.com/ivandiliso/kg-saf
    :alt: GitHub Repository
 
-
-**KG-SaF** provides a workflow (*KG-SaF-JDeX*) and curated datasets  (*KG-SaF-Data*) for knowledge graph refinement (KGR) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** and **reasoning services**.
+**JediKG** provides a workflow **JDeX** (Jedi Dataset EXtraction) and curated datasets suite **JDSet** (Jedi DataSET) for knowledge graph refinement (KGR) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** and **reasoning services**.
 
 
 
@@ -17,10 +16,10 @@ KG-SaF-Data and KG-SaF-JDeX from "Diliso, I., Barile, R., d'Amato, C., & Fanizzi
    :target: https://doi.org/10.5281/zenodo.17817931
    :alt: DOI
 
-.. image:: https://img.shields.io/github/v/release/ivandiliso/kg-saf
+.. image:: https://img.shields.io/github/v/release/ara-t3/jedikg
    :alt: GitHub repo size
 
-.. image:: https://img.shields.io/github/license/ivandiliso/sphm4kg
+.. image:: https://img.shields.io/github/license/ara-t3/jedikg
    :alt: GitHub License
 
 .. image:: https://img.shields.io/badge/python-3.11%2B-blue
@@ -30,7 +29,7 @@ KG-SaF-Data and KG-SaF-JDeX from "Diliso, I., Barile, R., d'Amato, C., & Fanizzi
    :target: https://arxiv.org/abs/2602.14795
    :alt: arXiv
 
-.. image:: https://img.shields.io/github/stars/ivandiliso/kg-saf
+.. image:: https://img.shields.io/github/stars/ara-t3/jedikg
    :alt: GitHub repo size
 
 
@@ -74,7 +73,7 @@ Usability & Complete Customization
 
 .. toctree::
    :maxdepth: 3
-   :caption: Documentation:
+   :caption: JediKG Documentation :
 
    data
 
