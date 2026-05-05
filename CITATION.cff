@@ -13,8 +13,8 @@ authors:
 - family-names: "Fanizzi"
   given-names: "Nicola"
   orcid: "https://orcid.org/0000-0001-5319-7933"
-title: "KG-SaF: Building Complete and Curated Datasets for Machine Learning and Reasoning on Knowledge Graphs"
+title: "JediKG: Building Complete and Curated Datasets for Machine Learning and Reasoning on Knowledge Graphs"
 version: 2.0.0.0
 doi: 10.5281/zenodo.17817931
 date-released: 2026-05-04
-url: https://github.com/ara-t3/kg-saf
+url: https://github.com/ara-t3/jedikg

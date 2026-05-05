@@ -1,15 +1,15 @@
-# KG-SaF: Building Complete and Curated Datasets for Machine Learning and Reasoning on Knowledge Graphs
+# JediKG: Building Complete and Curated Datasets for Machine Learning and Reasoning on Knowledge Graphs
 
 [![DOI](https://zenodo.org/badge/1110012490.svg)](https://doi.org/10.5281/zenodo.17817931)
 ![GitHub License](https://img.shields.io/github/license/ivandiliso/sphm4kg)
 ![Python Version](https://img.shields.io/badge/python-3.12.8%2B-blue)
-[![Docs](https://img.shields.io/badge/docs-online-success.svg)](https://ara-t3.github.io/kg-saf/)
+[![Docs](https://img.shields.io/badge/docs-online-success.svg)](https://ara-t3.github.io/jedikg/)
 [![arXiv](https://img.shields.io/badge/arXiv-2602.14795-b31b1b.svg)](https://arxiv.org/abs/2602.14795)
 
 
-**KG-SaF** provides a workflow (*JDeX*) and curated datasets  (*Data*) for knowledge graph refinement (KGR) and NeuroSymbolic (NeSY) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** (PyKEEN, PyTorch) and **reasoning services** (Reasoners, Ontology Management Tools like Protege).
+**JediKG** provides a workflow (*JDeX*) and curated datasets  (*JDSet*) for knowledge graph refinement (KGR) and NeuroSymbolic (NeSY) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** (PyKEEN, PyTorch) and **reasoning services** (Reasoners, Ontology Management Tools like Protege).
 
-> Please read our official documentation at [ReadTheDocs Documentation](https://ara-t3.github.io/kg-saf/)
+> Please read our official documentation at [ReadTheDocs Documentation](https://ara-t3.github.io/jedikg/)
 
 ## 🚀 Key Features
 - 🗂️ Extracts datasets from RDF-based KGs with expressive schemas (RDFS/OWL2)  
@@ -17,7 +17,7 @@
 - ⚡ Handles inconsistencies and leverages reasoning to infer implicit knowledge
 - 🤖 Provides ML-ready **tensor representations** compatible with PyTorch and PyKEEN  
 - 🧩 Offers **schema decomposition** into themed partitions (modularization of ontology components)
-- 📄 Fully documented at [ReadTheDocs Documentation](https://ara-t3.github.io/kg-saf/)
+- 📄 Fully documented at [ReadTheDocs Documentation](https://ara-t3.github.io/jedikg/)
 
 ### Advanced Python Reasoning Integration
 - 🔌 Provides a Python abstraction layer for reasoners, tightly integrated with RDFLib, enabling seamless use of multiple engines:
@@ -100,15 +100,15 @@ All datasets are provided in a **standardized format** following the **Descripti
 
 ## Tutorials
 
-In the `tutorial` folder, we provide example notebooks demonstrating how to use KG-SaF datasets and tools. This folde also contains an example of configuration files and example inputs to test out the JDeX extraction pipeline!
+In the `tutorial` folder, we provide example notebooks demonstrating how to use JediKG datasets and tools. This folde also contains an example of configuration files and example inputs to test out the JDeX extraction pipeline!
 
 1. **Loading a PyTorch dataset using the custom `KnowledgeGraph` class**  
    - File: `tutorial/torch_loader.ipynb`  
-   - Description: Shows how to load a dataset from KG-SaF into PyTorch tensors using the `KnowledgeGraph` class, including train/test/validation splits and schema-aware representations.  
+   - Description: Shows how to load a dataset from JediKG into PyTorch tensors using the `KnowledgeGraph` class, including train/test/validation splits and schema-aware representations.  
 
-2. **Proof of concept: Using PyKEEN for machine learning on KG-SaF datasets**  
+2. **Proof of concept: Using PyKEEN for machine learning on JediKG datasets**  
    - File: `tutorial/pykeen_training.ipynb`  
-   - Description: Demonstrates a basic pipeline for training a Knowledge Graph Embedding (KGE) model using PyKEEN on one of the KG-SaF datasets, including evaluation.  
+   - Description: Demonstrates a basic pipeline for training a Knowledge Graph Embedding (KGE) model using PyKEEN on one of the JediKG datasets, including evaluation.  
 
 
 
