@@ -43,7 +43,7 @@
 
 ## **JDeX**: Dataset Extraction Tool Overview
 
-![](./docs/source/jdex.jpeg)
+![](./docs/source/jedikg.drawio.png)
 
 ##  **JDSet**: Dataset Suite Overview
 
