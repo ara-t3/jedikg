@@ -21,7 +21,7 @@ full control over each processing step.
 The following sections document each component in detail, with emphasis on their
 individual usage and configuration options. A schematization of the full pipeline (with all reasoing services active) can be found below
 
-.. figure:: jdex.jpeg
+.. figure:: jedikg.drawio.png
 
 
 Reasoning Utility

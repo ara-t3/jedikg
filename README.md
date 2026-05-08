@@ -117,17 +117,3 @@ In the `tutorial` folder, we provide example notebooks demonstrating how to use 
    - File: `tutorial/pykeen_training.ipynb`  
    - Description: Demonstrates a basic pipeline for training a Knowledge Graph Embedding (KGE) model using PyKEEN on one of the JediKG datasets, including evaluation.  
 
-
-
-# Citation
-```bibtex
-@misc{diliso2026returnschemabuildingcomplete,
-      title={Return of the Schema: Building Complete Datasets for Machine Learning and Reasoning on Knowledge Graphs}, 
-      author={Ivan Diliso and Roberto Barile and Claudia d'Amato and Nicola Fanizzi},
-      year={2026},
-      eprint={2602.14795},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2602.14795}, 
-}
-```
