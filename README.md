@@ -10,7 +10,6 @@
 ![GitHub License](https://img.shields.io/github/license/ara-t3/jedikg)
 ![Python Version](https://img.shields.io/badge/python-3.12.8%2B-blue)
 [![Docs](https://img.shields.io/badge/docs-online-success.svg)](https://ara-t3.github.io/jedikg/)
-[![arXiv](https://img.shields.io/badge/arXiv-2602.14795-b31b1b.svg)](https://arxiv.org/abs/2602.14795)
 
 
 **JediKG** provides a workflow (*JDeX*) and curated datasets  (*JDSet*) for knowledge graph refinement (KGR) and NeuroSymbolic (NeSY) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** (PyKEEN, PyTorch) and **reasoning services** (Reasoners, Ontology Management Tools like Protege).

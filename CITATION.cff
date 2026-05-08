@@ -7,12 +7,12 @@ authors:
 - family-names: "Barile"
   given-names: "Roberto"
   orcid: "https://orcid.org/0009-0007-3058-8692"
-- family-names: "d'Amato"
-  given-names: "Claudia"
-  orcid: "https://orcid.org/0000-0002-3385-987X"
 - family-names: "Fanizzi"
   given-names: "Nicola"
   orcid: "https://orcid.org/0000-0001-5319-7933"
+- family-names: "d'Amato"
+  given-names: "Claudia"
+  orcid: "https://orcid.org/0000-0002-3385-987X"
 title: "JediKG: Building Complete and Curated Datasets for Machine Learning and Reasoning on Knowledge Graphs"
 version: 2.0.0.0
 doi: 10.5281/zenodo.17817931

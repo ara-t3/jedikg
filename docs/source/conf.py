@@ -43,14 +43,14 @@ myst_enable_extensions = ["dollarmath"]
 html_baseurl = "https://ara-t3.github.io/jedikg/"
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
-html_title = "KG-SaF: Official Documentation"
+html_title = "JediKG: Official Documentation"
 html_logo = "JediKG_Logo2-2.png"
 html_theme_options = {
     "logo_only": True,
     "display_version": False,
 }
 html_context = {
-    "description": "Documentation for the KG-SaF-Data and KG-SaF-JDeX Workflow: Building Complete and Curated Datasets for Machine Learning"
+    "description": "Documentation for JediKG: Building Complete and Curated Datasets for Machine Learning"
 }
 
 source_suffix = {

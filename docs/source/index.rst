@@ -4,13 +4,11 @@ JediKG Suite: Official Documentation
 
 
 
+**JediKG** provides a workflow **JDeX** (Jedi Dataset EXtraction) and curated datasets suite **JDSet** (Jedi DataSET) for knowledge graph refinement (KGR) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** and **reasoning services**.
+
 .. image:: https://img.shields.io/badge/GitHub-Repository-black?logo=github
    :target: https://github.com/ivandiliso/kg-saf
    :alt: GitHub Repository
-
-**JediKG** provides a workflow **JDeX** (Jedi Dataset EXtraction) and curated datasets suite **JDSet** (Jedi DataSET) for knowledge graph refinement (KGR) research. The resource includes datasets with both **schema (ontologies)** and **ground facts**, making it ready for **machine learning** and **reasoning services**.
-
-
 
 .. image:: https://zenodo.org/badge/1110012490.svg
    :target: https://doi.org/10.5281/zenodo.17817931
@@ -24,10 +22,6 @@ JediKG Suite: Official Documentation
 
 .. image:: https://img.shields.io/badge/python-3.11%2B-blue
    :alt: Python Version
-
-.. image:: https://img.shields.io/badge/arXiv-2602.14795-b31b1b.svg
-   :target: https://arxiv.org/abs/2602.14795
-   :alt: arXiv
 
 .. image:: https://img.shields.io/github/stars/ara-t3/jedikg
    :alt: GitHub repo size
