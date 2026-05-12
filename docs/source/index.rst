@@ -27,6 +27,7 @@ JediKG Suite: Official Documentation
    :alt: GitHub repo size
 
 
+
 Key Features
 ------------
 
@@ -35,6 +36,8 @@ Key Features
 - ⚡ Handles inconsistencies and leverages reasoning to infer implicit knowledge
 - 🤖 Provides ML-ready **tensor representations** compatible with PyTorch and PyKEEN
 - 🧩 Offers **schema decomposition** into themed partitions (modularization of ontology components)
+
+.. figure:: jedikg.png
 
 Advanced Python Reasoning Integration
 -------------------------------------

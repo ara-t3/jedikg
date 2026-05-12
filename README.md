@@ -43,7 +43,7 @@
 
 ## **JDeX**: Dataset Extraction Tool Overview
 
-![](./docs/source/jedikg.drawio.png)
+![](./docs/source/jedikg.png)
 
 ##  **JDSet**: Dataset Suite Overview
 
@@ -115,5 +115,4 @@ In the `tutorial` folder, we provide example notebooks demonstrating how to use 
 
 2. **Proof of concept: Using PyKEEN for machine learning on JediKG datasets**  
    - File: `tutorial/pykeen_training.ipynb`  
-   - Description: Demonstrates a basic pipeline for training a Knowledge Graph Embedding (KGE) model using PyKEEN on one of the JediKG datasets, including evaluation.  
-
+   - Description: Demonstrates a basic pipeline for training a Knowledge Graph Embedding (KGE) model using PyKEEN on one of the JediKG datasets, including evaluation.
