@@ -5,12 +5,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>jdex.config &mdash; KG-SaF: Official Documentation</title>
+  <title>jdex.config &mdash; JediKG: Official Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
-    <link rel="canonical" href="https://ivandiliso.github.io/kg-saf/_modules/jdex/config.html" />
+    <link rel="canonical" href="https://ara-t3.github.io/jedikg/_modules/jdex/config.html" />
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=72d88caf"></script>
@@ -29,8 +29,9 @@
 
           
           
-          <a href="../../index.html" class="icon icon-home">
-            KG-SaF: Building Complete and Curated Datasets for Machine Learning
+          <a href="../../index.html">
+            
+              <img src="../../_static/JediKG_Logo2-2.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -40,13 +41,22 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../quick.html">Quick Start Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../config.html">JDEX Configuration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorials and Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../data.html">KGSaF <strong>Data</strong>: Complete KGR Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../jdex.html">KGSaF <strong>JDeX</strong>: Modular Suite</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">JediKG Documentation :</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../data.html"><strong>JDSet</strong>: Complete KGR Datasets</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../jdex.html"><strong>JDeX</strong>: Modular Extraction Tool</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Future Updates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../maintenance.html">Roadmap and Maintenance Plan</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
@@ -59,7 +69,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">KG-SaF: Building Complete and Curated Datasets for Machine Learning</a>
+          <a href="../../index.html">JediKG: Building Complete and Curated Datasets for Machine Learning</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -83,10 +93,11 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">jdex.owl.reasoning</span><span class="w"> </span><span class="kn">import</span> <span class="n">PresetAxioms</span>
 
-
 <span class="n">DLProfile</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;EL&quot;</span><span class="p">,</span> <span class="s2">&quot;ALC&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">PathsConfig</span><span class="p">:</span>
@@ -173,7 +184,7 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">enabled</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
             <span class="n">axioms</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;axioms&quot;</span><span class="p">,</span> <span class="n">PresetAxioms</span><span class="o">.</span><span class="n">tbox_materialization</span><span class="p">())),</span>
-            <span class="n">reasoner</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reasoner&quot;</span><span class="p">,</span> <span class="s2">&quot;hermit&quot;</span><span class="p">)</span>
+            <span class="n">reasoner</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reasoner&quot;</span><span class="p">,</span> <span class="s2">&quot;hermit&quot;</span><span class="p">),</span>
         <span class="p">)</span>
 
 
@@ -213,7 +224,7 @@
             <span class="n">enabled</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
             <span class="n">reasoner</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reasoner&quot;</span><span class="p">,</span> <span class="s2">&quot;konclude&quot;</span><span class="p">),</span>
         <span class="p">)</span>
-    
+
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">ModularizationConfig</span><span class="p">:</span>
@@ -230,7 +241,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a ModularizationConfig from a dictionary.&quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
-    
+
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">ConsistencyConfig</span><span class="p">:</span>
@@ -247,7 +258,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a ConsistencyConfig from a dictionary.&quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">convert_ntriples</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;convert_ntriples&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
-    
+
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">DecompositionConfig</span><span class="p">:</span>
@@ -269,6 +280,7 @@
             <span class="n">rbox</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rbox&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
             <span class="n">tbox</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tbox&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
         <span class="p">)</span>
+
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SatisfiabilityConfig</span><span class="p">:</span>
@@ -299,7 +311,7 @@
             <span class="n">filter_unsatisfiable</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filter_unsatisfiable&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
             <span class="n">reasoner</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reasoner&quot;</span><span class="p">,</span> <span class="s2">&quot;hermit&quot;</span><span class="p">),</span>
         <span class="p">)</span>
-    
+
 
 <div class="viewcode-block" id="ReasoningConfig">
 <a class="viewcode-back" href="../../jdex.html#jdex.config.ReasoningConfig">[docs]</a>
@@ -323,7 +335,9 @@
     <span class="n">java_11_home</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">java_max_ram</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
     <span class="n">satisfiability</span><span class="p">:</span> <span class="n">SatisfiabilityConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">SatisfiabilityConfig</span><span class="p">)</span>
-    <span class="n">materialization</span><span class="p">:</span> <span class="n">MaterializationConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">MaterializationConfig</span><span class="p">)</span>
+    <span class="n">materialization</span><span class="p">:</span> <span class="n">MaterializationConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">MaterializationConfig</span>
+    <span class="p">)</span>
     <span class="n">realization</span><span class="p">:</span> <span class="n">RealizationConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">RealizationConfig</span><span class="p">)</span>
     <span class="n">modularization</span><span class="p">:</span> <span class="n">ModularizationConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">ModularizationConfig</span><span class="p">)</span>
     <span class="n">decomposition</span><span class="p">:</span> <span class="n">DecompositionConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">DecompositionConfig</span><span class="p">)</span>
@@ -339,7 +353,9 @@
             <span class="n">java_max_ram</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;java_max_ram&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
             <span class="n">java_8_home</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;java_8_home&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;java_8_home&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">java_11_home</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;java_11_home&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;java_11_home&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">materialization</span><span class="o">=</span><span class="n">MaterializationConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;materialization&quot;</span><span class="p">)),</span>
+            <span class="n">materialization</span><span class="o">=</span><span class="n">MaterializationConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;materialization&quot;</span><span class="p">)</span>
+            <span class="p">),</span>
             <span class="n">realization</span><span class="o">=</span><span class="n">RealizationConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;realization&quot;</span><span class="p">)),</span>
             <span class="n">modularization</span><span class="o">=</span><span class="n">ModularizationConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modularization&quot;</span><span class="p">)),</span>
             <span class="n">decomposition</span><span class="o">=</span><span class="n">DecompositionConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;decomposition&quot;</span><span class="p">)),</span>
@@ -347,6 +363,7 @@
             <span class="n">satisfiability</span><span class="o">=</span><span class="n">SatisfiabilityConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;satisfiability&quot;</span><span class="p">)),</span>
         <span class="p">)</span></div>
 </div>
+
 
 
 <span class="nd">@dataclass</span>
@@ -370,6 +387,7 @@
             <span class="n">minimum_frequency</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;minimum_frequency&quot;</span><span class="p">,</span> <span class="mf">0.97</span><span class="p">),</span>
         <span class="p">)</span>
 
+
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SplitConfig</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for dataset splitting.</span>
@@ -391,7 +409,9 @@
     <span class="n">validation_percent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">test_percent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">transductive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">test_leakage_filtering</span><span class="p">:</span> <span class="n">TestLeakageFilteringConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">TestLeakageFilteringConfig</span><span class="p">)</span>
+    <span class="n">test_leakage_filtering</span><span class="p">:</span> <span class="n">TestLeakageFilteringConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">TestLeakageFilteringConfig</span>
+    <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate split percentages.&quot;&quot;&quot;</span>
@@ -441,6 +461,28 @@
         <span class="p">)</span>
 
 
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DensityFilterConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for density filtering steps.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        enabled (bool): Whether to filter facts.</span>
+<span class="sd">        k (int): k value for density based filtering (keep triples whose entities appear in at least k other triples)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DensityFilterConfig&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a PostProcessingConfig from a dictionary.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">enabled</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">k</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="p">)</span>
+
+
 <div class="viewcode-block" id="JDEXConfig">
 <a class="viewcode-back" href="../../jdex.html#jdex.config.JDEXConfig">[docs]</a>
 <span class="nd">@dataclass</span>
@@ -457,7 +499,7 @@
 <span class="sd">        split (SplitConfig): Dataset splitting configuration.</span>
 <span class="sd">        description_logic_profile (DLProfile): DL profile (&quot;EL&quot;, &quot;ALC&quot;, &quot;SROIQ&quot;, or None).</span>
 <span class="sd">        post_processing (PostProcessingConfig): Post-processing configuration.</span>
-
+<span class="sd">        density_filter(DensityFilteringConfig): Density filtering configuration</span>
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError: If an invalid description logic profile is provided.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -467,10 +509,13 @@
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">interactive_shell</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">reasoning</span><span class="p">:</span> <span class="n">ReasoningConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">ReasoningConfig</span><span class="p">)</span>
-    <span class="n">test_leakage_filtering</span><span class="p">:</span> <span class="n">TestLeakageFilteringConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">TestLeakageFilteringConfig</span><span class="p">)</span>
+    <span class="n">test_leakage_filtering</span><span class="p">:</span> <span class="n">TestLeakageFilteringConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">TestLeakageFilteringConfig</span>
+    <span class="p">)</span>
     <span class="n">split</span><span class="p">:</span> <span class="n">SplitConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">SplitConfig</span><span class="p">)</span>
     <span class="n">description_logic_profile</span><span class="p">:</span> <span class="n">DLProfile</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">post_processing</span><span class="p">:</span> <span class="n">PostProcessingConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">PostProcessingConfig</span><span class="p">)</span>
+    <span class="n">density_filtering</span><span class="p">:</span> <span class="n">DensityFilterConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">DensityFilterConfig</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate description logic profile.&quot;&quot;&quot;</span>
@@ -505,8 +550,9 @@
             <span class="p">),</span>
             <span class="n">split</span><span class="o">=</span><span class="n">SplitConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;split&quot;</span><span class="p">)),</span>
             <span class="n">description_logic_profile</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description_logic_profile&quot;</span><span class="p">),</span>
-            <span class="n">post_processing</span><span class="o">=</span><span class="n">PostProcessingConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;post_processing&quot;</span><span class="p">)</span>
+            <span class="n">post_processing</span><span class="o">=</span><span class="n">PostProcessingConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;post_processing&quot;</span><span class="p">)),</span>
+            <span class="n">density_filtering</span><span class="o">=</span><span class="n">DensityFilterConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;density_filtering&quot;</span><span class="p">)</span>
             <span class="p">),</span>
         <span class="p">)</span></div>
 
@@ -534,6 +580,11 @@
 <span class="s2">schema: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span>
 <span class="s2">data: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">data</span><span class="si">}</span>
 <span class="s2">output: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">output</span><span class="si">}</span>
+
+<span class="s2">DENSITY FILTERING SETTING</span>
+
+<span class="s2">enabled: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">density_filtering</span><span class="o">.</span><span class="n">enabled</span><span class="si">}</span>
+<span class="s2">k: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">density_filtering</span><span class="o">.</span><span class="n">k</span><span class="si">}</span>
 
 <span class="s2">REASONING SERVICES SETTINGS</span>
 
@@ -586,8 +637,6 @@
 <span class="s2">    tsv_conversion: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">post_processing</span><span class="o">.</span><span class="n">tsv_conversion</span><span class="si">}</span>
 <span class="s2">            &quot;&quot;&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
 </div>
-
-
 
 </pre></div>
 

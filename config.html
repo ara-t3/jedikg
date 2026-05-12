@@ -54,6 +54,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#configuration-structure-overview">Configuration Structure Overview</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#general-settings">General Settings</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#paths-configuration">Paths Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filtering">Filtering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#reasoning-configuration">Reasoning Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dataset-splitting">Dataset Splitting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#post-processing">Post-processing</a></li>
@@ -139,6 +140,7 @@ This tutorial walks you through the structure of the configuration file and prov
 <ul class="simple">
 <li><p><strong>General Settings</strong>: Global execution behavior.</p></li>
 <li><p><strong>Paths</strong>: Input and output file management.</p></li>
+<li><p><strong>Filtering</strong>: Generate a subset of assertions via Density Filtering</p></li>
 <li><p><strong>Reasoning</strong>: Logic-based inference and validation settings.</p></li>
 <li><p><strong>Split</strong>: Parameters for Machine Learning dataset partitioning.</p></li>
 <li><p><strong>Post-processing</strong>: Export formats and mapping utilities.</p></li>
@@ -181,6 +183,18 @@ This tutorial walks you through the structure of the configuration file and prov
 <span class="w">    </span><span class="nt">&quot;schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data/schema.owl&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data/data.ttl&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;output&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;output/&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="filtering">
+<h3>Filtering<a class="headerlink" href="#filtering" title="Link to this heading"></a></h3>
+<p>Defines if JDeX should create a subset of the assertions via density filtering. If enabled, only the object property assertions that contain entities referred by at least other <code class="docutils literal notranslate"><span class="pre">k</span></code> assertions are retained.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;density_filtering&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;k&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -319,6 +333,11 @@ This tutorial walks you through the structure of the configuration file and prov
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Sparse datasets and Leakage Filtering
+Very sparse dataset can contain object properties with referred by only one triples. By the current implementation of leakage filtering by PyKEEN this casuses internal error. For this reason, a safety check is performed by JDeX, if any obj prop with less than 2 triples is found, the leakage filtering is skipped, even if enabled.</p>
+</div>
 </section>
 <section id="post-processing">
 <h3>Post-processing<a class="headerlink" href="#post-processing" title="Link to this heading"></a></h3>
