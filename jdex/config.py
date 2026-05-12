@@ -3,10 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
+
 from jdex.owl.reasoning import PresetAxioms
 
-
 DLProfile = Literal["EL", "ALC", None]
+
 
 @dataclass
 class PathsConfig:
@@ -93,7 +94,7 @@ class MaterializationConfig:
         return cls(
             enabled=data.get("enabled", True),
             axioms=list(data.get("axioms", PresetAxioms.tbox_materialization())),
-            reasoner=data.get("reasoner", "hermit")
+            reasoner=data.get("reasoner", "hermit"),
         )
 
 
@@ -133,7 +134,7 @@ class RealizationConfig:
             enabled=data.get("enabled", True),
             reasoner=data.get("reasoner", "konclude"),
         )
-    
+
 
 @dataclass
 class ModularizationConfig:
@@ -150,7 +151,7 @@ class ModularizationConfig:
         """Create a ModularizationConfig from a dictionary."""
         data = data or {}
         return cls(enabled=data.get("enabled", True))
-    
+
 
 @dataclass
 class ConsistencyConfig:
@@ -167,7 +168,7 @@ class ConsistencyConfig:
         """Create a ConsistencyConfig from a dictionary."""
         data = data or {}
         return cls(convert_ntriples=data.get("convert_ntriples", False))
-    
+
 
 @dataclass
 class DecompositionConfig:
@@ -189,6 +190,7 @@ class DecompositionConfig:
             rbox=data.get("rbox", True),
             tbox=data.get("tbox", True),
         )
+
 
 @dataclass
 class SatisfiabilityConfig:
@@ -219,7 +221,7 @@ class SatisfiabilityConfig:
             filter_unsatisfiable=data.get("filter_unsatisfiable", False),
             reasoner=data.get("reasoner", "hermit"),
         )
-    
+
 
 @dataclass
 class ReasoningConfig:
@@ -241,7 +243,9 @@ class ReasoningConfig:
     java_11_home: str | None = None
     java_max_ram: int = 4
     satisfiability: SatisfiabilityConfig = field(default_factory=SatisfiabilityConfig)
-    materialization: MaterializationConfig = field(default_factory=MaterializationConfig)
+    materialization: MaterializationConfig = field(
+        default_factory=MaterializationConfig
+    )
     realization: RealizationConfig = field(default_factory=RealizationConfig)
     modularization: ModularizationConfig = field(default_factory=ModularizationConfig)
     decomposition: DecompositionConfig = field(default_factory=DecompositionConfig)
@@ -255,13 +259,16 @@ class ReasoningConfig:
             java_max_ram=data.get("java_max_ram", 4),
             java_8_home=data["java_8_home"] if data.get("java_8_home") else None,
             java_11_home=data["java_11_home"] if data.get("java_11_home") else None,
-            materialization=MaterializationConfig.from_dict(data.get("materialization")),
+            materialization=MaterializationConfig.from_dict(
+                data.get("materialization")
+            ),
             realization=RealizationConfig.from_dict(data.get("realization")),
             modularization=ModularizationConfig.from_dict(data.get("modularization")),
             decomposition=DecompositionConfig.from_dict(data.get("decomposition")),
             consistency=ConsistencyConfig.from_dict(data.get("consistency")),
             satisfiability=SatisfiabilityConfig.from_dict(data.get("satisfiability")),
         )
+
 
 @dataclass
 class TestLeakageFilteringConfig:
@@ -284,6 +291,7 @@ class TestLeakageFilteringConfig:
             minimum_frequency=data.get("minimum_frequency", 0.97),
         )
 
+
 @dataclass
 class SplitConfig:
     """Configuration for dataset splitting.
@@ -305,7 +313,9 @@ class SplitConfig:
     validation_percent: int = 10
     test_percent: int = 10
     transductive: bool = True
-    test_leakage_filtering: TestLeakageFilteringConfig = field(default_factory=TestLeakageFilteringConfig)
+    test_leakage_filtering: TestLeakageFilteringConfig = field(
+        default_factory=TestLeakageFilteringConfig
+    )
 
     def __post_init__(self) -> None:
         """Validate split percentages."""
@@ -356,6 +366,28 @@ class PostProcessingConfig:
 
 
 @dataclass
+class DensityFilterConfig:
+    """Configuration for density filtering steps.
+
+    Attributes:
+        enabled (bool): Whether to filter facts.
+        k (int): k value for density based filtering (keep triples whose entities appear in at least k other triples)
+    """
+
+    enabled: bool = False
+    k: int = 10
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any] | None) -> "DensityFilterConfig":
+        """Create a PostProcessingConfig from a dictionary."""
+        data = data or {}
+        return cls(
+            enabled=data.get("enabled", False),
+            k=data.get("k", 10),
+        )
+
+
+@dataclass
 class JDEXConfig:
     """Top-level configuration for JDEX pipeline.
 
@@ -369,7 +401,7 @@ class JDEXConfig:
         split (SplitConfig): Dataset splitting configuration.
         description_logic_profile (DLProfile): DL profile ("EL", "ALC", "SROIQ", or None).
         post_processing (PostProcessingConfig): Post-processing configuration.
-
+        density_filter(DensityFilteringConfig): Density filtering configuration
     Raises:
         ValueError: If an invalid description logic profile is provided.
     """
@@ -379,10 +411,13 @@ class JDEXConfig:
     verbose: int = 1
     interactive_shell: bool = True
     reasoning: ReasoningConfig = field(default_factory=ReasoningConfig)
-    test_leakage_filtering: TestLeakageFilteringConfig = field(default_factory=TestLeakageFilteringConfig)
+    test_leakage_filtering: TestLeakageFilteringConfig = field(
+        default_factory=TestLeakageFilteringConfig
+    )
     split: SplitConfig = field(default_factory=SplitConfig)
     description_logic_profile: DLProfile = None
     post_processing: PostProcessingConfig = field(default_factory=PostProcessingConfig)
+    density_filtering: DensityFilterConfig = field(default_factory=DensityFilterConfig)
 
     def __post_init__(self) -> None:
         """Validate description logic profile."""
@@ -415,8 +450,9 @@ class JDEXConfig:
             ),
             split=SplitConfig.from_dict(data.get("split")),
             description_logic_profile=data.get("description_logic_profile"),
-            post_processing=PostProcessingConfig.from_dict(
-                data.get("post_processing")
+            post_processing=PostProcessingConfig.from_dict(data.get("post_processing")),
+            density_filtering=DensityFilterConfig.from_dict(
+                data.get("density_filtering")
             ),
         )
 
@@ -441,6 +477,11 @@ PATHS SETTINGS
 schema: {self.paths.schema}
 data: {self.paths.data}
 output: {self.paths.output}
+
+DENSITY FILTERING SETTING
+
+enabled: {self.density_filtering.enabled}
+k: {self.density_filtering.k}
 
 REASONING SERVICES SETTINGS
 
@@ -492,5 +533,3 @@ post_processing:
     id_mapping: {self.post_processing.id_mapping}
     tsv_conversion: {self.post_processing.tsv_conversion}
             """.strip()
-
-

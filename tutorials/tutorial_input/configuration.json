@@ -2,6 +2,10 @@
     "dataset_name": "tutorial_dataset",
     "verbose": 1,
     "interactive_shell": true,
+    "density_filtering": {
+    "enabled": true,
+    "k" : 2
+    },
     "paths": {
         "schema": "./tutorials/tutorial_input/schema.owl",
         "data": "./tutorials/tutorial_input/facts.owl",
@@ -12,7 +16,7 @@
         "java_11_home": "/opt/homebrew/opt/openjdk@11/",
         "java_max_ram": 8,
         "materialization": {
-            "enabled": true,
+          "enabled": false,
             "axioms": [
                 "SubClass",
                 "EquivalentClass",
