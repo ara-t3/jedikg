@@ -27,6 +27,7 @@ You do not need to setup all the parameters! Set only what you want, all other p
 The configuration is logically divided into five primary sections:
 - **General Settings**: Global execution behavior.
 - **Paths**: Input and output file management.
+- **Filtering**: Generate a subset of assertions via Density Filtering
 - **Reasoning**: Logic-based inference and validation settings.
 - **Split**: Parameters for Machine Learning dataset partitioning.
 - **Post-processing**: Export formats and mapping utilities.
@@ -58,6 +59,18 @@ Defines where JDEX finds your knowledge base and where it saves processed artifa
     "schema": "data/schema.owl",
     "data": "data/data.ttl",
     "output": "output/"
+  }
+}
+```
+
+### Filtering
+Defines if JDeX should create a subset of the assertions via density filtering. If enabled, only the object property assertions that contain entities referred by at least other `k` assertions are retained. 
+
+```json
+{
+  "density_filtering": {
+    "enabled": false,
+    "k": 10
   }
 }
 ```
@@ -144,6 +157,9 @@ Configure how triples are partitioned for Machine Learning tasks.
 | test_leakage_filtering.enabled   | Enables or disables leakage filtering for the test set.                                        |
 | test_leakage_filtering.minimum_frequency | Threshold frequency for filtering entities to prevent leakage (e.g., 0.97).         |
 
+```{warning} Sparse datasets and Leakage Filtering
+Very sparse dataset can contain object properties with referred by only one triples. By the current implementation of leakage filtering by PyKEEN this casuses internal error. For this reason, a safety check is performed by JDeX, if any obj prop with less than 2 triples is found, the leakage filtering is skipped, even if enabled.
+```
 
 ### Post-processing
 Control the final output formats for downstream consumption.
