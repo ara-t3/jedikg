@@ -1,0 +1,3975 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://example.org/"
+     xml:base="http://example.org/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://example.org/"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://dbpedia.org/ontology/Academic -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Academic">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Activity -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Activity">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Actor -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Actor">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Artist"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q483501"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/AdministrativeRegion -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/AdministrativeRegion">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Region"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Agent -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Agent">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Aircraft -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Aircraft">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MeanOfTransportation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Product"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Airline -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Airline">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Company"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PublicTransitSystem"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q4830453"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Airport -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Airport">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Album -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Album">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MusicalWork"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q2188189"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/AmericanFootballPlayer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/AmericanFootballPlayer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/GridironFootballPlayer"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q14128148"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/AnatomicalStructure -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/AnatomicalStructure">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Animal -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Animal">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Arachnid -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Arachnid">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Architect -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Architect">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/ArchitecturalStructure -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/ArchitecturalStructure">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Artery -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Artery">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/AnatomicalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q4936952"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Artist -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Artist">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/ArtistDiscography -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/ArtistDiscography">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MusicalWork"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q2188189"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Athlete -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Athlete">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Automobile -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Automobile">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MeanOfTransportation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Award -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Award">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Bacteria -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Bacteria">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Band -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Band">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Group"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Bank -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Bank">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Company"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q4830453"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/BasketballPlayer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/BasketballPlayer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/BasketballTeam -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/BasketballTeam">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsTeam"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/SportsTeam"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q12973014"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/BodyOfWater -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/BodyOfWater">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Book -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Book">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WrittenWork"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q234460"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Bridge -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Bridge">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/RouteOfTransportation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/BroadcastNetwork -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/BroadcastNetwork">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Broadcaster"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q15265344"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Broadcaster -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Broadcaster">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Building -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Building">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/City -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/City">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Settlement"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q486972"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/CityDistrict -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/CityDistrict">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Settlement"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q486972"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Cleric -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Cleric">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/ClericalAdministrativeRegion -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/ClericalAdministrativeRegion">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/AdministrativeRegion"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Region"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/AdministrativeArea"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q3455524"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Coach -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Coach">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/CollegeCoach -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/CollegeCoach">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Coach"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Colour -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Colour">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Comedian -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Comedian">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Artist"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q483501"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Comic -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Comic">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WrittenWork"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q234460"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/ComicsCreator -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/ComicsCreator">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Artist"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q483501"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Company -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Company">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Continent -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Continent">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Convention -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Convention">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SocietalEvent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Country -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Country">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Criminal -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Criminal">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Crustacean -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Crustacean">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Dam -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Dam">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Department -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Department">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/AdministrativeRegion"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/GovernmentalAdministrativeRegion"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Region"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/AdministrativeArea"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q3455524"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Device -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Device">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Diocese -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Diocese">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/AdministrativeRegion"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ClericalAdministrativeRegion"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Region"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/AdministrativeArea"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q3455524"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Economist -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Economist">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/EducationalInstitution -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/EducationalInstitution">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Engineer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Engineer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/EthnicGroup -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/EthnicGroup">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Eukaryote -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Eukaryote">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Event -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Event"/>
+    
+
+
+    <!-- http://dbpedia.org/ontology/FictionalCharacter -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/FictionalCharacter">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/FigureSkater -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/FigureSkater">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WinterSportPlayer"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Film -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Film">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/FloweringPlant -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/FloweringPlant">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Plant"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q756"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/FootballLeagueSeason -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/FootballLeagueSeason">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsSeason"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsTeamSeason"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/FormulaOneRacer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/FormulaOneRacer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MotorsportRacer"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/RacingDriver"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q378622"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/FormulaOneTeam -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/FormulaOneTeam">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsTeam"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/SportsTeam"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q12973014"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Genre -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Genre">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/TopicalConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/GolfPlayer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/GolfPlayer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/GovernmentAgency -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/GovernmentAgency">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/GovernmentType -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/GovernmentType">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/TopicalConcept"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Type"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/GovernmentalAdministrativeRegion -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/GovernmentalAdministrativeRegion">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/AdministrativeRegion"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Region"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/AdministrativeArea"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q3455524"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Governor -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Governor">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Politician"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q82955"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/GrandPrix -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/GrandPrix">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SocietalEvent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsEvent"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/SportsEvent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Grape -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Grape">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/FloweringPlant"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Plant"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q756"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/GridironFootballPlayer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/GridironFootballPlayer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Group -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Group">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/HockeyTeam -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/HockeyTeam">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsTeam"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/SportsTeam"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q12973014"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Holiday -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Holiday">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/TimeInterval"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Horse -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Horse">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Mammal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q7377"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/HorseRace -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/HorseRace">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Race"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SocietalEvent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsEvent"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/SportsEvent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/HorseTrainer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/HorseTrainer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/IceHockeyLeague -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/IceHockeyLeague">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsLeague"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q623109"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/IceHockeyPlayer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/IceHockeyPlayer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WinterSportPlayer"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Ideology -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Ideology">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/TopicalConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/InformationAppliance -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/InformationAppliance">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Device"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Infrastructure -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Infrastructure">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Insect -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Insect">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Instrument -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Instrument">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Device"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Product"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Island -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Island">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Jockey -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Jockey">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Lake -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Lake">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/BodyOfWater"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/BodyOfWater"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Language -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Language">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Legislature -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Legislature">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Mammal -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Mammal">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Manga -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Manga">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Comic"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WrittenWork"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q234460"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q245068"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/MeanOfTransportation -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/MeanOfTransportation">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/MilitaryConflict -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/MilitaryConflict">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SocietalEvent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/MilitaryPerson -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/MilitaryPerson">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/MilitaryStructure -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/MilitaryStructure">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/MilitaryUnit -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/MilitaryUnit">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/MixedMartialArtsEvent -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/MixedMartialArtsEvent">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SocietalEvent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsEvent"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/SportsEvent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Model -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Model">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Mollusca -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Mollusca">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/MotorsportRacer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/MotorsportRacer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Mountain -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Mountain">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/MountainRange -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/MountainRange">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Museum -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Museum">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Building"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q41176"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/MusicGenre -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/MusicGenre">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Genre"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/TopicalConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/MusicalArtist -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/MusicalArtist">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Artist"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/MusicGroup"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q483501"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/MusicalWork -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/MusicalWork">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/NaturalPlace -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/NaturalPlace">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Newspaper -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Newspaper">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PeriodicalLiterature"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WrittenWork"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q1092563"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q234460"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/OfficeHolder -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/OfficeHolder">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/OlympicEvent -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/OlympicEvent">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Olympics"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SocietalEvent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsEvent"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/SportsEvent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Olympics -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Olympics">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SocietalEvent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsEvent"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/SportsEvent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Organisation -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Organisation">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/OrganisationMember -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/OrganisationMember">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/PeriodicalLiterature -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/PeriodicalLiterature">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WrittenWork"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q234460"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Person -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Person">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/PersonFunction -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/PersonFunction">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Philosopher -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Philosopher">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Place -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Place"/>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Plant -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Plant">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/PoliticalParty -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/PoliticalParty">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Politician -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Politician">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Pope -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Pope">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Cleric"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/PopulatedPlace -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/PopulatedPlace">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/President -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/President">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Politician"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q82955"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/PrimeMinister -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/PrimeMinister">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Politician"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q82955"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/ProgrammingLanguage -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/ProgrammingLanguage">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Language"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Language"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q315"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/ProtectedArea -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/ProtectedArea">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/ProtohistoricalPeriod -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/ProtohistoricalPeriod">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/TimePeriod"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Province -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Province">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/AdministrativeRegion"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/GovernmentalAdministrativeRegion"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Region"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/AdministrativeArea"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q3455524"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/PublicTransitSystem -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/PublicTransitSystem">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Company"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q4830453"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Publisher -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Publisher">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Company"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q4830453"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Race -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Race">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SocietalEvent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsEvent"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/SportsEvent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/RaceTrack -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/RaceTrack">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportFacility"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Racecourse -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Racecourse">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/RaceTrack"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportFacility"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/RacingDriver -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/RacingDriver">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MotorsportRacer"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/RadioProgram -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/RadioProgram">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/RadioStation -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/RadioStation">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Broadcaster"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q15265344"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/RailwayLine -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/RailwayLine">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/RouteOfTransportation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/RecordLabel -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/RecordLabel">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Company"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q4830453"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Region -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Region">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Religious -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Religious">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/River -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/River">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/BodyOfWater"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Stream"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/BodyOfWater"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q47521"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Road -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Road">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/RouteOfTransportation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/RouteOfTransportation -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/RouteOfTransportation">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Royalty -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Royalty">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/RugbyClub -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/RugbyClub">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsClub"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/RugbyLeague -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/RugbyLeague">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsLeague"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q623109"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Saint -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Saint">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Cleric"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/School -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/School">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/EducationalInstitution"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/EducationalOrganization"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q2385804"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Scientist -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Scientist">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/ScreenWriter -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/ScreenWriter">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Writer"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q36180"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Settlement -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Settlement">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Single -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Single">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MusicalWork"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q2188189"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Skier -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Skier">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WinterSportPlayer"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SoccerClub -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SoccerClub">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsClub"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SoccerClubSeason -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SoccerClubSeason">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsSeason"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsTeamSeason"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SoccerLeague -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SoccerLeague">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsLeague"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q623109"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SoccerManager -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SoccerManager">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsManager"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SoccerPlayer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SoccerPlayer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SocietalEvent -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SocietalEvent">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Software -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Software">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Song -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Song">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MusicalWork"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/MusicRecording"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q2188189"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Species -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Species">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Sport -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Sport">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Activity"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q1914636"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SportFacility -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SportFacility">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SportsClub -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SportsClub">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SportsEvent -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SportsEvent">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SocietalEvent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SportsLeague -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SportsLeague">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SportsManager -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SportsManager">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SportsSeason -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SportsSeason">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SportsTeam -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SportsTeam">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SportsTeamMember -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SportsTeamMember">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/OrganisationMember"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SportsTeamSeason -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SportsTeamSeason">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsSeason"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/StarCluster -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/StarCluster">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Station -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Station">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Stream -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Stream">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/BodyOfWater"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/BodyOfWater"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/TelevisionEpisode -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/TelevisionEpisode">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/TelevisionShow -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/TelevisionShow">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/TelevisionStation -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/TelevisionStation">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Broadcaster"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q15265344"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/TimeInterval -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/TimeInterval"/>
+    
+
+
+    <!-- http://dbpedia.org/ontology/TimePeriod -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/TimePeriod">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/TopicalConcept -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/TopicalConcept"/>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Tower -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Tower">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Town -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Town">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Settlement"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q486972"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Type -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Type">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/TopicalConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/UnitOfWork -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/UnitOfWork">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/University -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/University">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/EducationalInstitution"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/EducationalOrganization"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q2385804"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Venue -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Venue">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Building"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q41176"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/VideoGame -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/VideoGame">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Software"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q7397"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Village -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Village">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Settlement"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q486972"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Weapon -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Weapon">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Device"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Product"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Website -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Website">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/WineRegion -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/WineRegion">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/WinterSportPlayer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/WinterSportPlayer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Work -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Work">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Wrestler -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Wrestler">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Writer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Writer">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://dbpedia.org/ontology/WrittenWork -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/WrittenWork">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://purl.org/ontology/bibo/Book -->
+
+    <owl:Class rdf:about="http://purl.org/ontology/bibo/Book">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WrittenWork"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q234460"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/AdministrativeArea -->
+
+    <owl:Class rdf:about="http://schema.org/AdministrativeArea">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/Airport -->
+
+    <owl:Class rdf:about="http://schema.org/Airport">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/BankOrCreditUnion -->
+
+    <owl:Class rdf:about="http://schema.org/BankOrCreditUnion">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Company"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q4830453"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/BodyOfWater -->
+
+    <owl:Class rdf:about="http://schema.org/BodyOfWater">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/Book -->
+
+    <owl:Class rdf:about="http://schema.org/Book">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WrittenWork"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q234460"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/City -->
+
+    <owl:Class rdf:about="http://schema.org/City">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Settlement"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q486972"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/Country -->
+
+    <owl:Class rdf:about="http://schema.org/Country">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/CreativeWork -->
+
+    <owl:Class rdf:about="http://schema.org/CreativeWork"/>
+    
+
+
+    <!-- http://schema.org/EducationalOrganization -->
+
+    <owl:Class rdf:about="http://schema.org/EducationalOrganization">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/LakeBodyOfWater -->
+
+    <owl:Class rdf:about="http://schema.org/LakeBodyOfWater">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/BodyOfWater"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/BodyOfWater"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/Language -->
+
+    <owl:Class rdf:about="http://schema.org/Language"/>
+    
+
+
+    <!-- http://schema.org/Mountain -->
+
+    <owl:Class rdf:about="http://schema.org/Mountain">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/Movie -->
+
+    <owl:Class rdf:about="http://schema.org/Movie">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/MusicAlbum -->
+
+    <owl:Class rdf:about="http://schema.org/MusicAlbum">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MusicalWork"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q2188189"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/MusicGroup -->
+
+    <owl:Class rdf:about="http://schema.org/MusicGroup"/>
+    
+
+
+    <!-- http://schema.org/MusicRecording -->
+
+    <owl:Class rdf:about="http://schema.org/MusicRecording"/>
+    
+
+
+    <!-- http://schema.org/Organization -->
+
+    <owl:Class rdf:about="http://schema.org/Organization">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/Person -->
+
+    <owl:Class rdf:about="http://schema.org/Person">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/Product -->
+
+    <owl:Class rdf:about="http://schema.org/Product"/>
+    
+
+
+    <!-- http://schema.org/RadioStation -->
+
+    <owl:Class rdf:about="http://schema.org/RadioStation">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Broadcaster"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q15265344"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/RiverBodyOfWater -->
+
+    <owl:Class rdf:about="http://schema.org/RiverBodyOfWater">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/BodyOfWater"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Stream"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/BodyOfWater"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q47521"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/School -->
+
+    <owl:Class rdf:about="http://schema.org/School">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/EducationalInstitution"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/EducationalOrganization"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q2385804"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/SportsEvent -->
+
+    <owl:Class rdf:about="http://schema.org/SportsEvent">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Event"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SocietalEvent"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/SportsTeam -->
+
+    <owl:Class rdf:about="http://schema.org/SportsTeam">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/TVEpisode -->
+
+    <owl:Class rdf:about="http://schema.org/TVEpisode">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/TelevisionStation -->
+
+    <owl:Class rdf:about="http://schema.org/TelevisionStation">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Broadcaster"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q15265344"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://schema.org/WebSite -->
+
+    <owl:Class rdf:about="http://schema.org/WebSite">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q1067263 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q1067263">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Device"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q1092563 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q1092563">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WrittenWork"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q234460"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q10978 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q10978">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/FloweringPlant"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Plant"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q756"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q11204 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q11204">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q11424 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q11424">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q11436 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q11436">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MeanOfTransportation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Product"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q11774891 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q11774891">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WinterSportPlayer"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q12280 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q12280">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/RouteOfTransportation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q12323 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q12323">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q1248784 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q1248784">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q12518 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q12518">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q12973014 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q12973014">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q13156709 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q13156709">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q132050 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q132050">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Politician"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q82955"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q13219587 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q13219587">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WinterSportPlayer"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q134556 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q134556">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MusicalWork"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q2188189"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q1390 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q1390">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q14128148 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q14128148">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q141683 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q141683">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Broadcaster"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q15265344"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q1445650 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q1445650">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/TimeInterval"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q15265344 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q15265344">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q15416 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q15416">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q1555508 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q1555508">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q176799 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q176799">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q1777138 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q1777138">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportFacility"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q188094 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q188094">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q188451 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q188451">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Genre"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/TopicalConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q19088 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q19088">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q1914636 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q1914636"/>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q19546 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q19546">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Cleric"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q215627 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q215627">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q2159907 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q2159907">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q2188189 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q2188189">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q225829 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q225829">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Device"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Product"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q23397 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q23397">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/BodyOfWater"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/BodyOfWater"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q23442 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q23442">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q234460 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q234460">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q2385804 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q2385804">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q24229398 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q24229398"/>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q245068 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q245068">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WrittenWork"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q234460"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q25326 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q25326">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q2566598 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q2566598">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q28389 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q28389">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Writer"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q36180"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q30461 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q30461">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Politician"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q82955"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q315 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q315"/>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q33506 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q33506">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Building"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q41176"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q33999 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q33999">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Artist"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q483501"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q34442 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q34442">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/RouteOfTransportation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q3455524 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q3455524">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q349 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q349">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Activity"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q1914636"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q36180 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q36180">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q378622 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q378622">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MotorsportRacer"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q386724 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q386724"/>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q3914 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q3914">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/EducationalInstitution"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/EducationalOrganization"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q2385804"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q3957 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q3957">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Settlement"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q486972"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q4022 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q4022">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/BodyOfWater"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Stream"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/BodyOfWater"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q47521"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q41176 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q41176">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q4270517 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q4270517">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WinterSportPlayer"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q42973 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q42973">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q43115 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q43115">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Cleric"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q43229 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q43229">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q4498974 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q4498974">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsTeam"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/SportsTeam"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q12973014"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q4610556 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q4610556">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q46831 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q46831">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q46970 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q46970">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Company"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PublicTransitSystem"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q4830453"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q473972 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q473972">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q47521 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q47521">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/BodyOfWater"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/BodyOfWater"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q476028 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q476028">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsClub"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q482994 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q482994">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/MusicalWork"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q2188189"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q4830453 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q4830453">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q483501 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q483501">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q486972 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q486972">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q4936952 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q4936952"/>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q4964182 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q4964182">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q5 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q5">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q515 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q515">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Settlement"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q486972"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q532 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q532">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Settlement"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q486972"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q571 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q571">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/WrittenWork"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q234460"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q623109 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q623109">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q6256 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q6256">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/PopulatedPlace"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q628099 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q628099">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/SportsManager"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q719456 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q719456">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q7257 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q7257">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/TopicalConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q7278 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q7278">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Organisation"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Organization"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q43229"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q728 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q728">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Device"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Product"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q728937 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q728937">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/ArchitecturalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Infrastructure"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/RouteOfTransportation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q729 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q729">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q7377 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q7377">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q7397 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q7397">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Work"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/CreativeWork"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q386724"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q756 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q756">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q81096 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q81096">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q82955 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q82955">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q8502 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q8502">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/NaturalPlace"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Place"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q901 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q901">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q9143 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q9143">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Language"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Language"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q315"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q937857 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q937857">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Athlete"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Person"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://schema.org/Person"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q215627"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q5"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+        <rdfs:subClassOf rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q95074 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q95074">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Agent"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q24229398"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.wikidata.org/entity/Q9655 -->
+
+    <owl:Class rdf:about="http://www.wikidata.org/entity/Q9655">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/AnatomicalStructure"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q4936952"/>
+    </owl:Class>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/Person -->
+
+    <owl:Class rdf:about="http://xmlns.com/foaf/0.1/Person">
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Animal"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Eukaryote"/>
+        <rdfs:subClassOf rdf:resource="http://dbpedia.org/ontology/Species"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q19088"/>
+        <rdfs:subClassOf rdf:resource="http://www.wikidata.org/entity/Q729"/>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29) https://github.com/owlcs/owlapi -->
+

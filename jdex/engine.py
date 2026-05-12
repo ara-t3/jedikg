@@ -437,6 +437,7 @@ class JDEX:
                 ("Object properties removed", len(null_object_properties)),
             ],
         )
+        
 
         if self.config.density_filtering.enabled:
                 self.ui.subrule("Assertions Density Extraction")
@@ -449,20 +450,29 @@ class JDEX:
                 for s,p,o in self.ui.progress(op_triples, "Analyzing Assertions", total=len(op_triples)):
                     entity_counts[s] += 1
                     entity_counts[o] += 1
+                    
+                filtered_op_triples = Graph()
 
                 for s,p,o in self.ui.progress(op_triples, "Object Property Assertion Selection", total=len(op_triples)):
-                    if entity_counts[o] < self.config.density_filtering.k or entity_counts[s] < self.config.density_filtering.k:
-                        op_triples.remove((s,p,o))
-                    else:
+                    if entity_counts[o] >= self.config.density_filtering.k and entity_counts[s] >= self.config.density_filtering.k:
+                        filtered_op_triples.add((s,p,o))
                         individuals.add(s)
                         individuals.add(o)
                         object_properties.add(p)
+                        
+                filtered_ca_triples = Graph()
 
                 for s,p,o in self.ui.progress(ca_triples, "Class Assertion Selection", total=len(ca_triples)):
-                    if s not in individuals:
-                        ca_triples.remove((s,p,o))
-                    else:
+                    if s in individuals:
+                        filtered_ca_triples.add((s,p,o))
                         classes.add(o)
+                        
+                op_triples = filtered_op_triples
+                ca_triples = filtered_ca_triples
+                
+          
+                
+           
 
                 self.ui.panel(
                             title= "Post Filtering Assertions Overview",
@@ -474,6 +484,14 @@ class JDEX:
                                 ("Class assertions", len(ca_triples)),
                             ],
                         )
+        
+        
+        props_count = defaultdict(int)
+        for _,p,_ in op_triples:
+            props_count[p] += 1
+            
+        rare = [r for r,c in props_count.items() if c < 2]
+                       
 
         self.ui.success("Assertion filtering completed successfully")
 
@@ -547,45 +565,49 @@ class JDEX:
                 self.kill(1)
 
             if self.config.split.test_leakage_filtering.enabled:
-                self.ui.info("Checking for and filtering test leakage")
-                train, valid, test = unleak(
-                    train,
-                    valid,
-                    test,
-                    n=None,
-                    minimum_frequency=self.config.split.test_leakage_filtering.minimum_frequency,
-                )
-
-                self.ui.panel(
-                    f"Leakage-Filtered Split Overview",
-                    data=[
-                        ("Train triples", train.num_triples),
-                        ("Validation triples", valid.num_triples),
-                        ("Test triples", test.num_triples),
-                    ],
-                )
-
-                self.ui.success("Leakage filtering completed successfully")
-
-                self.ui.info(
-                    f"Serializing splits to {(self.cwd / pc.SPLITS).absolute()}"
-                )
-
-                targets = [
-                    (self.cwd / pc.RDF_TRAIN, train.triples),
-                    (self.cwd / pc.RDF_VALID, valid.triples),
-                    (self.cwd / pc.RDF_TEST, test.triples),
-                ]
-
-                for path, split in targets:
-                    with open(path, "w") as split_file:
-                        for triple in split:
-                            outstr = f"<{URIRef(triple[0])}> <{URIRef(triple[1])}> <{URIRef(triple[2])}> .\n"
-                            split_file.write(outstr)
-
-                    self.ui.success(
-                        f"{path.name.split('.')[0].capitalize()} split saved to {(path).absolute()}"
+                if rare:
+                    self.ui.warning("Found properties with less than 2 triples. Skipping unleak filtering for safety reasons! Disable Density Filtering and try again!")  
+                else:                  
+                    self.ui.info("Checking for and filtering test leakage")
+                    train, valid, test = unleak(
+                        train,
+                        valid,
+                        test,
+                        n=None,
+                        minimum_frequency=self.config.split.test_leakage_filtering.minimum_frequency,
                     )
+
+                    self.ui.panel(
+                        f"Leakage-Filtered Split Overview",
+                        data=[
+                            ("Train triples", train.num_triples),
+                            ("Validation triples", valid.num_triples),
+                            ("Test triples", test.num_triples),
+                        ],
+                    )
+
+                    self.ui.success("Leakage filtering completed successfully")
+
+            self.ui.info(
+                f"Serializing splits to {(self.cwd / pc.SPLITS).absolute()}"
+            )
+
+            targets = [
+                (self.cwd / pc.RDF_TRAIN, train.triples),
+                (self.cwd / pc.RDF_VALID, valid.triples),
+                (self.cwd / pc.RDF_TEST, test.triples),
+            ]
+
+            for path, split in targets:
+                with open(path, "w") as split_file:
+                    for triple in split:
+                        outstr = f"<{URIRef(triple[0])}> <{URIRef(triple[1])}> <{URIRef(triple[2])}> .\n"
+                        split_file.write(outstr)
+
+                self.ui.success(
+                    f"{path.name.split('.')[0].capitalize()} split saved to {(path).absolute()}"
+                )
+                
 
             start_usage = mem_mb()
             self.ui.info(

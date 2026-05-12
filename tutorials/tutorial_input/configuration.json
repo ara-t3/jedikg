@@ -2,21 +2,21 @@
     "dataset_name": "tutorial_dataset",
     "verbose": 1,
     "interactive_shell": true,
-    "density_filtering": {
-    "enabled": true,
-    "k" : 2
-    },
+        "density_filtering": {
+        "enabled": true,
+        "k" : 2
+        },
     "paths": {
         "schema": "./tutorials/tutorial_input/schema.owl",
         "data": "./tutorials/tutorial_input/facts.owl",
         "output": "./tutorials/"
     },
     "reasoning": {
-        "java_8_home": "/Library/Java/JavaVirtualMachines/temurin-8.jdk/Contents/Home",
-        "java_11_home": "/opt/homebrew/opt/openjdk@11/",
+        "java_8_home": "/usr/lib/jvm/java-1.8.0-openjdk-amd64",
+        "java_11_home": "/usr/lib/jvm/java-1.11.0-openjdk-amd64",
         "java_max_ram": 8,
         "materialization": {
-          "enabled": false,
+          "enabled": true,
             "axioms": [
                 "SubClass",
                 "EquivalentClass",

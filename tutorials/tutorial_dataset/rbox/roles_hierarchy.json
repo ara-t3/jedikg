@@ -1,0 +1,20 @@
+{
+    "http://dbpedia.org/ontology/capital": [
+        "http://dbpedia.org/ontology/administrativeHeadCity"
+    ],
+    "http://dbpedia.org/ontology/isPartOfMilitaryConflict": [
+        "http://dbpedia.org/ontology/isPartOf"
+    ],
+    "http://dbpedia.org/ontology/isPartOfWineRegion": [
+        "http://dbpedia.org/ontology/isPartOf"
+    ],
+    "http://dbpedia.org/ontology/literaryGenre": [
+        "http://dbpedia.org/ontology/genre"
+    ],
+    "http://dbpedia.org/ontology/locationCountry": [
+        "http://dbpedia.org/ontology/location"
+    ],
+    "http://dbpedia.org/ontology/nextEvent": [
+        "http://dbpedia.org/ontology/followedBy"
+    ]
+}
